@@ -1,0 +1,10 @@
+- - a
+  - x:
+      u: {}
+    y: &share
+      u: {}
+- - b
+  - x: *share
+    y:
+      u: {}
+- with_product: False
