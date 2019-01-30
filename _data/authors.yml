@@ -1,20 +1,17 @@
 
 xp:
     name     : 张炎泼
-    bio      : "do what I want"
+    bio      : "朋友都叫我xp, 正在学画画, 主业是码农"
     avatar   : "/assets/images/author/xp.jpg"
     location : 
-    links:
-        - label: "Made Mistakes"
-          icon: "fas fa-fw fa-link"
-          url: "https://mademistakes.com"
-        - label: "Twitter"
-          icon: "fab fa-fw fa-twitter-square"
-          url: "https://twitter.com/mmistakes"
-        - label: "GitHub"
-          icon: "fab fa-fw fa-github"
-          url: "https://github.com/mmistakes"
-        - label: "Instagram"
-          icon: "fab fa-fw fa-instagram"
-          url: "https://instagram.com/mmistakes"
+    links    :
+        - label: "xp的个人博客"
+          icon : "fas fa-fw fa-link"
+          url  : "https://drmingdrmer.github.io/"
+        - label: "xp的微博"
+          icon : "fas fa-fw fa-weibo"
+          url  : "https://weibo.com/drdrxp"
+        - label: "xp的GitHub"
+          icon : "fab fa-fw fa-github"
+          url  : "https://github.com/drmingdrmer"
 
