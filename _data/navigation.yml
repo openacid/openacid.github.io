@@ -8,5 +8,7 @@ main:
   #   url: /year-archive/
   # - title: "Sample Collections"
   #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+  - title: "About Us"
+    url: https://github.com/orgs/openacid/people
+  - title: "Sitemap"
+    url: /sitemap/
