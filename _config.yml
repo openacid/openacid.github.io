@@ -107,10 +107,12 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  # name             : "Your Name"
+  name             :
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** person."
-  location         : "Somewhere"
+  bio              : "分布式系统研究小院."
+  # location         : "Somewhere"
+  location         :
   email            :
   links:
     - label: "Email"
