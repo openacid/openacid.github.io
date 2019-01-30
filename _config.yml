@@ -107,8 +107,7 @@ analytics:
 
 # Site Author
 author:
-  # name             : "Your Name"
-  name             :
+  name             : "OpenACID"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "分布式系统研究小院."
   # location         : "Somewhere"
