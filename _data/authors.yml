@@ -5,13 +5,13 @@ xp:
     avatar   : "/assets/images/author/xp.jpg"
     location : 
     links    :
-        - label: "xp的个人博客"
+        - label: "个人博客"
           icon : "fas fa-fw fa-link"
           url  : "https://drmingdrmer.github.io/"
-        - label: "xp的微博"
+        - label: "微博"
           icon : "fas fa-fw fa-weibo"
           url  : "https://weibo.com/drdrxp"
-        - label: "xp的GitHub"
+        - label: "GitHub"
           icon : "fab fa-fw fa-github"
           url  : "https://github.com/drmingdrmer"
 
