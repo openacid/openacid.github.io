@@ -27,3 +27,14 @@ pengsven:
         - label: "GitHub"
           icon : "fab fa-fw fa-github"
           url  : "https://github.com/pengsven"
+
+lishulong:
+    name     : 李树龙
+    bio      : "码农一枚"
+    avatar   : "/assets/images/author/lsl.jpg"
+    location :
+    links    :
+        - label: "GitHub"
+          icon : "fab fa-fw fa-github"
+          url  : "https://github.com/lishulong"
+
