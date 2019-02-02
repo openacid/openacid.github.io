@@ -38,3 +38,15 @@ lishulong:
           icon : "fab fa-fw fa-github"
           url  : "https://github.com/lishulong"
 
+wenbo:
+    name     : 李文博(wenbo)
+    bio      : "萌新码农"
+    avatar   : "/assets/images/author/wenbo.jpg"
+    location :
+    links    :
+        - label: "微博"
+          icon : "fas fa-fw fa-weibo"
+          url  : "https://weibo.com/wenbobuaa"
+        - label: "GitHub"
+          icon : "fab fa-fw fa-github"
+          url  : "https://github.com/wenbobuaa"
