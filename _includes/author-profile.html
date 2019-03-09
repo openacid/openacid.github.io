@@ -1,7 +1,22 @@
-{% assign author = page.author | default: page.authors[0] | default: site.author %}
-{% assign author = site.data.authors[author] | default: author %}
+{% assign authorCount = page.authors | size %}
+{% if authorCount == 0 %}
+  {% if page.author %}
+    {% assign author_ids = page.author | split: "," %}
+  {% else %}
+    {% assign author_ids = "-" | split: "," %}
+  {% endif %}
+{% else %}
+  {% assign author_ids = page.authors %}
+{% endif %}
 
-<div itemscope itemtype="https://schema.org/Person">
+<div itemscope itemtype="http://schema.org/Person">
+  {% for author_id in author_ids %}
+  {% if author_id == "-" %}
+    {% assign author = site.author %}
+  {% else %}
+    {% assign author = site.data.authors[author_id] | site.autor %}
+  {% endif %}
+  <p>
 
   {% if author.avatar %}
     <div class="author__avatar">
@@ -249,4 +264,7 @@
       {% include author-profile-custom-links.html %}
     </ul>
   </div>
+
+  </p>
+  {% endfor %}
 </div>
