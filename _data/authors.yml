@@ -3,17 +3,13 @@ xp:
     name     : 张炎泼(xp)
     bio      : "正在学画画, 主业是码农"
     avatar   : "/assets/images/author/xp.jpg"
+    weibo    : drdrxp
+    github   : drmingdrmer
     location : 
     links    :
         - label: "个人博客"
           icon : "fas fa-fw fa-link"
           url  : "https://drmingdrmer.github.io/"
-        - label: "微博"
-          icon : "fas fa-fw fa-weibo"
-          url  : "https://weibo.com/drdrxp"
-        - label: "GitHub"
-          icon : "fab fa-fw fa-github"
-          url  : "https://github.com/drmingdrmer"
 
 pengsven:
     name     : 吴义谱(pengsven)
