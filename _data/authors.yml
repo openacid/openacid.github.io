@@ -18,7 +18,7 @@ pengsven:
     location :
     links    :
         - label: "微博"
-          icon : "fas fa-fw fa-weibo"
+          icon : "fab fa-fw fa-weibo"
           url  : "https://weibo.com/u/5253355875"
         - label: "GitHub"
           icon : "fab fa-fw fa-github"
@@ -41,7 +41,7 @@ wenbo:
     location :
     links    :
         - label: "微博"
-          icon : "fas fa-fw fa-weibo"
+          icon : "fab fa-fw fa-weibo"
           url  : "https://weibo.com/wenbobuaa"
         - label: "GitHub"
           icon : "fab fa-fw fa-github"
