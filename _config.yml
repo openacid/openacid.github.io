@@ -19,7 +19,7 @@ locale                   : "zh-CN"
 title                    : "OpenACID Blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "Your Site Name"
+name                     : "OpenACID-分布式系统研究小院"
 description              : "分布式系统研究小院."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
