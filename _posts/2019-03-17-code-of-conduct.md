@@ -12,9 +12,6 @@ toc_label: 本文目录
 toc_sticky: true
 ---
 
-# OpenACID's Code of Conduct
-
-
 ## 社交规则
 
 
