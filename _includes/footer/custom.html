@@ -1,3 +1,20 @@
 <!-- start custom footer snippets -->
 
+{% if page.mathjax == true %}
+
+<script language="javascript" type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      jax: ["input/TeX", "output/SVG"],
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"> </script>
+
+
+{% endif %}
+
 <!-- end custom footer snippets -->
