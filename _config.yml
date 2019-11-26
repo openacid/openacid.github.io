@@ -19,8 +19,8 @@ locale                   : "zh-CN"
 title                    : "OpenACID Blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "OpenACID-分布式系统研究小院"
-description              : "分布式系统研究小院."
+name                     : "OpenACID-分布式研究小院"
+description              : "分布式研究小院."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -103,7 +103,7 @@ analytics:
 author:
   name             : "OpenACID"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "分布式系统研究小院."
+  bio              : "分布式研究小院."
   # location         : "Somewhere"
   location         :
   email            :
