@@ -60,7 +60,7 @@ def convert_math(cont, imgdir, imgurl):
             e = m.end()
             tex = m.groups()[0]
             dd()
-            dd("### convert tex...")
+            dd("### convert tex... block mode:", is_block)
             dd("    ",  tex)
 
             pngfn = tex_to_image(tex, imgdir, is_block)
