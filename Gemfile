@@ -3,3 +3,4 @@ gemspec
 
 
 gem 'jekyll-octicons'
+gem 'jekyll-sitemap'
