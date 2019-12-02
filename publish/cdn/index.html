@@ -409,7 +409,7 @@
 
 <ul>
   <li>每个CDN边缘机房对外提供的日常下载总带宽: <code class="highlighter-rouge">20Gbps</code>，</li>
-  <li>源站中所有文件的<strong>总量</strong><code class="highlighter-rouge">n</code>: <code class="highlighter-rouge">7200TB</code>，</li>
+  <li>源站中所有文件的<strong>总量</strong><code class="highlighter-rouge">n</code>，</li>
   <li>边缘机房的存储容量占源站文件总量的比值: <code class="highlighter-rouge">e</code>(edge)，例如(图1)中，<code class="highlighter-rouge">e=10%</code>，每个边缘机房能存储1/10的内容。</li>
   <li>回源率<code class="highlighter-rouge">b</code>(backsource) 是边缘机房消耗的回源带宽跟这个边缘机房下载带宽的比值，例如(图1)中，<code class="highlighter-rouge">e=10%</code>时，<code class="highlighter-rouge">b=6%</code>。</li>
 </ul>
@@ -464,7 +464,7 @@
 894/
 k^{0.708331}"/>
 
-<p>其中<code class="highlighter-rouge">s</code>的值 <code class="highlighter-rouge">s=0.708331</code>是我们后面计算需要用到的。</p>
+<p>其中<code class="highlighter-rouge">s</code>的值是我们后面计算需要用到的。</p>
 
 <blockquote>
   <p>zipf中的<code class="highlighter-rouge">c</code>参数在我们的分析中没有被使用到，
@@ -529,7 +529,7 @@ k^{0.708331}"/>
 <p>根据以上设定，我们可以得到一个边缘机房中:</p>
 
 <ul>
-  <li>存储成本是: <code class="highlighter-rouge">7200TB * e * 1元/TB/天</code></li>
+  <li>存储成本是: <code class="highlighter-rouge">n * e * 1元/TB/天</code></li>
   <li>回源带宽成本: <code class="highlighter-rouge">20Gbps * b * 600元/Gbps/天</code></li>
 </ul>
 
@@ -544,7 +544,14 @@ k^{0.708331}"/>
   <li>再结合单位成本，得出每个<code class="highlighter-rouge">e</code>对应的总成本，</li>
 </ol>
 
-<p>最后我们得到如下一个边缘容量<code class="highlighter-rouge">e</code>决定回源率<code class="highlighter-rouge">b</code>和成本的表格:</p>
+<p>这里我们选择一个更大的样本,
+其中<code class="highlighter-rouge">s=1.10138726235</code>, <code class="highlighter-rouge">n=8,000,000</code>,</p>
+
+<img src="/publish/cdn/images/f_k_=_c_k_1_10138726235_-ff2ac2c65ab039593d5d72f27b90322a.png" style="display: block; margin: 0 auto 1.3em auto" alt="f(k) =
+c/
+k^{1.10138726235}"/>
+
+<p>得到如下一个边缘容量<code class="highlighter-rouge">e</code>决定回源率<code class="highlighter-rouge">b</code>和成本的表格:</p>
 
 <table>
   <thead>
