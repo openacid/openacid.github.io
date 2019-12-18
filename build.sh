@@ -8,10 +8,14 @@ die()
     exit 1
 }
 
-JEKYLL_ENV=production jekyll build || die
-cp -R _site/* $TARGET || die
-cd $TARGET || die
-git add . || die
+
+# Need to overrides url to generate site for another domain
+JEKYLL_ENV=production jekyll build \
+    --config _config.yml,_config_blog_openacid_com.yml || die
+
+cp -R _site/* $TARGET    || die
+cd $TARGET               || die
+git add .                || die
 git ci -m 'update build' || die
-git push coding master || die
+git push coding master   || die
 
