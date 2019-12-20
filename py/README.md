@@ -3,7 +3,14 @@ It convert math in form of `<script type="math/tex...` to png.
 
 # Usage
 
-- Run `jekyll serve` locally to compile site.
+- Run `jekyll build` locally to compile site:
+
+    Same as `build.sh`
+
+    ```
+    JEKYLL_ENV=production jekyll build \
+        --config _config.yml,_config_blog_openacid_com.yml || die
+    ```
 
 - Convert an article `zipf`. The compiled article resides in
     `_site/<category>/<sub category>...`:
@@ -38,8 +45,8 @@ It convert math in form of `<script type="math/tex...` to png.
     `<escaped_math_latex>-<md5(latex string)>.png`.
 
 -   Access:
-    The original article is `https://openacid.github.io/tech/zipf/`.
+    The original article is `https://blog.openacid.com/tech/zipf/`.
     Then the **publish** version of it is:
-    `https://openacid.github.io/publish/zipf/`.
+    `https://blog.openacid.github.com/publish/zipf/`.
 
     > There is no category in the published url.
