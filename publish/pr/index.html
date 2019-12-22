@@ -1,0 +1,854 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Art of Pull Requests(翻译) - OpenACID Blog</title>
+<meta name="description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
+
+
+  <meta name="author" content="张炎泼(xp)">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="OpenACID Blog">
+<meta property="og:title" content="Art of Pull Requests(翻译)">
+<meta property="og:url" content="https://blog.openacid.com/culture/pr/">
+
+
+  <meta property="og:description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2019-12-20T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://blog.openacid.com/culture/pr/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "OpenACID-分布式研究小院",
+      "url": "https://blog.openacid.com/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="OpenACID Blog Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180"    href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest"                            href="/assets/images/favicon/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logo/icon-lemon-margin.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          OpenACID Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="http://schema.org/Person">
+  
+  
+  <p>
+
+  
+    <div class="author__avatar">
+      
+
+      
+        <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">张炎泼(xp)</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>正在学画画, 主业是码农</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+
+  </p>
+  
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Art of Pull Requests(翻译)">
+    <meta itemprop="description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
+    <meta itemprop="datePublished" content="December 20, 2019">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Art of Pull Requests(翻译)
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 分钟阅读
+
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 本文目录</h4></header>
+              <ul class="toc__menu">
+  <li><a href="#请求越大review时间越长">请求越大，review时间越长</a></li>
+  <li><a href="#pr越长review的人就越累">PR越长，review的人就越累</a></li>
+  <li><a href="#给出上下文">给出上下文</a></li>
+  <li><a href="#防止上下文切换">防止上下文切换</a></li>
+  <li><a href="#审稿人也需要帮助">审稿人也需要帮助</a></li>
+  <li><a href="#专注于重要的事情">专注于重要的事情</a></li>
+  <li><a href="#不要太严肃">不要太严肃</a></li>
+  <li><a href="#pr不适合进行长时间的架构讨论">PR不适合进行长时间的架构讨论</a></li>
+  <li><a href="#如果代码比以前更好那么批准它">如果代码比以前更好，那么批准它</a></li>
+  <li><a href="#不要害怕">不要害怕</a></li>
+</ul>
+            </nav>
+          </aside>
+        
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/culture/pr/">https://blog.openacid.com/culture/pr/</a>
+</p>
+
+        <p>原文: <a href="https://hackernoon.com/the-art-of-pull-requests-6f0f099850f9">Art of Pull Requests</a></p>
+
+<p><img src="/post-res/pr/1*KlreYtsrnlfVdAfyjZjNgw.jpeg" alt="img" /></p>
+
+<p><a href="http://blog.viacom.tech/2017/04/07/effective-remote-teams/">正如我之前写的</a>，
+我们是一个远程团队，团队成员遍布世界各地。
+这意味着code reviews 和 <a href="https://hackernoon.com/tagged/pull-requests">pull requests</a>必须远程完成。</p>
+
+<p>最近，我们<a href="https://twitter.com/_west_on">团队</a>的一位成员提出了这样的宣言:</p>
+
+<blockquote>
+  <p><em>作为 PR writer 我会:</em></p>
+
+  <ul>
+    <li>保持PR够小</li>
+    <li>使用标签表明PR是许多部分之一</li>
+    <li>发布PR后在Slack上也提一下</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><em>作为 PR reviewer 我会:</em></p>
+
+  <ul>
+    <li>一有空就review。</li>
+    <li>只要比以前好就批准吧.</li>
+    <li>尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.</li>
+    <li>建议而不是拒绝，特别是当用标签来标识多个部分的时候.</li>
+  </ul>
+</blockquote>
+
+<p>我们来看看这个。 本质是:<strong>PR需要小而快</strong>!</p>
+
+<p>这也符合<a href="http://blog.cleancoder.com/uncle-bob/2015/11/18/TheProgrammersOath.html">程序员的誓言</a>:</p>
+
+<blockquote>
+  <p><em>我会发布频繁和小的release，这样我就不会妨碍他人工作的推进</em>。</p>
+</blockquote>
+
+<p>但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。</p>
+
+<h2 id="请求越大review时间越长">请求越大，review时间越长</h2>
+
+<p>我们希望尽可能地接近<strong>head开发方法</strong>，在这种方法中，代码很容易进入master/develop。
+我们应该致力于连续的产生好的代码。</p>
+
+<p>我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!</p>
+
+<p><img src="/post-res/pr/0*H1oFzCkF0Qo3RCku.png" alt="img" /></p>
+
+<p>因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!
+你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。
+因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。</p>
+
+<p><img src="/post-res/pr/0*hMIZJvQxEDOK0H1k.png" alt="img" /></p>
+
+<h2 id="pr越长review的人就越累">PR越长，review的人就越累</h2>
+
+<p>如果review很累，开发人员就不想review了。
+但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!</p>
+
+<h2 id="给出上下文">给出上下文</h2>
+
+<p>让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。
+添加一个好的<a href="https://hackernoon.com/no-description-provided-8d9e0f3a3abb">描述和一些截图</a>:</p>
+
+<p><img src="/post-res/pr/0*m1nk8pj1XtuU3ect.png" alt="img" /></p>
+
+<h2 id="防止上下文切换">防止上下文切换</h2>
+
+<p>让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.
+review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。
+所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!</p>
+
+<h2 id="审稿人也需要帮助">审稿人也需要帮助</h2>
+
+<p>如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。</p>
+
+<p>所以审查经常!</p>
+
+<p>在每一次休息之后，在你开始一张新ticket之前，在每一次<a href="https://en.wikipedia.org/wiki/Pomodoro_Technique">番茄工作法</a>
+之后，或者每次你自己打开一个pull request之后。</p>
+
+<p>我们的团队引入了打开的PR上限, 与看<a href="http://kanbantool.com/kanban-wip-limits">板中的WIP限制</a>类似。
+如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!</p>
+
+<h2 id="专注于重要的事情">专注于重要的事情</h2>
+
+<p>所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。
+CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，
+这样review可以很容易地集中在逻辑和体系结构上。</p>
+
+<h2 id="不要太严肃">不要太严肃</h2>
+
+<p>PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。
+友好。 使用表情符号和动图让读者对你的建议会心一笑:</p>
+
+<p><img src="/post-res/pr/0*MkccokzNveEgWzcL.png" alt="img" /></p>
+
+<p>评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。</p>
+
+<p><img src="/post-res/pr/0*NY4ftERy14vj7nWc.png" alt="img" /></p>
+
+<h2 id="pr不适合进行长时间的架构讨论">PR不适合进行长时间的架构讨论</h2>
+
+<p>不要过度使用PR讨论。 反正也太迟了，代码已经写好了!
+使用其他渠道，如每日/每周的开发者会议。
+PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。
+如果你的团队中有下级，试着使用<a href="https://hackernoon.com/tagged/programming">结对编程</a>，
+不要通过PR来教，否则会令人沮丧。</p>
+
+<h2 id="如果代码比以前更好那么批准它">如果代码比以前更好，那么批准它</h2>
+
+<p>如果发现有什么东西可以变得更好，打开一个issue或ticket。
+当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。
+如果PR只是部分ticket，则它更容易被优先处理。
+另一个PR肯定会很快到来，可以立即解决这个问题。</p>
+
+<h2 id="不要害怕">不要害怕</h2>
+
+<p>在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。
+当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。
+接受这一点需要勇气和信任!</p>
+
+<p>原文: <a href="https://hackernoon.com/the-art-of-pull-requests-6f0f099850f9">Art of Pull Requests</a></p>
+
+        <p>
+<img src="/assets/images/qrcode-text.png" alt="openacid">
+</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 标签: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#pr" class="page__taxonomy-item" rel="tag">pr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#pull" class="page__taxonomy-item" rel="tag">pull</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#request" class="page__taxonomy-item" rel="tag">request</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#review" class="page__taxonomy-item" rel="tag">review</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#teamwork" class="page__taxonomy-item" rel="tag">teamwork</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#culture" class="page__taxonomy-item" rel="tag">culture</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2019-12-20T00:00:00+08:00">December 20, 2019</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">分享</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Art+of+Pull+Requests%28%E7%BF%BB%E8%AF%91%29%20https%3A%2F%2Fblog.openacid.com%2Fculture%2Fpr%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Fculture%2Fpr%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Fculture%2Fpr%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/tech/cdn/" class="pagination--pager" title="掐指算算: 你的CDN多花了几百万?
+">向前</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">向后</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">猜您还喜欢</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/tech/cdn/" rel="permalink">掐指算算: 你的CDN多花了几百万?
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  5 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">在上篇
+互联网中对象访问频率的91分布
+我们通过
+90%的流量由10%的内容产生
+这句经验描述，
+得出了访问频率的zipf模型:
+
+
+
+CDN (Content delivery network)
+就是一个典型的符合zipf分布的缓存系统:
+将缓存服务部署在距离用户最近的上百个地区（CDN边缘机房），
+当用户需要...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/tech/zipf/" rel="permalink">互联网中对象访问频率的91分布
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">在互联网领域, 流行着这么一句话:
+
+
+  90%的流量由10%的内容产生.
+
+
+缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储,
+就可以以很低的成本提供尽可能好的服务质量.
+
+一般符合这种互联网访问模型的曲线是下图这样的.
+对每个访问的url做独立计数, 并按照从访问最多到最低排序:
+
+
+
+这句是...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/culture/code-of-conduct/" rel="permalink">OpenACID’s Code of Conduct
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">社交规则
+
+避免”故作惊讶”
+
+第一条规则是, 当对方说他不知道某件事情时, 你最好不要(刻意的或无意的)表现得很惊讶。
+
+包括技术问题(“什么?!我不能相信你不知道堆栈是什么!) 和非技术问题(“你不知道谁是RMS ?!”)
+(RMS: Richard Matthew Stallman,  自由软件奠基人)。
+...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/tech/algorithm/slimtrie-impl/" rel="permalink">SlimTrie: 单机百亿文件的极致索引-实现篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  20 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">
+
+
+
+Github:  SlimTrie
+
+
+    上一篇
+    
+        《SlimTrie 设计篇》
+    
+    中，我们介绍了单机百亿文件的索引设计思路，今天我们来具体介绍下它代码级别的实现。文中我们要解决的问题是: 
+    在一台通用的100TB的存储服务器的内存中, 索引100亿个...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>关注:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2019 OpenACID-分布式研究小院. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://blog.openacid.com/culture/pr/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/culture/pr"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://openacid.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  </body>
+</html>
