@@ -10,6 +10,9 @@ import sys
 def dd(*msg):
     print ''.join([str(x) for x in msg])
 
+def jp(*ps):
+    return os.path.join(*ps)
+
 def mkdir(*d):
     try:
         os.makedirs(os.path.join(*d))
@@ -20,7 +23,12 @@ def mkdir(*d):
             raise
 
 
-def convert_math_to_image(fn, outdir, title, imgurl):
+
+def resource_to_image(fn, outdir, title, imgurl):
+    '''
+        Convert math and table to image.
+        to make it easier to publish on other platform such wechat and weibo
+    '''
     dd("convert: ", fn, " to dir: ", outdir, " title: ", title)
     imgdir = os.path.join(outdir, "images")
     mkdir(imgdir)
@@ -29,6 +37,7 @@ def convert_math_to_image(fn, outdir, title, imgurl):
         cont = f.read()
 
     cont = convert_math(cont, imgdir, imgurl)
+    cont = convert_table(cont, imgdir, imgurl)
 
     with open(os.path.join(outdir, "index.html"), 'w') as f:
         f.write(cont)
@@ -75,6 +84,128 @@ def convert_math(cont, imgdir, imgurl):
             cont = cont[:s] + imgtag + cont[e:]
 
     return cont
+
+tbl_patterns = (
+        # block math
+        (r'<table>.*?</table>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
+        ),
+)
+
+def convert_table(cont, imgdir, imgurl):
+
+    for ptn, repl in tbl_patterns:
+
+        while True:
+            m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
+            if m is None:
+                break
+
+            s = m.start()
+            e = m.end()
+            tblhtml = cont[s:e]
+
+            dd()
+            dd("### convert table... ")
+            dd("    ",  tblhtml)
+
+            pngfn = table_to_image(tblhtml, imgdir)
+            dd("    image fn: ", pngfn)
+
+            imgtag = repl.format(
+                    src=imgurl+"/"+pngfn,
+                    alt="table")
+
+            dd("    tag: ", imgtag)
+
+            cont = cont[:s] + imgtag + cont[e:]
+
+    return cont
+
+tblhtml_start = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>x</title>
+        <style type="text/css" media="screen">
+            table {
+                display: block;
+                margin-bottom: 1em;
+                width: fit-content;
+                font-family: -apple-system,BlinkMacSystemFont,"Roboto","Segoe UI","Helvetica Neue","Lucida Grande",Arial,sans-serif;
+                font-size: .75em;
+                border-collapse: collapse;
+                overflow-x: auto;
+            }
+
+            thead {
+                background-color: #ddd;
+                border-bottom: 2px solid #ddd;
+            }
+
+            th {
+                padding: 0.5em;
+                font-weight: bold;
+                text-align: left;
+            }
+
+            td {
+                padding: 0.5em;
+                border-bottom: 1px solid #ddd;
+            }
+
+            tr,
+            td,
+            th {
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+'''
+tblhtml_end = '''
+    </body>
+</html>
+'''
+
+def table_to_image(tblhtml, imgdir):
+    imgdir = os.path.abspath(imgdir)
+    tmpdir = os.path.abspath("tmp")
+    proc.shell_script('rm *.png *.html', cwd=tmpdir)
+
+    tblmd5 = hashlib.md5(tblhtml).hexdigest()
+    fn = "tbl_" + tblmd5 + ".png"
+
+    if os.path.exists(os.path.join(imgdir, fn)):
+        return fn
+
+    html = tblhtml_start + tblhtml + tblhtml_end
+    with open(jp(tmpdir, "tbl.html"), 'w') as f:
+        f.write(html)
+
+    dd("make html at:", jp(tmpdir, "tbl.html"))
+    proc.command_ex(
+            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "--headless",
+            "--screenshot",
+            "--window-size=1000,2000",
+            "--default-background-color=0",
+            "tbl.html", 
+            cwd=tmpdir, 
+    )
+
+    dd("crop to visible area")
+    proc.command_ex(
+            "convert",
+            "screenshot.png",
+            "-trim",
+            "+repage",
+            jp(imgdir, fn),
+            cwd=tmpdir, 
+    )
+
+    proc.shell_script('rm *.png *.html', cwd=tmpdir)
+    return fn
 
 def tex_to_image(tex, imgdir, is_block):
 
@@ -196,4 +327,4 @@ if __name__ == "__main__":
     pubdir = 'publish'
     outdir = os.path.join(pubdir, title)
     imgurl = '/' + pubdir + '/' + title + '/images'
-    convert_math_to_image(src, outdir, title, imgurl)
+    resource_to_image(src, outdir, title, imgurl)
