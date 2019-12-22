@@ -20,7 +20,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:site_name" content="OpenACID Blog">
 <meta property="og:title" content="掐指算算: 你的CDN多花了几百万?">
-<meta property="og:url" content="http://localhost:4000/tech/cdn/">
+<meta property="og:url" content="https://blog.openacid.com/tech/cdn/">
 
 
   <meta property="og:description" content="在上篇互联网中对象访问频率的91分布我们通过90%的流量由10%的内容产生这句经验描述，得出了访问频率的zipf模型:CDN (Content delivery network)就是一个典型的符合zipf分布的缓存系统:将缓存服务部署在距离用户最近的上百个地区（CDN边缘机房），当用户需要访问热门内容时，只需在边缘机房读取，以此达到性能优化。因为符合zipf模型，所以，如果一个边缘机房的容量对全量数据的占比变化1%，会带来每年数十万元的成本变化。一个中等规模的CDN系统，调优前后，可能会有每年几百万的成本差别。本文从原理到实践跟大家一起分析下CDN的成本构成，以及zipf如何影响成本。本文结构">
@@ -42,7 +42,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/tech/cdn/">
+<link rel="canonical" href="https://blog.openacid.com/tech/cdn/">
 
 
 
@@ -53,7 +53,7 @@
     
       "@type": "Person",
       "name": "OpenACID-分布式研究小院",
-      "url": "http://localhost:4000/"
+      "url": "https://blog.openacid.com/"
     
   }
 </script>
@@ -332,6 +332,10 @@
             </nav>
           </aside>
         
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/tech/cdn/">https://blog.openacid.com/tech/cdn/</a>
+</p>
+
         <p>在上篇
 <a href="/tech/zipf">互联网中对象访问频率的91分布</a>
 我们通过
@@ -614,8 +618,10 @@ k^{1.10138726235}"/>
 作为一个技术从业人员，发现这些改变的可能，实现这些改变，并把这种改变服务于可受益的人，
 也许就是最开心的事情了: <strong>Discover, Design, Distribute</strong>…</p>
 
-<p><img src="/assets/images/qrcode-text.png" alt="openacid" /></p>
 
+        <p>
+<img src="/assets/images/qrcode-text.png" alt="openacid">
+</p>
 
         
       </section>
@@ -713,11 +719,11 @@ k^{1.10138726235}"/>
     <h4 class="page__share-title">分享</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=%E6%8E%90%E6%8C%87%E7%AE%97%E7%AE%97%3A+%E4%BD%A0%E7%9A%84CDN%E5%A4%9A%E8%8A%B1%E4%BA%86%E5%87%A0%E7%99%BE%E4%B8%87%3F%20http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fcdn%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=%E6%8E%90%E6%8C%87%E7%AE%97%E7%AE%97%3A+%E4%BD%A0%E7%9A%84CDN%E5%A4%9A%E8%8A%B1%E4%BA%86%E5%87%A0%E7%99%BE%E4%B8%87%3F%20https%3A%2F%2Fblog.openacid.com%2Ftech%2Fcdn%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fcdn%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fcdn%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fcdn%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fcdn%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
@@ -734,6 +740,15 @@ k^{1.10138726235}"/>
   </nav>
 
     </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
 
     
   </article>
@@ -993,10 +1008,28 @@ Github:  SlimTrie
 
 
 
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/tech/cdn/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.url = "https://blog.openacid.com/tech/cdn/";  // Replace PAGE_URL with your page's canonical URL variable
       this.page.identifier = "/tech/cdn"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
