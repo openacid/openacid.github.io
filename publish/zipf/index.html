@@ -20,7 +20,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:site_name" content="OpenACID Blog">
 <meta property="og:title" content="互联网中对象访问频率的91分布">
-<meta property="og:url" content="http://localhost:4000/tech/zipf/">
+<meta property="og:url" content="https://blog.openacid.com/tech/zipf/">
 
 
   <meta property="og:description" content="在互联网领域, 流行着这么一句话:  90%的流量由10%的内容产生.缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储,就可以以很低的成本提供尽可能好的服务质量.一般符合这种互联网访问模型的曲线是下图这样的.对每个访问的url做独立计数, 并按照从访问最多到最低排序:这句是一个经验结论, 从它可以得出我们的频度分布公式:也就是zipf 模型.这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:即: k的对数跟y的对数呈现线性关系.线性太棒了, 简单又好用!用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情.以下是得出这个结论的愉快的推倒过程.">
@@ -42,7 +42,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/tech/zipf/">
+<link rel="canonical" href="https://blog.openacid.com/tech/zipf/">
 
 
 
@@ -53,7 +53,7 @@
     
       "@type": "Person",
       "name": "OpenACID-分布式研究小院",
-      "url": "http://localhost:4000/"
+      "url": "https://blog.openacid.com/"
     
   }
 </script>
@@ -327,6 +327,10 @@
             </nav>
           </aside>
         
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/tech/zipf/">https://blog.openacid.com/tech/zipf/</a>
+</p>
+
         <p>在互联网领域, 流行着这么一句话:</p>
 
 <blockquote>
@@ -468,6 +472,10 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 </ul>
 
 
+        <p>
+<img src="/assets/images/qrcode-text.png" alt="openacid">
+</p>
+
         
       </section>
 
@@ -528,11 +536,11 @@ frequency of elements of rank k, f(k;s,N), is:</p>
     <h4 class="page__share-title">分享</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%AD%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E9%A2%91%E7%8E%87%E7%9A%8491%E5%88%86%E5%B8%83%20http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fzipf%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%AD%E5%AF%B9%E8%B1%A1%E8%AE%BF%E9%97%AE%E9%A2%91%E7%8E%87%E7%9A%8491%E5%88%86%E5%B8%83%20https%3A%2F%2Fblog.openacid.com%2Ftech%2Fzipf%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fzipf%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fzipf%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Ftech%2Fzipf%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fzipf%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
@@ -551,6 +559,15 @@ frequency of elements of rank k, f(k;s,N), is:</p>
     </div>
 
     
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
   </article>
 
   
@@ -558,6 +575,48 @@ frequency of elements of rank k, f(k;s,N), is:</p>
     <div class="page__related">
       <h4 class="page__related-title">猜您还喜欢</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/culture/pr/" rel="permalink">Art of Pull Requests(翻译)
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">原文: Art of Pull Requests
+
+
+
+正如我之前写的，
+我们是一个远程团队，团队成员遍布世界各地。
+这意味着code reviews 和 pull requests必须远程完成。
+
+最近，我们团队的一位成员提出了这样的宣言:
+
+
+  作为 PR writer 我会:
+
+  
+    保持PR够小...</p>
+  </article>
+</div>
+
         
           
 
@@ -675,47 +734,6 @@ Github:  SlimTrie
 </div>
 
         
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/tech/algorithm/slimtrie-design/" rel="permalink">SlimTrie: 单机百亿文件的极致索引-设计篇
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  15 分钟阅读
-
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">
-
-
-
-Github:  SlimTrie
-
-
-    背景
-
-
-    当下信息社会每天都产生大量需要保存的数据，这些数据在刺激海量存储技术发展的同时也带来了新的挑战。比如，海量数据为存储系统增加了大量的小文件，这些小文件的元数据如何管理？如何控制定位某个文件的时间和空间开销？
-
-
-    随着对数据实时性要求...</p>
-  </article>
-</div>
-
-        
       </div>
     </div>
   
@@ -805,10 +823,28 @@ Github:  SlimTrie
 
 
 
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/tech/zipf/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.url = "https://blog.openacid.com/tech/zipf/";  // Replace PAGE_URL with your page's canonical URL variable
       this.page.identifier = "/tech/zipf"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
     (function() { // DON'T EDIT BELOW THIS LINE
