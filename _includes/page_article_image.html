@@ -1,0 +1,13 @@
+{% if page.article.image contains "://" %}
+  {% capture img_path %}{{ page.article.image }}{% endcapture %}
+{% else %}
+  {% capture img_path %}{{ page.article.image | relative_url }}{% endcapture %}
+{% endif %}
+
+{% if page.article.image_description %}
+  {% assign image_description = page.article.image_description %}
+{% else %}
+  {% assign image_description = page.title %}
+{% endif %}
+
+<img src="{{ img_path }}" alt="{{ image_description }}" class="page__hero-image">
