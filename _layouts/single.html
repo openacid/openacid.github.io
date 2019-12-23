@@ -41,6 +41,11 @@ layout: default
           </aside>
         {% endif %}
         {% include single_head.html %}
+
+        {% if page.article.image %}
+          {% include page_article_image.html %}
+        {% endif %}
+
         {{ content }}
         {% include single_foot.html %}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
