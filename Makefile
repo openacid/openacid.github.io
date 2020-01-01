@@ -1,14 +1,18 @@
 TARGET = $(HOME)/xp/vcs/coding/drmingdrmer/drmingdrmer/
-export:
+build:
 	# Generate static site locally
-	sh build.sh
+	# Need to overrides url to generate site for another domain
+	JEKYLL_ENV=production jekyll build \
+		   --config _config.yml,_config_blog_openacid_com.yml || die
+
+export: build
 	# Convert built html to easy-to-publish versions:
 	#   convert math and table to images
 	python2 py/conv.py _site/culture/pr
 	python2 py/conv.py _site/tech/cdn
 	python2 py/conv.py _site/tech/zipf
-	# Re-generate to put publish/ dir back to _site
-	sh build.sh
+	# put publish/ dir back to _site
+	cp -R publish _site/
 
 # Build and deploy to a site in china mainland.
 # This is works only on xp's mac.
