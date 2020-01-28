@@ -1,5 +1,10 @@
 <p style="font-size: 0.7rem; font-weight: bolder;">
 本文链接: <a href="{{ page.url | absolute_url }}">{{ page.url | absolute_url }}</a>
+
+{% if page.pdf %}
+<br/>
+下载pdf: <a href="{{ page.id | prepend: "publish/pdf" | absolute_url }}.pdf">{{ page.title }}.pdf</a>
+{% endif %}
 </p>
 <ul class="page-links" style="display:none;">
 {% for ref in page.refs %}
