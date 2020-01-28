@@ -1,0 +1,6 @@
+{% for ref in page.refs %}
+{% for link in ref %}
+[{{ link[0] }}]: {{ link[1] }}
+
+{% endfor %}
+{%endfor%}
