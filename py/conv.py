@@ -452,7 +452,7 @@ def tex_to_image_texvc(tex, imgdir, fn):
 if __name__ == "__main__":
 
     opts = {
-            'wechat': 'math table a-to-txt',
+            'wechat': 'math a-to-txt',
             'weibo': 'math table pre code blockquote permlink li-p',
     }
 
