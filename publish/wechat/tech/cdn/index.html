@@ -569,7 +569,89 @@ k^{1.10138726235}"/>
 
 <p>得到如下一个边缘容量<code class="highlighter-rouge">e</code>决定回源率<code class="highlighter-rouge">b</code>和成本的表格:</p>
 
-<img src="/publish/wechat/tech/cdn/images/tbl_001c2300237783535486dfa1ccf0a969.png" style="display: block; margin: 0 auto 1.3em auto" alt="table"/>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">e:边缘存储容量占比%</th>
+      <th style="text-align: right">b:回源率%</th>
+      <th style="text-align: right">存储成本</th>
+      <th style="text-align: right">回源带宽成本</th>
+      <th style="text-align: right">总成本</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">2.00%</td>
+      <td style="text-align: right">12.14%</td>
+      <td style="text-align: right">144</td>
+      <td style="text-align: right">1456.8</td>
+      <td style="text-align: right">1600.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">3.00%</td>
+      <td style="text-align: right">10.64%</td>
+      <td style="text-align: right">216</td>
+      <td style="text-align: right">1276.8</td>
+      <td style="text-align: right">1492.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">4.00%</td>
+      <td style="text-align: right">9.62%</td>
+      <td style="text-align: right">288</td>
+      <td style="text-align: right">1154.4</td>
+      <td style="text-align: right">1442.4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">5.00%</td>
+      <td style="text-align: right">8.85%</td>
+      <td style="text-align: right">360</td>
+      <td style="text-align: right">1062.0</td>
+      <td style="text-align: right">1422.0</td>
+    </tr>
+    <tr>
+      <td style="text-align: right"><code class="highlighter-rouge">min ------&gt; 6.00%</code></td>
+      <td style="text-align: right">8.23%</td>
+      <td style="text-align: right">432</td>
+      <td style="text-align: right">987.6</td>
+      <td style="text-align: right"><strong>1419.6</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: right">7.00%</td>
+      <td style="text-align: right">7.72%</td>
+      <td style="text-align: right">504</td>
+      <td style="text-align: right">926.4</td>
+      <td style="text-align: right">1430.4</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">8.00%</td>
+      <td style="text-align: right">7.28%</td>
+      <td style="text-align: right">576</td>
+      <td style="text-align: right">873.6</td>
+      <td style="text-align: right">1449.6</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">9.00%</td>
+      <td style="text-align: right">6.89%</td>
+      <td style="text-align: right">648</td>
+      <td style="text-align: right">826.8</td>
+      <td style="text-align: right">1474.8</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">10.00%</td>
+      <td style="text-align: right">6.56%</td>
+      <td style="text-align: right">720</td>
+      <td style="text-align: right">787.2</td>
+      <td style="text-align: right">1507.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: right">…</td>
+      <td style="text-align: right">…</td>
+      <td style="text-align: right">…</td>
+      <td style="text-align: right">…</td>
+      <td style="text-align: right">…</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>我们看到，在这个业务场景中，<strong>边缘容量取到6%时，总成本会达到最低: 1419.6 元/天</strong>。</p>
 

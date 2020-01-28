@@ -470,7 +470,30 @@ EC可以认为是分布式系统发展起来后, RAID算法在多机系统上的
 <p>在上面这个简单的系统中, 总共存储了4份数据, 有效的数据是3份. 冗余是<strong>133%</strong>,
 它的可靠性和2副本的<strong>200%</strong>冗余的存储策略<strong>差不多</strong>: 最多允许丢失1份数据.</p>
 
-<img src="/publish/wechat/storage/ec-1/images/tbl_40f4856c956d0659c75fd015a99f5a9f.png" style="display: block; margin: 0 auto 1.3em auto" alt="table"/>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">策略</th>
+      <th style="text-align: left">冗余度</th>
+      <th style="text-align: left">可靠性</th>
+      <th style="text-align: left">存储策略示意</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">2副本</td>
+      <td style="text-align: left">200%</td>
+      <td style="text-align: left">允许丢1块: 1 X 10⁻⁸</td>
+      <td style="text-align: left">(d₁,d₁), (d₂,d₂), (d₃,d₃)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3+1求和冗余</td>
+      <td style="text-align: left">133%</td>
+      <td style="text-align: left">允许丢1块: 6 X 10⁻⁸</td>
+      <td style="text-align: left">(d₁, d₂, d₃, y₁)</td>
+    </tr>
+  </tbody>
+</table>
 
 <blockquote>
   <p>这里还只是<strong>差不多</strong>, 虽然都是允许丢失1块数据, 但还并不是完全一样,
