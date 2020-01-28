@@ -1,6 +1,15 @@
 <p style="font-size: 0.7rem; font-weight: bolder;">
 本文链接: <a href="{{ page.url | absolute_url }}">{{ page.url | absolute_url }}</a>
 </p>
+<ul class="page-links" style="display:none;">
+{% for ref in page.refs %}
+    {% for link in ref %}
+        <li style="font-size:0.7em">
+        [{{ link[0] }}]: {{ link[1] | split: " " | first }}
+        </li>
+    {% endfor %}
+{%endfor%}
+</ul>
 <p>
 <img src="/assets/images/qrcode-text.png" alt="openacid">
 </p>
