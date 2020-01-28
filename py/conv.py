@@ -22,9 +22,85 @@ def mkdir(*d):
         else:
             raise
 
+tbl_patterns = (
+        # block math
+        (r'<table>.*?</table>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
+        ),
+)
+
+pre_patterns = (
+        # block math
+        (r'<pre.*?>.*?</pre>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
+        ),
+)
+
+blockquote_ptns = (
+        (r'<blockquote>(.*?)</blockquote>',
+         '{txt}'
+        ),
+)
+code_ptns = (
+        (r'<code.*?>(.*?)</code>',
+         '{txt}'
+         # '<span>{txt}</span>'
+        ),
+)
+pre_ptns = (
+        (r'<pre.*?>(.*?)</pre>',
+         '<p>{txt}</p>'
+        ),
+)
+permlink_ptns = (
+        (r'</body>(.*?)',
+         # convert /body> to /body > thus it wont match twice
+         '<style> .header-link {{ display: none !important; }} </style> </body >{txt}'
+        ),
+)
+li_p_ptns = (
+        (r'<li>\s*?<p>(.*?)</p>',
+         '<li><b>{txt}</b>'
+        ),
+        (r'<li>(.*?)</li>',
+         '{txt}'
+        ),
+)
+
+def handle_a_to_txt(sess, cont, m):
+
+    s = m.start()
+    e = m.end()
+    txt = m.group("txt")
+    href = m.group("href")
+    sess[txt] = href
+
+    newtxt = '[{txt}]'.format(txt=txt)
+
+    dd("capture link:", txt, href)
+    return cont[:s] + newtxt + cont[e:]
+
+def a_to_txt_final(sess, cont):
+    ptn = r'<ul class="page-links" style="display:none;">'
+    m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
+    if m is None:
+        return
+
+    s = m.start()
+    e = m.end()
+
+    newtxt = '<ul class="page-links" style="display:block;">'
+    return cont[:s] + newtxt + cont[e:]
+
+a_to_txt_ptns = (
+        (r'<a href="(?P<href>.*?)".*?>(?P<txt>.*?)</a>',
+         handle_a_to_txt,
+         a_to_txt_final, 
+        ),
+)
 
 
-def resource_to_image(fn, outdir, title, imgurl):
+def resource_to_image(fn, outdir, title, imgurl, opt):
     '''
         Convert math and table to image.
         to make it easier to publish on other platform such wechat and weibo
@@ -36,8 +112,23 @@ def resource_to_image(fn, outdir, title, imgurl):
     with open(fn) as f:
         cont = f.read()
 
-    cont = convert_math(cont, imgdir, imgurl)
-    cont = convert_table(cont, imgdir, imgurl)
+    if 'math' in opt:
+        cont = convert_math(cont, imgdir, imgurl)
+    if 'table' in opt:
+        cont = convert_html_to_image(cont, imgdir, imgurl, tbl_patterns)
+    if 'pre' in opt:
+        cont = convert_html_to_image(cont, imgdir, imgurl, pre_patterns)
+    if 'code' in opt:
+        cont = convert_ptn(cont, code_ptns)
+    if 'blockquote' in opt:
+        cont = convert_ptn(cont, blockquote_ptns)
+    if 'permlink' in opt:
+        cont = convert_ptn(cont, permlink_ptns)
+    if 'li-p' in opt:
+        cont = convert_ptn(cont, li_p_ptns)
+    if 'a-to-txt' in opt:
+        cont = convert_xxx(cont, a_to_txt_ptns)
+
 
     with open(os.path.join(outdir, "index.html"), 'w') as f:
         f.write(cont)
@@ -85,16 +176,9 @@ def convert_math(cont, imgdir, imgurl):
 
     return cont
 
-tbl_patterns = (
-        # block math
-        (r'<table>.*?</table>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
-        ),
-)
+def convert_html_to_image(cont, imgdir, imgurl, ptns):
 
-def convert_table(cont, imgdir, imgurl):
-
-    for ptn, repl in tbl_patterns:
+    for ptn, repl in ptns:
 
         while True:
             m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
@@ -109,7 +193,7 @@ def convert_table(cont, imgdir, imgurl):
             dd("### convert table... ")
             dd("    ",  tblhtml)
 
-            pngfn = table_to_image(tblhtml, imgdir)
+            pngfn = html_to_image(tblhtml, imgdir)
             dd("    image fn: ", pngfn)
 
             imgtag = repl.format(
@@ -159,6 +243,13 @@ tblhtml_start = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN
             th {
                 vertical-align: middle;
             }
+            pre.highlight {
+                margin: 0;
+                padding: 1em;
+                background: #263238;
+                color: #eff;
+                font-size: 1.5em;
+            }
         </style>
     </head>
     <body>
@@ -168,7 +259,7 @@ tblhtml_end = '''
 </html>
 '''
 
-def table_to_image(tblhtml, imgdir):
+def html_to_image(tblhtml, imgdir):
     imgdir = os.path.abspath(imgdir)
     tmpdir = os.path.abspath("tmp")
     proc.shell_script('rm *.png *.html', cwd=tmpdir)
@@ -190,8 +281,8 @@ def table_to_image(tblhtml, imgdir):
             "--screenshot",
             "--window-size=1000,2000",
             "--default-background-color=0",
-            "tbl.html", 
-            cwd=tmpdir, 
+            "tbl.html",
+            cwd=tmpdir,
     )
 
     dd("crop to visible area")
@@ -201,17 +292,59 @@ def table_to_image(tblhtml, imgdir):
             "-trim",
             "+repage",
             jp(imgdir, fn),
-            cwd=tmpdir, 
+            cwd=tmpdir,
     )
 
     proc.shell_script('rm *.png *.html', cwd=tmpdir)
     return fn
 
+def convert_ptn(cont, ptns):
+
+    for ptn, repl in ptns:
+
+        while True:
+            m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
+            if m is None:
+                break
+
+            s = m.start()
+            e = m.end()
+            inner = m.groups()[0]
+
+            dd()
+            dd("### remove:" + ptn)
+            dd("### keep:  ",  inner)
+
+            newtxt = repl.format(
+                    txt=inner)
+
+            cont = cont[:s] + newtxt + cont[e:]
+
+    return cont
+
+def convert_xxx(cont, ptns):
+
+    for ptn, repl, final in ptns:
+
+        sess = {}
+
+        while True:
+            m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
+            if m is None:
+                break
+
+            cont = repl(sess, cont, m)
+
+        cont = final(sess, cont)
+
+    return cont
+
+
 def tex_to_image(tex, imgdir, is_block):
 
     texmd5 = hashlib.md5(tex).hexdigest()
     texescaped = re.sub('[^a-zA-Z0-9_\-=]+', '_', tex)
-    fn = texescaped + '-' + texmd5 + '.png'
+    fn = texescaped[:64] + '-' + texmd5 + '.png'
     fn = fn.lstrip('_')
 
     if os.path.exists(os.path.join(imgdir, fn)):
@@ -317,14 +450,23 @@ def tex_to_image_texvc(tex, imgdir, fn):
 
 
 if __name__ == "__main__":
+
+    opts = {
+            'wechat': 'math table a-to-txt',
+            'weibo': 'math table pre code blockquote permlink li-p',
+    }
+
     # _site/tech/zipf/index.hml
     # _site/tech/zipf
     src = sys.argv[1]
     if not src.endswith('/index.html'):
         src = src.rstrip('/') + '/index.html'
 
-    title = src.split('/')[-2]
+    title = '/'.join(src.split('/')[1:-1])
     pubdir = 'publish'
-    outdir = os.path.join(pubdir, title)
-    imgurl = '/' + pubdir + '/' + title + '/images'
-    resource_to_image(src, outdir, title, imgurl)
+
+    for plat4m, opt in opts.items():
+        outdir = os.path.join(pubdir, plat4m, title)
+        imgurl = '/' + pubdir + '/' + plat4m + '/' + title + '/images'
+
+        resource_to_image(src, outdir, title, imgurl, opt)
