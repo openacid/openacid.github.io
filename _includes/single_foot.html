@@ -7,6 +7,13 @@
 {% endif %}
 </p>
 <ul class="page-links" style="display:none;">
+
+{% if page.pdf %}
+<li style="font-size:0.7em">
+[下载{{ page.title }}.pdf]: {{ page.id | prepend: "publish/pdf" | absolute_url }}.pdf
+</li>
+{% endif %}
+
 {% for ref in page.refs %}
     {% for link in ref %}
         <li style="font-size:0.7em">
