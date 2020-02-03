@@ -24,3 +24,4 @@ toc_sticky: true
 
 xxx
 
+{% include build_ref %}
