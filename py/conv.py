@@ -249,6 +249,7 @@ tblhtml_start = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN
                 background: #263238;
                 color: #eff;
                 font-size: 1.5em;
+                font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,"PingFang SC", "Microsoft YaHei",monospace;
             }
         </style>
     </head>
