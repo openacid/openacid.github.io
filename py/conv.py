@@ -47,11 +47,6 @@ code_ptns = (
          # '<span>{txt}</span>'
         ),
 )
-pre_ptns = (
-        (r'<pre.*?>(.*?)</pre>',
-         '<p>{txt}</p>'
-        ),
-)
 permlink_ptns = (
         (r'</body>(.*?)',
          # convert /body> to /body > thus it wont match twice
@@ -453,8 +448,9 @@ def tex_to_image_texvc(tex, imgdir, fn):
 if __name__ == "__main__":
 
     opts = {
-            'wechat': 'math a-to-txt permlink',
-            'weibo': 'math table pre code blockquote permlink li-p',
+            'wechat': 'math       a-to-txt                     permlink',
+            'weibo':  'math table          pre code blockquote permlink li-p',
+            'zhihu':  'math table          pre                 permlink'
     }
 
     # _site/tech/zipf/index.hml
