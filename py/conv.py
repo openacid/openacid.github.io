@@ -25,14 +25,14 @@ def mkdir(*d):
 tbl_patterns = (
         # block math
         (r'<table>.*?</table>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{alt}"/>',
         ),
 )
 
 pre_patterns = (
         # block math
         (r'<pre.*?>.*?</pre>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{alt}"/>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{alt}"/>',
         ),
 )
 
@@ -136,13 +136,13 @@ def resource_to_image(fn, outdir, title, imgurl, opt):
 patterns = (
         # block math
         (r'<script type="math/tex; mode=display">(.*?)</script>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" alt="{tex}"/>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
          True,
         ),
 
         # inline math
         (r'<script type="math/tex">(.*?)</script>',
-         '<img src="{src}" style="height: 1.2em" alt="{tex}"/>',
+         '<img src="{src}" style="height: 1.2em" _alt="{tex}"/>',
          False,
         ),
 )
