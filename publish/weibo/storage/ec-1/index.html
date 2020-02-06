@@ -466,7 +466,7 @@ EC可以认为是分布式系统发展起来后, RAID算法在多机系统上的
 <p>在上面这个简单的系统中, 总共存储了4份数据, 有效的数据是3份. 冗余是<strong>133%</strong>,
 它的可靠性和2副本的<strong>200%</strong>冗余的存储策略<strong>差不多</strong>: 最多允许丢失1份数据.</p>
 
-<img src="/publish/weibo/storage/ec-1/images/tbl_40f4856c956d0659c75fd015a99f5a9f.png" style="display: block; margin: 0 auto 1.3em auto" alt="table"/>
+<img src="/publish/weibo/storage/ec-1/images/tbl_40f4856c956d0659c75fd015a99f5a9f.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
 
 
   <p>这里还只是<strong>差不多</strong>, 虽然都是允许丢失1块数据, 但还并不是完全一样,
@@ -499,7 +499,7 @@ y₁ = d₁ + d₂ + d₃.</p>
 
   <p>例如我们存储了2个校验块:</p>
 
-  <img src="/publish/weibo/storage/ec-1/images/begin_cases_d_1_d_2_d_3_=_y_1_d_1_d_2_d_3_=_y_2_end_cases_-c8e96d126ec9f242cbffeb94267d03f4.png" style="display: block; margin: 0 auto 1.3em auto" alt="\begin{cases}
+  <img src="/publish/weibo/storage/ec-1/images/begin_cases_d_1_d_2_d_3_=_y_1_d_1_d_2_d_3_=_y_2_end_cases_-c8e96d126ec9f242cbffeb94267d03f4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\begin{cases}
 d_1 + d_2 + d_3 = y_1 \\
 d_1 + d_2 + d_3 = y_2
 \end{cases}"/>
@@ -514,7 +514,7 @@ d_1 + d_2 + d_3 = y_2
       <p>如果 d₁, d₂ 都丢失了(用 u₁, u₂ 表示丢失的数据),
 下面这个关于 u₁, u₂ 的线性方程是有无穷多解的:</p>
 
-      <img src="/publish/weibo/storage/ec-1/images/begin_cases_u_1_u_2_=_y_1_-_d_3_u_1_u_2_=_y_2_-_d_3_end_cases_-d71d949b529bdfd2f06226eb994ef3e6.png" style="display: block; margin: 0 auto 1.3em auto" alt="\begin{cases}
+      <img src="/publish/weibo/storage/ec-1/images/begin_cases_u_1_u_2_=_y_1_-_d_3_u_1_u_2_=_y_2_-_d_3_end_cases_-d71d949b529bdfd2f06226eb994ef3e6.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\begin{cases}
 u_1 + u_2 = y_1 - d_3 \\
 u_1 + u_2 = y_2 - d_3
 \end{cases}"/>
@@ -535,7 +535,7 @@ u_1 + u_2 = y_2 - d_3
   计算 y₂ 时, 对每个数字乘以1, 2, 4, 8 …
 </ul>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_aligned_y_1_=_d_1_d_2_d_3_y_2_=_d_1_2_d_2_4_d_3_end-f9f2c37f86d4e35d7ced96d74c32032e.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_aligned_y_1_=_d_1_d_2_d_3_y_2_=_d_1_2_d_2_4_d_3_end-f9f2c37f86d4e35d7ced96d74c32032e.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{aligned}
 y_1 & = d_1 +   d_2 +   d_3 \\
 y_2 & = d_1 + 2 d_2 + 4 d_3
@@ -558,7 +558,7 @@ y_2 & = d_1 + 2 d_2 + 4 d_3
   
 </ul>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_cases_begin_aligned_u_1_u_2_=_y_1_-_d_3_u_1_2_u_2_=-e4fc4261b119c56dc137422c41fcc43b.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_cases_begin_aligned_u_1_u_2_=_y_1_-_d_3_u_1_2_u_2_=-e4fc4261b119c56dc137422c41fcc43b.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{cases}
 \begin{aligned}
 u_1 + u_2   & = y_1 - d_3 \\
@@ -594,7 +594,7 @@ u_1 + 2 u_2 & = y_2 - 4 d_3
 <p>而 y₃ 的计算我们需要再为所有的 dⱼ 选择1组不同的系数,
 例如1,3,9,27…来保证后面数据丢失时,得到的1个3元一次方程组是可解的:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_cases_begin_aligned_d_1_d_2_d_3_=_y_1_d_1_2_d_2_4_d-5a75044249e1fdf3a1a678f05365e5bf.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_cases_begin_aligned_d_1_d_2_d_3_=_y_1_d_1_2_d_2_4_d-5a75044249e1fdf3a1a678f05365e5bf.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{cases}
 \begin{aligned}
 d_1 +   d_2 +   d_3 & = y_1 \\
@@ -632,7 +632,7 @@ EC 是更具通用性的算法. 但因为实现的成本(主要是恢复数据�
 
 <p><strong>我们使用1个直线的方程, 把 d₁, d₂ 作为系数, 来实现数据的冗余备份和恢复</strong>:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/y_=_d_1_d_2_x-5157da5e8eb4b4838449f29807eebe10.png" style="display: block; margin: 0 auto 1.3em auto" alt="y = d_1 + d_2 x"/>
+<img src="/publish/weibo/storage/ec-1/images/y_=_d_1_d_2_x-5157da5e8eb4b4838449f29807eebe10.png" style="display: block; margin: 0 auto 1.3em auto" _alt="y = d_1 + d_2 x"/>
 
 <p>这条直线具备这样的特点:</p>
 
@@ -680,7 +680,7 @@ EC 是更具通用性的算法. 但因为实现的成本(主要是恢复数据�
 
 <p>在这个校验块跟数据块的关系中:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/begin_cases_y_1_=_d_1_d_2_y_2_=_d_1_2d_2_end_cases_-d1bcc5cb2e39db26602ccae8c9018fb6.png" style="display: block; margin: 0 auto 1.3em auto" alt="\begin{cases}
+<img src="/publish/weibo/storage/ec-1/images/begin_cases_y_1_=_d_1_d_2_y_2_=_d_1_2d_2_end_cases_-d1bcc5cb2e39db26602ccae8c9018fb6.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\begin{cases}
 y_1 = d_1 + d_2 \\
 y_2 = d_1 + 2d_2
 \end{cases}"/>
@@ -708,7 +708,7 @@ y_2 = d_1 + 2d_2
 <p>如果有k个数据块, 我们把k个数据作为系数, 来定义1条关于x的高次曲线,
 再通过记录曲线上的点的坐标来实现冗余:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/y_=_d_1_d_2_x_d_3_x_2_d_k_x_k-1_-5471c2a2dae90c282fbadb0160c78e29.png" style="display: block; margin: 0 auto 1.3em auto" alt="y = d_1 + d_2 x + d_3 x^2 + ... + d_k x^{k-1}"/>
+<img src="/publish/weibo/storage/ec-1/images/y_=_d_1_d_2_x_d_3_x_2_d_k_x_k-1_-5471c2a2dae90c282fbadb0160c78e29.png" style="display: block; margin: 0 auto 1.3em auto" _alt="y = d_1 + d_2 x + d_3 x^2 + ... + d_k x^{k-1}"/>
 
 
   <p>例如要存储4个数据1, 2, 3, 4, 则曲线方程是: y = 1 + 2x + 3x² + 4x³.
@@ -722,7 +722,7 @@ y_2 = d_1 + 2d_2
 
     <p>取m个不同的x的值(1, 2, 3…m), 记录这条曲线上m个不同点的坐标:</p>
 
-    <img src="/publish/weibo/storage/ec-1/images/1_y_2_y_m_y_m_-192711a4346a3eb62ca607345ba5952d.png" style="display: block; margin: 0 auto 1.3em auto" alt="(1, y₁), (2, y₂) ... (m, y_m)"/>
+    <img src="/publish/weibo/storage/ec-1/images/1_y_2_y_m_y_m_-192711a4346a3eb62ca607345ba5952d.png" style="display: block; margin: 0 auto 1.3em auto" _alt="(1, y₁), (2, y₂) ... (m, y_m)"/>
 
     <p>存储所有k个数据块 d₁, d₂ ....
 和所有m个校验块 y₁, y₂ ....</p>
@@ -733,7 +733,7 @@ y_2 = d_1 + 2d_2
 次幂的曲线(或通过m个点跟k-m个已知系数确定一条k-1次幂的曲线).
 确定了这条关于x的曲线,就找回了它的系数,也就是数据块</p>
 
-    <img src="/publish/weibo/storage/ec-1/images/d_1_d_2_d_k-2239564f0d87e4198b1daeee07c34a0b.png" style="display: block; margin: 0 auto 1.3em auto" alt="d_1, d_2 ... d_k"/>
+    <img src="/publish/weibo/storage/ec-1/images/d_1_d_2_d_k-2239564f0d87e4198b1daeee07c34a0b.png" style="display: block; margin: 0 auto 1.3em auto" _alt="d_1, d_2 ... d_k"/>
   
 </ul>
 
@@ -745,7 +745,7 @@ y_2 = d_1 + 2d_2
 <p>从EC的几何本质出发, 我们再系统的描述下生成校验块的过程:
 为x取自然数的值(1,2,3…)来计算 y 的值:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/begin_aligned_y_1_=_d_1_1_d_2_1_2_d_3_dots_1_k-1_d_k_y_2_=_d_1_-8122cb31101942c27bf14ccaf40bd68f.png" style="display: block; margin: 0 auto 1.3em auto" alt="\begin{aligned}
+<img src="/publish/weibo/storage/ec-1/images/begin_aligned_y_1_=_d_1_1_d_2_1_2_d_3_dots_1_k-1_d_k_y_2_=_d_1_-8122cb31101942c27bf14ccaf40bd68f.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\begin{aligned}
 y_1 = d_1 + 1 d_2  + 1^2 d_3  + \dots  1^{k-1} d_k \\
 y_2 = d_1 + 2 d_2  + 2^2 d_3  + \dots  2^{k-1} d_k \\
 y_3 = d_1 + 3 d_2  + 3^2 d_3  + \dots  3^{k-1} d_k \\
@@ -754,7 +754,7 @@ y_3 = d_1 + 3 d_2  + 3^2 d_3  + \dots  3^{k-1} d_k \\
 
 <p>把上面等式写成矩阵的形式, 就得到了EC校验块的 <strong>生成矩阵</strong> <a href="https://en.wikipedia.org/wiki/Generator_matrix" title="Generator-Matrix">Generator-Matrix</a>:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_y_1_y_2_y_3_y_m_end_bmatrix_=_begin_bmatrix-956c5dafca84853793e1ff7211b8fd0e.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_y_1_y_2_y_3_y_m_end_bmatrix_=_begin_bmatrix-956c5dafca84853793e1ff7211b8fd0e.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{bmatrix}
 y_1 \\
 y_2 \\
@@ -798,7 +798,7 @@ d_k
 
 <p>既然EC的编码过程是<strong>编码矩阵</strong>(<a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" title="Vandermonde matrix">Vandermonde</a>)和数据块列相乘:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_1_1_1_1_1_2_4_2_k-1_1_3_9_3_k-1_1_m_m_1_m_k-1aaf5603dbcf4cc4bfcc723687693749.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_1_1_1_1_1_2_4_2_k-1_1_3_9_3_k-1_1_m_m_1_m_k-1aaf5603dbcf4cc4bfcc723687693749.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{bmatrix}
 1 & 1 & 1 & ... & 1 \\
 1 & 2 & 4 & ... & 2^{k-1} \\
@@ -831,7 +831,7 @@ y_m
 <p>例如 d₂, d₃ 丢失了, 下面用 u₂, u₃ 表示
 (只丢失了2块数据, 不需要所有的m个校验块参与, 只需要2个校验块来恢复数据)</p>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_1_1_1_1_1_2_4_2_k-1_end_bmatrix_times_begin-fabdb565866ab3ee59a48415c12dbe72.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_begin_bmatrix_1_1_1_1_1_2_4_2_k-1_end_bmatrix_times_begin-fabdb565866ab3ee59a48415c12dbe72.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{bmatrix}
 1 & 1 & 1 & ... & 1 \\
 1 & 2 & 4 & ... & 2^{k-1} \\
@@ -861,7 +861,7 @@ y_2 \\
 因为我们选择的<a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" title="Vandermonde matrix">Vandermonde</a> 矩阵保证了任意m行m列组成的子矩阵都是线性无关的,
 构成的方程肯定有确定解. 例如:</p>
 
-<img src="/publish/weibo/storage/ec-1/images/CDATA_V=_begin_bmatrix_1_x_1_x_1_2_dots_x_1_n-1_1_x_2_x_2_2_dot-b9e3fa2d696f43be3809299922cab97d.png" style="display: block; margin: 0 auto 1.3em auto" alt="% <![CDATA[
+<img src="/publish/weibo/storage/ec-1/images/CDATA_V=_begin_bmatrix_1_x_1_x_1_2_dots_x_1_n-1_1_x_2_x_2_2_dot-b9e3fa2d696f43be3809299922cab97d.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 V=\begin{bmatrix}
 1      & x_1    & x_1^2  & \dots  & x_1^{n-1} \\
 1      & x_2    & x_2^2  & \dots  & x_2^{n-1} \\
@@ -873,7 +873,7 @@ V=\begin{bmatrix}
 <ul>
   <b><a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" title="Vandermonde matrix">Vandermonde</a> 的 行列式的值为:</b>
 
-    <img src="/publish/weibo/storage/ec-1/images/det_V_=_prod__1_leq_i_lt_j_leq_n_x_j_-_x_i_-7e308172ffdbff8b5536508bb0700c80.png" style="display: block; margin: 0 auto 1.3em auto" alt="\det(V)=\prod_{1 \leq i \lt j \leq n}(x_j - x_i)"/>
+    <img src="/publish/weibo/storage/ec-1/images/det_V_=_prod__1_leq_i_lt_j_leq_n_x_j_-_x_i_-7e308172ffdbff8b5536508bb0700c80.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\det(V)=\prod_{1 \leq i \lt j \leq n}(x_j - x_i)"/>
 
     <p>只要 xᵢ 都不同, 则 <a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" title="Vandermonde matrix">Vandermonde</a> 矩阵的行列式就不为0, 矩阵可逆, 表示方程有唯一解.</p>
   
@@ -1145,7 +1145,8 @@ V=\begin{bmatrix}
 ">向前</a>
     
     
-      <a href="#" class="pagination--pager disabled">向后</a>
+      <a href="/storage/ec-2/" class="pagination--pager" title="Erasure-Code-擦除码-2-实现篇
+">向后</a>
     
   </nav>
 
@@ -1168,6 +1169,45 @@ V=\begin{bmatrix}
     <div class="page__related">
       <h4 class="page__related-title">猜您还喜欢</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-2/" rel="permalink">Erasure-Code-擦除码-2-实现篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  60 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">书接上回
+
+上一篇 第一篇:原理 中, 我们介绍了EC的基本原理,
+实际上EC的存储跟恢复过程可以理解为:
+一条k-1次曲线可以通过k个系数或曲线上的点来确定.
+
+我们也提到:
+
+
+  但这套理论还不能直接应用到线上产品中.
+因为计算机中还要考虑数字大小限制, 例如k个32位整数作为数据,
+通过Vandermon...</p>
+  </article>
+</div>
+
         
           
 
@@ -1289,42 +1329,6 @@ CDN (Content delivery network)
 
 
 这句是...</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/culture/code-of-conduct/" rel="permalink">OpenACID’s Code of Conduct
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  2 分钟阅读
-
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">社交规则
-
-避免”故作惊讶”
-
-第一条规则是, 当对方说他不知道某件事情时, 你最好不要(刻意的或无意的)表现得很惊讶。
-
-包括技术问题(“什么?!我不能相信你不知道堆栈是什么!) 和非技术问题(“你不知道谁是RMS ?!”)
-(RMS: Richard Matthew Stallman,  自由软件奠基人)。
-...</p>
   </article>
 </div>
 
