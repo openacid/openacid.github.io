@@ -20,6 +20,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
+excerpt: "this is an excerpt"
 ---
 
 xxx
