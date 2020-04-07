@@ -1,0 +1,1483 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Erasure-Code-擦除码-3-极限篇 - OpenACID Blog</title>
+<meta name="description" content="没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑">
+
+
+  <meta name="author" content="张炎泼(xp)">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="OpenACID Blog">
+<meta property="og:title" content="Erasure-Code-擦除码-3-极限篇">
+<meta property="og:url" content="https://blog.openacid.com/storage/ec-3/">
+
+
+  <meta property="og:description" content="没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-02-07T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://blog.openacid.com/storage/ec-3/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "OpenACID-分布式研究小院",
+      "url": "https://blog.openacid.com/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="OpenACID Blog Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180"    href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest"                            href="/assets/images/favicon/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a>
+    <a href="#main" class="screen-reader-shortcut">Skip to content</a>
+    <a href="#footer" class="screen-reader-shortcut">Skip to footer</a>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logo/icon-lemon-margin.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          OpenACID Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="http://schema.org/Person">
+  
+  
+  <p>
+
+  
+    <div class="author__avatar">
+      
+
+      
+        <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">张炎泼(xp)</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>正在学画画, 主业是码农</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      <!--
+  
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  
+-->
+    </ul>
+  </div>
+
+  </p>
+  
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Erasure-Code-擦除码-3-极限篇">
+    <meta itemprop="description" content="没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑">
+    <meta itemprop="datePublished" content="February 07, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Erasure-Code-擦除码-3-极限篇
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  24 分钟阅读
+
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 本文目录</h4></header>
+              <ul class="toc__menu">
+  <a href="#书接上回">书接上回</a>
+  <a href="#运算优化">运算优化</a>
+    <ul>
+      <a href="#编码解码开销">编码解码开销</a>
+      <a href="#优化查表次数">优化查表次数</a>
+        <ul>
+          <a href="#构造小乘法表">构造小乘法表</a>
+          <a href="#移位和乘法在gf2的等价">移位和乘法在GF(2⁸)的等价</a>
+        </ul>
+      
+      <a href="#并行查表-simd">并行查表 SIMD</a>
+    </ul>
+  
+  <a href="#算法优化">算法优化</a>
+    <ul>
+      <a href="#数据恢复io优化-lrc">数据恢复IO优化: LRC</a>
+        <ul>
+          <a href="#lrc-的校验块生成">LRC 的校验块生成</a>
+          <a href="#lrc-的数据恢复">LRC 的数据恢复</a>
+        </ul>
+      
+      <a href="#hitchhiker-ec算法">Hitchhiker EC算法</a>
+        <ul>
+          <a href="#hitchhiker-编码过程">Hitchhiker 编码过程</a>
+          <a href="#hitchhiker-数据恢复过程">Hitchhiker 数据恢复过程</a>
+        </ul>
+      
+    </ul>
+  
+  <a href="#ec的可靠性分析">EC的可靠性分析</a>
+  <a href="#数据修复io消耗分析">数据修复IO消耗分析</a>
+    <ul>
+      <a href="#lrc-io开销">LRC IO开销</a>
+    </ul>
+  
+</ul>
+            </nav>
+          </aside>
+        
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/storage/ec-3/">https://blog.openacid.com/storage/ec-3/</a>
+
+
+</p>
+
+
+        
+          
+
+
+
+<img src="/post-res/ec-3/trump-xp-4.png" alt="Erasure-Code-擦除码-3-极限篇" class="page__hero-image">
+
+        
+
+        <h1 id="书接上回">书接上回</h1>
+
+<p>上一篇 <a href="https://blog.openacid.com/storage/ec-2" title="第二篇:Erasure-Code-擦除码-2-实现篇">第二篇:实现</a> 中, 我们介绍完了基于GF(2⁸)伽罗瓦域的标准实现以及做了正确性分析,
+我们也提到:</p>
+
+
+  <p>在EC的计算中, 编解码是一个比较耗时的过程,
+因此业界也在不断寻找优化的方法, 不论从理论算法上还是从计算机指令的优化上,
+于是下一篇我们将介绍如何把EC实现为一个高效的实现.</p>
+
+
+<p>本文我们来介绍, 在实际生产环境使用时还需做哪些优化,
+来将EC打造成一个高效的实现.</p>
+
+<ul>
+  <a href="https://blog.openacid.com/storage/ec-1" title="第一篇:Erasure-Code-擦除码-1-原理篇">第一篇:原理</a> 再上一篇 🤔
+  <a href="https://blog.openacid.com/storage/ec-2" title="第二篇:Erasure-Code-擦除码-2-实现篇">第二篇:实现</a> 上一篇 🤔
+  <a href="https://blog.openacid.com/storage/ec-3" title="第三篇:Erasure-Code-擦除码-3-极限篇">第三篇:极限</a> 我们在这 😁
+</ul>
+
+<p>优化从两方面入手, 一方面是如何加快运算, 一方面是如何减少运算.</p>
+
+<h1 id="运算优化">运算优化</h1>
+
+<p>我们先根据一些基本的假设来计算下EC的计算开销有多少,
+首先是EC编码过程是:</p>
+
+<h2 id="编码解码开销">编码解码开销</h2>
+
+<p>假设EC配置是k+m, k个数据库编码成m个校验块.
+EC的编码就是矩阵相乘:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/CDATA_begin_bmatrix_y_1_y_2_y_3_vdots_y_m_end_bmatrix_=_begin_b-87d0b4212471788182bd169fef29ea82.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+\vdots \\
+y_m 
+\end{bmatrix}
+
+=
+\begin{bmatrix}
+1      & 1      & 1      & \dots  & 1       \\
+1      & 2      & 2^2    & \dots  & 2^{k-1} \\
+1      & 3      & 3^2    & \dots  & 3^{k-1} \\
+\vdots & \vdots & \vdots & \ddots & \vdots  \\
+1      & m      & m^2    & \dots  & m^{k-1}
+\end{bmatrix}
+\times
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+\vdots \\
+x_k 
+\end{bmatrix} %]]>"/>
+
+<p>生成每一个校验块的计算工作是 <strong>yᵢ = Σ aᵢⱼ ⊗ dⱼ</strong></p>
+
+<p>⊗ 表示GF(2⁸) 下的乘法, Σ表示GF(2⁸)下的求和, 也就是XOR,
+每个校验块的生成就需要k个GF(2⁸)的乘法, 以及k-1次(计算时假设为k次)XOR操作.
+而之前我们提到的GF(2⁸)中的乘法和除法是通过查<a href="https://blog.openacid.com/storage/ec-2/#标准ec的实现" title="指数表">指数表</a>计算的 :</p>
+
+<img src="/publish/weibo/storage/ec-3/images/begin_aligned_a_b_=_2_log_2a_log_2b_end_aligned_-e08961db48ddc53ceed6658c77b3c83f.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\begin{aligned}
+a * b = 2^{log_2a+log_2b}
+\end{aligned}"/>
+
+<p>也就是说一次GF(2⁸)的一次乘法运算需要: 2次查对数表求得 log₂a和log₂b, 一次加法,
+最后再查一次指数表, 再算上最后的求和运算,
+生成一个校验块的操作需要 3 * k 个查表, 2 * k 个计算.
+查表看做L1 cache的访问, 大约1纳秒.
+XOR计算指令大约0.5 纳秒.</p>
+
+<p>编码 1 byte 开销大约是4 * k 纳秒.</p>
+
+
+  <p>GF(2⁸)下的指数表和对数表都是256字节, 假设cpu的L1 cache line有足够空间,
+查表都在L1 cache中完成.</p>
+
+  <p>Intel Core i7-9xx CPU的L1 data cache有32KB.</p>
+
+  <p>L1 Cache 访问延迟 为 4个cycle, 约1~2纳秒.</p>
+
+
+<p>数据解码开销分为2部分, 一个是矩阵求逆, 一个是逆矩阵跟没有丢失数据的乘法计算.
+其中主要是第2部分, 它跟编码过程一样也是计算一个矩阵乘法: <strong>uᵢ = Σ aᵢⱼ ⊗ xⱼ</strong>, 也需要4 * k 纳秒.</p>
+
+
+  <p>矩阵求逆的操作开销可以忽略, 因为一般情况下,
+丢失的数据都是一整块(例如12+4的EC组中, 每个数据块都是64MB大小的)
+对一组EC编码的数据, 只需要求一次逆就可以了.所以均摊开销很小.</p>
+
+
+<p>在k+m = 12+4 的EC配置下, 一个CPU上的编/解码速度大约是1秒/(4*12)纳秒 = 19MB/秒 .</p>
+
+<p>机械盘的顺序读写差不多是100MB/s,
+25Gbps的网线快普及了, 每秒读写3GB数据,
+SSD就不说了, 一个EC数据修复速度才19MB/s? 不行不行.优化!</p>
+
+<p>直接的优化方式包括2方面:</p>
+<ul>
+  <strong>减少查表次数</strong>,
+  以及通过<strong>并行指令</strong>使得多个查表或计算的工作在一个指令内完成.
+</ul>
+
+<h2 id="优化查表次数">优化查表次数</h2>
+
+<p>为了优化查表次数, 我们可以将基于指数表和对数表的乘法实现:
+a * b = 2^(log₂a + log₂b)
+优化成直接查询一个乘法表, 但这个表太大, 有256x256个字节=64K, 可能超出L1
+cache的大小, 导致查表效率直线下降(一般L1 cache和L2 cache的查询效率相差几倍)</p>
+
+<p>于是为了减少查表次数, 我们首先必须减小表的大小.</p>
+
+<h3 id="构造小乘法表">构造小乘法表</h3>
+
+<p>因为一个 8-bit 的数字 a=hhhhllll  可以表示成 2 个 4-bit 的数字(hhhh0000 ^ llll):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_79c0e3d4b54540965155dfd3cbc7676b.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>于是我们可以把2个 8-bit 数的乘法拆成2个 4-bit数 乘 8-bit数 之和:</p>
+
+<p>y ⊗ a = (y ⊗ 2⁴ ⊗ h) ^ (y ⊗ l).</p>
+
+<p>这样所需的乘法表就很小了, 只有16x256 = 4KB大小(y和y⊗2⁴的取值有256个, h/l的取值有16个),
+完全可以放入L1 cache中.
+而对应的GF(2⁸)下的乘除法计算也需要做一些调整,
+但首先我们需要证明一下这种拆分的正确性:</p>
+
+<h3 id="移位和乘法在gf2的等价">移位和乘法在GF(2⁸)的等价</h3>
+
+<p>根据在上一篇的 <a href="https://blog.openacid.com/storage/ec-2/#gf2-扩张成-gf2" title="GF(28)的质多项式">质多项式</a> 的解释,
+在GF(2⁸) 下, h ⊗ 2⁴ 和 h&lt;&lt;4 是等价的, 因为根据GF(2⁸)下的乘法定义是 <strong>a ⊗ b % P₈</strong>(P₈ = x⁸ + x⁴ + x³ + x² + 1);</p>
+
+<p>h只有4个bit, 它对应的多项式最高次数项是x³, 2⁴对应的多项式是x⁴,
+所以它们2个相乘最高次幂是x⁷, 不会超过P₈, 所以取模结果跟移位结果一样.</p>
+
+<p>而h ⊗ 2⁵ 跟 h&lt;&lt;5 在GF(2⁸)下不是等价, h&lt;&lt;5最高次幂是8,
+取模之后值就可能发生了变化.</p>
+
+<p>举个例子, 回顾下我们在 上一篇 中生成的<a href="https://blog.openacid.com/storage/ec-2/#标准ec的实现" title="指数表">指数表</a>,
+可以看到对所有的a=0000xxxx形式的数, a ⊗ 2⁴ 和 a&lt;&lt;4的结果是一样的,
+a ⊗ 2⁵ 跟 a&lt;&lt;5 就不一样了:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_1a7f139bd8cd91c7314406cb0a8eda4f.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>根据h ⊗ 2⁴ 和 h&lt;&lt;4的等价, 我们就可以拆分
+y ⊗ a = (y ⊗ 2⁴ ⊗ h) ^ (y ⊗ l).
+然后利用16x256的乘法表来实现更快的GF(2⁸)下的乘法.</p>
+
+<h2 id="并行查表-simd">并行查表 SIMD</h2>
+
+<p>在上面乘法优化的基础上, 下一个计算优化是将查表并行处理, 这主要通过使用<a href="https://en.wikipedia.org/wiki/SIMD" title="SIMD单指令流多数据流">SIMD</a>
+指令来实现.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/SIMD" title="SIMD单指令流多数据流">SIMD</a> 是优化的主要手段, 同时对一组数据（又称“数据向量”）中的每一个分别执行相同的操作从而实现空间上的并行性的技术.
+例如Intel的MMX或SSE，以及AMD的3D Now!指令集.</p>
+
+<p>mm_shuffle_epi8(u, v) 可以一次对2 个128bit的整数操作:</p>
+<ul>
+  u 被当做是一个16个元素, 每个元素8bit的table, 在我们这个场景中u是 y ⊗ 所有 0000xxxx 的值或y ⊗ 所有 xxxx0000的值.
+  v是16 个index, 在我们的场景中是16个不同的aᵢ的高4bit或低4bit.
+</ul>
+
+<p>假设有一组乘法需要查表计算时:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_4c83828136ff3aeb973566bb11220ba9.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>首先准备好这2个表:</p>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_d6295a055e39baf76d96ae96fcdb3c11.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>然后计算过程就如下所述:</p>
+<ul>
+  加载tableL 到128bit的寄存器u,
+  取16个aᵢ的低4bit: lᵢ存储到寄存器v,
+  mm_shuffle_epi8(y, lᵢ)
+  加载tableH 到128bit的寄存器u,
+  取16个aᵢ的高4bit: hᵢ存储到寄存器v,
+  mm_shuffle_epi8(y, hᵢ)
+</ul>
+
+<p>整个乘法操作需要2次查表4个计算, 大约4纳秒,
+因为一次可以计算16个8bit整数的乘法,
+平均每个乘法0.25 纳秒.</p>
+
+<p>同样加法也可以功过并行指令来优化, 每个加法平均需要0.06个指令.</p>
+
+<p>再回头看编解码计算 uᵢ = Σ aᵢ xᵢ</p>
+
+<p>编解码平均就只需要0.31 * k 纳秒.
+简单估计就比之前的4*k纳秒减少到1/10, 至少每秒可以恢复300MB的数据了.</p>
+
+<p>几乎所有的EC实现都使用了并行优化, 包括
+Jerasure, Intel ISA-L 这2个c实现.</p>
+
+<p>如果你需要go版本的实现, 请移步我的前任(同事)<a href="https://github.com/templexxx" title="xxx">xxx</a>同学的实现, benchmark比Intel ISA-L还要快一点:
+<a href="https://github.com/templexxx/reedsolomon" title="reedsolomon">reedsolomon</a>.</p>
+
+<p>关于实现设计可以参考<a href="https://github.com/templexxx" title="xxx">xxx</a>同学的博客: <a href="http://www.templex.xyz/blog/101/writers.html" title="实现高性能纠删码引擎">实现高性能纠删码引擎</a>.</p>
+
+
+  <p>8102年跟大家一起做EC时, 设计2个月, 编码1个月, 当时碰巧在某乎撩到了<a href="https://github.com/templexxx" title="xxx">xxx</a>同学, 有他的加入,
+还有当时一起的几个棒小伙(小妹), 才能顺(mian)利(qiáng)完成.
+这一版的go实现在当时内部版本中又增加了垃圾回收支持, 更新EC组数据的快速合并等.</p>
+
+
+<h1 id="算法优化">算法优化</h1>
+
+<p>计算开销的优化之后我们来看看在算法层面的优化.
+EC的解码开销主要来自于需要对k组数据同时进行计算, 才能解码一个数据块.
+如果能降低整体恢复所需的数据, 那解码开销将在计算优化的基础上进一步降低.</p>
+
+<h2 id="数据恢复io优化-lrc">数据恢复IO优化: LRC</h2>
+
+<p>当 EC 进行数据恢复的时候, 需要k个块参与数据恢复, 直观上,
+每个数据块损坏都需要k倍的IO消耗.</p>
+
+<p>为了缓解这个问题, 一种略微提高冗余度, 但可以大大降低恢复IO的算法被提出:
+[Local-Reconstruction-Code], 简称 LRC.</p>
+
+<p>LRC的思路很简单, 在原来的 EC 的基础上,
+对所有的数据块分组对每组在做1次 k’ + 1 的 EC.
+k’ 是二次分组的每组的数据块的数量.</p>
+
+<h3 id="lrc-的校验块生成">LRC 的校验块生成</h3>
+
+<img src="/publish/weibo/storage/ec-3/images/CDATA_begin_aligned_overbrace_d_1_d_2_d_3_y__1_1_overbrace_d_4_-c5ef95f6ac51262cd1199047a2edbf29.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+\begin{aligned}
+\overbrace{d_1  + d_2  + d_3}^{y_{1,1}} & + \overbrace{d_4 + d_5 + d_6}^{y_{1,2}} & = y_1 \\
+d_1             + 2d_2 + 2^2d_3         & + 2^3d_4 + 2^4d_5 + 2^5d_6              & = y_2 \\
+d_1             + 3d_2 + 3^2d_3         & + 3^3d_4 + 3^4d_5 + 3^5d_6              & = y_3
+\end{aligned} %]]>"/>
+
+<p>最终保存的块是所有的数据块: d₁, d₂, d₃, d₄, d₅, d₆ ,
+和校验块 y₁₁, y₁₂, y₂, y₃.</p>
+
+<p>这里不需要保存 y₁ 因为 y₁ = y₁₁ ^ y₁₂ .</p>
+
+<p>对于 LRC的EC来说, 它的生成矩阵前k行不变,
+去掉了标准EC的第k+1行(全1的行), 多出2个局部的校验行:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/CDATA_begin_bmatrix_1_0_0_0_0_0_0_1_0_0_0_0_0_0_1_0_0_0_0_0_0_1-223450de9176b2eb81d8e7f830cd04fe.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+\begin{bmatrix}
+1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 1 \\
+\hline \\
+1 & 1 & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 1 \\
+\hline \\
+1 & 2 & 2^2 & 2^3 & 2^4 & 2^5 \\
+1 & 3 & 3^2 & 3^3 & 3^4 & 3^5 \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+d_1 \\
+d_2 \\
+d_3 \\
+d_4 \\
+d_5 \\
+d_6
+\end{bmatrix} =
+\begin{bmatrix}
+d_1 \\
+d_2 \\
+d_3 \\
+d_4 \\
+d_5 \\
+d_6 \\
+y_{11} \\
+y_{12} \\
+y_2 \\
+y_3 \\
+\end{bmatrix} %]]>"/>
+
+<h3 id="lrc-的数据恢复">LRC 的数据恢复</h3>
+
+<p>LRC 的数据恢复和标准的EC类似, 除了2点不同:</p>
+
+<ul>
+  <b>在选择校验块的行生成解码矩阵的时候,
+如果某第k+i行没有覆盖到任何损坏的数据的话,
+是无法提供有效性信息, 需要跳过的.</b>
+
+    <p>例如 d₄  损坏时, 不能像标准EC那样选择第7行 1 1 1 0 0 0
+这行作为补充的校验行生成解码矩阵, 必须略过第7行, 使用第8行.</p>
+  
+  <b>不是所有的情况下, m个数据损坏都可以通过加入m个校验行来恢复.
+例如d₁, d₂, y₂, y₃ 损坏时就是无法恢复的, 因为y₁₂ 用不上</b>
+
+    <p>例如在12数据块, 4个校验块中前2个是LRC校验块的情况下,
+只有87%的损坏是能恢复的.</p>
+  
+</ul>
+
+<p>如果你需要一个LRC的c实现, 移步此处: <a href="https://github.com/drmingdrmer/lrc-erasure-code" title="lrc-erasure-code">lrc-erasure-code</a></p>
+
+<h2 id="hitchhiker-ec算法">Hitchhiker EC算法</h2>
+
+<p><a href="https://blog.acolyer.org/2014/12/17/a-hitchhikers-guide-to-fast-and-efficient-data-reconstruction-in-erasure-coded-data-centers/" title="Hitchhiker's Erasure Code">Hitchhiker</a> 可以认为是基于LRC的进一步优化.
+paper太繁琐, 核心思想挺简单:</p>
+
+<h3 id="hitchhiker-编码过程">Hitchhiker 编码过程</h3>
+
+<p>为了开始说明原理, 取一个有代表性的例子:
+对一组数据k=6: d₁, d₂…d₆ 做3,3的LRC编码:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_233dbea5344672768208601453b63b99.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>对另一组数据k=6: e₁, e₂…e₆ 做标准EC的编码:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_3c84018aaa391e793bdf91f4d7919630.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>存储的时候, 将d/e对应的编号的数据块作为一个数据块存储到一起,
+同时对应的校验块做如下规则的存储:</p>
+
+<ul>
+  校验块1 是 (y₁, z₁)
+  校验块2 是 (y₂, z₂+y₁₁)
+  校验块3 是 (y₃, z₃+y₁₂)
+</ul>
+
+<p>也就是说, 把第一组的LRC校验块, 跟第2组的某些校验块XOR之后一起存储:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/storage/ec-3/images/tbl_3406c6f99a721f51284a8d6bdf5f6c1c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<h3 id="hitchhiker-数据恢复过程">Hitchhiker 数据恢复过程</h3>
+
+<p>如果只有一个数据块损坏, 例如(d₁ e₁)损坏,</p>
+
+<ul>
+  先恢复第2行, 通过 e₂ .. e₆ 和 z₁ 恢复出e₁;
+  再通过 e₁ .. e₆ 计算出z₂;
+  通过没有损坏的z₂+y₁₁和z₂的值, 计算出y₁₁;
+  通过d₂, d₃, y₁₁恢复d₁.
+</ul>
+
+<p>这样在一个EC组中, 一半数据需要k倍IO来恢复, 剩下的一半只需要k/2倍的IO来恢复.
+总体来说大约节省了25%的IO开销.</p>
+
+<p>而第1, 2, 3步在计算时可以合并, 只会增加有限的额外的IO.</p>
+
+<p>理论上这种方法可以最多节省50%的恢复IO, 实际使用时, 因为k不能无限大,
+可以节省30%的IO.</p>
+
+<p>同样 Hitchhiker EC 有一份来自我前任(同事)<a href="https://github.com/templexxx" title="xxx">xxx</a>同学的go实现: <a href="https://github.com/templexxx/xrs" title="xrs">xrs</a>.</p>
+
+<h1 id="ec的可靠性分析">EC的可靠性分析</h1>
+
+<p>在可靠性方面, 假设 EC 的配置是k个数据块, m个校验块.
+根据 EC 的定义,k+m个块中, 任意丢失m个都可以将其找回.
+这个 EC 组的丢失数据的风险就是丢失m+1个块或更多的风险:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/sum__i=m_1_k_m_k_m_choose_i_p_i_1-p_k_m-i_-f5f1ab2411e19e4eae185d34c6afeda5.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\sum_{i=m+1}^{k+m} {k+m \choose i} p^{i} (1-p)^{k+m-i}"/>
+
+<p>这里p是单块数据丢失的风险,一般选择磁盘的日损坏率: 大约是0.0001.
+p一般很小所以近似数据丢失风险就只看第1项:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/k_m_choose_m_1_p_m_1_1-p_k-1_-1ed9ba0d664eb4dc426e885ad318b3f8.png" style="display: block; margin: 0 auto 1.3em auto" _alt="{k+m \choose m+1} p^{m+1} (1-p)^{k-1}"/>
+
+
+  <p>硬盘的年损坏率经验值大约是7%: 一年过去, 7%的硬盘坏掉.
+那么均摊到日损坏率: (1-p)³⁶⁵ = 0.07, 可以得到p = 0.00017</p>
+
+
+
+  <p>在计算多副本可靠性的时候, 这里也假设一个损坏的磁盘修复的周期是1天,
+也就是说1天之内同时损坏达到一定数量才会造成数据丢失.
+一天之后, 数据有恢复到原来的副本数量.
+所以即使冗余度不增加, 修复越快, 也可以很大程度上提高可靠性.</p>
+
+
+<p>在这个模型下, 我们可以看下2个校验块时的几个典型的可靠性比较,
+第一行k=1时, 就是1+m的EC, 实际上等同多副本的策略了.</p>
+
+<img src="/publish/weibo/storage/ec-3/images/tbl_bc2fe151ca0f9fbf4aebb246eee6ecb0.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
+
+<p>k+m EC 的数据丢失风险:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/tbl_27d53392f08177778acda8bb5f49e363.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
+
+<p>但是看图更清楚:</p>
+
+<p><img src="/post-res/ec-3/9-11-13-pad.png" alt="" /></p>
+
+<p><strong>划重点</strong>!!!:</p>
+
+<p>取k=1, m=2时, 相当于3副本, 大约可以达到11~12个9.
+这也是aws-s3承诺的11个9的由来: <a href="https://aws.amazon.com/s3/faqs/#Durability_.26_Data_Protection" title="s3-durability">s3-durability</a> :</p>
+
+<p><img src="/post-res/ec-3/s3-durability.png" alt="" /></p>
+
+<ul>
+  要达到13个9的可靠性, 2个校验块最多允许0.22个数据块.也就是说3副本无论如何也达不到13个9的可靠性.
+  要达到13个9的可靠性, 3个校验块最多允许11个数据块.
+  要达到13个9的可靠性, 4个校验块最多允许63个数据块.
+</ul>
+
+<p>同样, 如果有k个数据块要达到若干个9的可靠性, 要求的m如下:</p>
+
+<p><img src="/post-res/ec-3/reliability-3-pad.png" alt="" /></p>
+
+<h1 id="数据修复io消耗分析">数据修复IO消耗分析</h1>
+
+<p>以一个 EC 组来分析,
+1个数据块一天内损坏的概率是 p=0.0001(上面算的), 这个组中有块损坏的概率是:
+1 - (1-p)ᵏ⁺ᵐ
+而 <a href="https://en.wikipedia.org/wiki/Taylor_series#Binomial_series" title="泰勒级数">布鲁克·泰勒</a> 觉得p很小所以可以近似为: (k+m)p</p>
+
+<p>在标准EC的k+m实现里, 每次数据损坏都需要读取k个的数据进行恢复.
+不论1块损坏还是多块损坏. 可以认为EC的修复是读取k个数据块输出m个修复的块.</p>
+
+<p>于是在一天的时间内, 这个EC组修复产生的数据量是 (k+m)p * (k+m) * ECblockSize.
+除以EC组总大小(k+m)*ECblockSize, 就是存储集群单位容量每天产生的修复传输量,
+刚好是(k+m)p.</p>
+
+<p><strong>划重点</strong>!!!:</p>
+
+<p>如果存储集群有100PB, 每天用于恢复数据产生的数据传输量: (k+m)p *总容量 =~ 0.0016 * 总容量 = 160TB;</p>
+
+<p>假设单台存储服务器的容量是120TB, 整个集群有差不多1000台服务器.
+每台服务器均摊的传输量是160GB/天;</p>
+
+<p>而用于修复的带宽为 160GB/86400秒 = 15Mbps.</p>
+
+<p>但一般来说数据恢复不会在时间上很均匀的分布,
+这个带宽消耗需要预估10倍到100倍.</p>
+
+<h2 id="lrc-io开销">LRC IO开销</h2>
+
+<p>在一个EC组中, 损坏一个数据块的几率要远大于损坏多个数据块的几率.
+如果能够及时发现坏块, 那么多数情况下只需要恢复一块就够了.
+例如损坏一块的概率相比同时损坏2块的概率比例大概是:</p>
+
+<img src="/publish/weibo/storage/ec-3/images/frac_k_m_choose_1_p_1-p_k_m-1_k_m_choose_2_p_2_1-p_k_m-2_=_frac-e4e9e3e96bb447e7c7f4e3ffc84ef6f2.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\frac{
+{k+m \choose 1} p (1-p)^{k+m-1}
+}
+{
+{k+m \choose 2} p^{2} (1-p)^{k+m-2}
+}
+=
+\frac{2(1-p)}{(k+m-1)p}
+\approx 1000"/>
+
+<p>因此, 如果能比较快的发现坏盘, LRC的修复开销可以降低到几分之一.
+同样Hitchhiker也是一样.</p>
+
+<p>修复带宽是个需要关注的环节,
+如果短时间内触发大量数据修复而又没有限流控制,
+第一个会把磁盘IO吃光: 一个数据块需要k倍的读取来修复.
+第二会把内网带宽吃光, 所有数据块/校验块都是跨机器部署的, 
+一个数据块的修复带来的是k个服务器的出向带宽, 如果EC存储时跨交换机,
+例如每组EC的块非常随机的分布在整个集群的每台服务器上,
+那么几乎所有的修复带宽都要跑遍所有的交换机.</p>
+
+<p><strong>所以EC数据块的排列在相对比较小的范围内, 也许可以避免整个局域网内的带宽耗尽</strong>.</p>
+
+<p>别问我怎么知道的, 我只是猜测,
+我没有经历过内网带宽被数据修复吃光并且导致大量其他业务疯狂丢包无法访问的情况.</p>
+
+<p>EC系列完. 感谢大家听我叨逼叨.</p>
+
+
+  <p>EC擦除码系列:</p>
+  <ul>
+    <a href="https://blog.openacid.com/storage/ec-1" title="第一篇:Erasure-Code-擦除码-1-原理篇">第一篇:原理</a>
+    <a href="https://blog.openacid.com/storage/ec-2" title="第二篇:Erasure-Code-擦除码-2-实现篇">第二篇:实现</a>
+    <a href="https://blog.openacid.com/storage/ec-3" title="第三篇:Erasure-Code-擦除码-3-极限篇">第三篇:极限</a>
+  </ul>
+
+
+
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/storage/ec-3/">https://blog.openacid.com/storage/ec-3/</a>
+
+
+</p>
+<ul class="page-links" style="display:none;">
+
+
+
+
+    
+        <li style="font-size:0.7em">
+        [Vandermonde]: https://en.wikipedia.org/wiki/Vandermonde_matrix
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Cauchy]: https://en.wikipedia.org/wiki/Cauchy_matrix
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [failure-rate]: https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [RAID]: https://zh.wikipedia.org/wiki/RAID
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [RAID-5]: https://zh.wikipedia.org/wiki/RAID#RAID_5
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [RAID-6]: https://zh.wikipedia.org/wiki/RAID#RAID_6
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Finite-Field]: https://en.wikipedia.org/wiki/Finite_field
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Galois-Field]: https://en.wikipedia.org/wiki/Finite_field
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Reed-Solomon]: https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Erasure-Code]: https://en.wikipedia.org/wiki/Erasure_code
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Prime-Polynomial]: https://en.wikipedia.org/wiki/Irreducible_polynomial
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Field-Extension]: https://en.wikipedia.org/wiki/Field_extension
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Complex-Number]: https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Hamming-7-4]: https://en.wikipedia.org/wiki/Hamming(7,4)
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Generator-Matrix]: https://en.wikipedia.org/wiki/Generator_matrix
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [第一篇:原理]: https://blog.openacid.com/storage/ec-1
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [第二篇:实现]: https://blog.openacid.com/storage/ec-2
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [第三篇:极限]: https://blog.openacid.com/storage/ec-3
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [费马小定理的群论的证明]: https://en.wikipedia.org/wiki/Proofs_of_Fermat%27s_little_theorem#Proofs_using_group_theory
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [布鲁克·泰勒]: https://en.wikipedia.org/wiki/Taylor_series#Binomial_series
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [SIMD]: https://en.wikipedia.org/wiki/SIMD
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [质多项式]: https://blog.openacid.com/storage/ec-2/#gf2-扩张成-gf2
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [指数表]: https://blog.openacid.com/storage/ec-2/#标准ec的实现
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Hitchhiker]: https://blog.acolyer.org/2014/12/17/a-hitchhikers-guide-to-fast-and-efficient-data-reconstruction-in-erasure-coded-data-centers/
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [s3-durability]: https://aws.amazon.com/s3/faqs/#Durability_.26_Data_Protection
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [lrc-erasure-code]: https://github.com/drmingdrmer/lrc-erasure-code
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [实现高性能纠删码引擎]: http://www.templex.xyz/blog/101/writers.html
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [reedsolomon]: https://github.com/templexxx/reedsolomon
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [xrs]: https://github.com/templexxx/xrs
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [xxx]: https://github.com/templexxx
+        </li>
+    
+
+</ul>
+<p>
+<img src="/assets/images/qrcode-text.png" alt="openacid">
+</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 标签: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#distributed" class="page__taxonomy-item" rel="tag">distributed</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#ec" class="page__taxonomy-item" rel="tag">ec</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#erasure-code" class="page__taxonomy-item" rel="tag">erasure-code</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#gf256" class="page__taxonomy-item" rel="tag">GF256</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#hitchhiker" class="page__taxonomy-item" rel="tag">Hitchhiker</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#lrc" class="page__taxonomy-item" rel="tag">LRC</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#replication" class="page__taxonomy-item" rel="tag">replication</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#smid" class="page__taxonomy-item" rel="tag">SMID</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#storage" class="page__taxonomy-item" rel="tag">storage</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E4%BC%BD%E7%BD%97%E7%93%A6" class="page__taxonomy-item" rel="tag">伽罗瓦</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E4%BC%BD%E7%BD%97%E7%93%A6%E5%9F%9F" class="page__taxonomy-item" rel="tag">伽罗瓦域</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E5%9F%9F" class="page__taxonomy-item" rel="tag">域</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E6%93%A6%E9%99%A4%E7%A0%81" class="page__taxonomy-item" rel="tag">擦除码</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E7%BA%A0%E5%88%A0%E7%A0%81" class="page__taxonomy-item" rel="tag">纠删码</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#storage" class="page__taxonomy-item" rel="tag">storage</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-02-07T00:00:00+08:00">February 07, 2020</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">分享</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Erasure-Code-%E6%93%A6%E9%99%A4%E7%A0%81-3-%E6%9E%81%E9%99%90%E7%AF%87%20https%3A%2F%2Fblog.openacid.com%2Fstorage%2Fec-3%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Fstorage%2Fec-3%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Fstorage%2Fec-3%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/storage/ec-2/" class="pagination--pager" title="Erasure-Code-擦除码-2-实现篇
+">向前</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">向后</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">猜您还喜欢</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-2/" rel="permalink">Erasure-Code-擦除码-2-实现篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  39 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">书接上回
+
+上一篇 第一篇:原理 中, 我们介绍了EC的基本原理,
+实际上EC的存储跟恢复过程可以理解为:
+一条k-1次曲线可以通过k个系数或曲线上的点来确定.
+
+我们也提到:
+
+
+  但这套理论还不能直接应用到线上产品中.
+因为计算机中还要考虑数字大小限制, 例如k个32位整数作为数据,
+通过Vandermon...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-1/" rel="permalink">Erasure-Code-擦除码-1-原理篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  13 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">前言
+
+做分布式存储的同学, 一定都知道一个了不地的冗余算法叫作擦除码(Erasure-Code), 
+它让存储以多副本几分之一的成本来达到同样高的可靠性.
+
+虽然web上有很多介绍EC的文字,
+但几乎所有这些文字都为了严(bi)谨(ge)而搞的像牛津词典一样难读,
+懂的人不需要看, 不懂的人看不懂.
+
+能把事情...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/culture/pr/" rel="permalink">Art of Pull Requests(翻译)
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">原文: Art of Pull Requests
+
+
+
+正如我之前写的，
+我们是一个远程团队，团队成员遍布世界各地。
+这意味着code reviews 和 pull requests必须远程完成。
+
+最近，我们团队的一位成员提出了这样的宣言:
+
+
+  作为 PR writer 我会:
+
+  
+    保持PR够小...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/tech/cdn/" rel="permalink">掐指算算: 你的CDN多花了几百万?
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  5 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">在上篇
+互联网中对象访问频率的91分布
+我们通过
+90%的流量由10%的内容产生
+这句经验描述，
+得出了访问频率的zipf模型:
+
+
+
+CDN (Content delivery network)
+就是一个典型的符合zipf分布的缓存系统:
+将缓存服务部署在距离用户最近的上百个地区（CDN边缘机房），
+当用户需要...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+
+
+<script language="javascript" type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      jax: ["input/TeX", "output/SVG"],
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"> </script>
+
+
+
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <strong>关注:</strong>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 OpenACID-分布式研究小院. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://blog.openacid.com/storage/ec-3/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/storage/ec-3"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://openacid.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  <style> .header-link { display: none !important; } </style> </body >
+</html>
