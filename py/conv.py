@@ -281,6 +281,7 @@ def html_to_image(tblhtml, imgdir):
             cwd=tmpdir,
     )
 
+    # TODO extend to match page width
     dd("crop to visible area")
     proc.command_ex(
             "convert",
