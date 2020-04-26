@@ -1,0 +1,785 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>几个无理取闹的coding心得 - OpenACID Blog</title>
+<meta name="description" content="来自一个莫得感情的coding万年户">
+
+
+  <meta name="author" content="张炎泼(xp)">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="OpenACID Blog">
+<meta property="og:title" content="几个无理取闹的coding心得">
+<meta property="og:url" content="https://blog.openacid.com/tech/bla/programmer-should-know/">
+
+
+  <meta property="og:description" content="来自一个莫得感情的coding万年户">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-04-26T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://blog.openacid.com/tech/bla/programmer-should-know/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "OpenACID-分布式研究小院",
+      "url": "https://blog.openacid.com/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="OpenACID Blog Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180"    href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest"                            href="/assets/images/favicon/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logo/icon-lemon-margin.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          OpenACID Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="http://schema.org/Person">
+  
+  
+  <p>
+
+  
+    <div class="author__avatar">
+      
+
+      
+        <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">张炎泼(xp)</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>正在学画画, 主业是码农</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+
+  </p>
+  
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="几个无理取闹的coding心得">
+    <meta itemprop="description" content="来自一个莫得感情的coding万年户">
+    <meta itemprop="datePublished" content="April 26, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">几个无理取闹的coding心得
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 分钟阅读
+
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/tech/bla/programmer-should-know/">https://blog.openacid.com/tech/bla/programmer-should-know/</a>
+
+
+</p>
+
+
+        
+          
+
+
+
+<img src="/post-res/programmer-should-know/programmer-should-know-banner.png" alt="几个无理取闹的coding心得" class="page__hero-image">
+
+        
+
+        <ul>
+  <li>
+    <p>软件开发里所有的东西都已经发明出来了!
+人们总是在做重复的事情, 假装在发明新的东西.
+如果有个东西让你觉得很酷很新, 那它肯定是从Smalltalk, HAKMEM, Ivan
+Sutherland, Douglas Engelbart, 早期的IBM, 或者Bell 实验室其中之一抄来的.</p>
+  </li>
+  <li>
+    <p>别相信编译器, 别相信工具, 别相信文档, 别相信你自己.</p>
+  </li>
+  <li>
+    <p>我们已经不需要更多的编程语言了!
+但是… 你还是会立马跑去发明一个新的语言.
+恩…我猜, 你那个超酷的新语言肯定还是用的IEEE-754浮点数, 和定宽整数吧.</p>
+  </li>
+  <li>
+    <p>维护代码比写代码困难的多.
+写很多很多新代码其实就是在犯懒.</p>
+  </li>
+  <li>
+    <p>我们学习到的知识是, 内存, cpu, 带宽都是无限和免费的. 实际上不是这样的,
+不是这样的, 不是这样的.
+推荐读读 Knuth的 prematrue optimization 相关的文字.</p>
+  </li>
+  <li>
+    <p>几个月之后你就会忘记你当时为啥写那段代码…
+写的时候能写多直白就多写多直白(xp建议: 永远低估几月后自己的智力准没问题的).</p>
+  </li>
+  <li>
+    <p>有时候一行sed命令就够了.</p>
+  </li>
+  <li>
+    <p>如果谁跟你说他的方案绝逼是最好最快的, 小心点.
+编程是个艺术不是宗教.</p>
+  </li>
+  <li>
+    <p>如果你觉得有个事情你要重复做10次以上, 就立刻把它做成自动化的!(xp觉得大概3次就该考虑了…)</p>
+  </li>
+  <li>
+    <p>备份是一个事情,  恢复备份是完全不同的另外一个事情!</p>
+  </li>
+  <li>
+    <p>仅仅是在你自己的电脑上可以工作不代表没有bug. - Piers Sutton.</p>
+  </li>
+  <li>
+    <p>想要装一个新工具的话, 等0.1版本出来再说, 让其他人当小白鼠(<code class="highlighter-rouge">Let other people be guinea pigs</code>).</p>
+
+    <p><img src="/post-res/programmer-should-know/guinea-pig.png" alt="" /></p>
+  </li>
+  <li>
+    <p>好的程序员写好的代码.
+杰出的程序员不写代码.
+大师程序员删代码.</p>
+  </li>
+  <li>
+    <p>出问题时, 别管有多少领导正在朝你吼着训话, 第一件事情总应该是稳定复现bug.</p>
+  </li>
+  <li>
+    <p>或早或晚, 你会遇到一个经验丰富的前辈, 偶尔他会向你传授 Laws of Programming.
+让他滚一边去.</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>原文链接:
+<a href="https://www.quora.com/What-are-some-things-that-only-someone-who-has-been-programming-20-50-years-would-know/answer/John-Byrd-2?share=bf7b4448&amp;srid=uJiB" title="x">What are some things that only someone who has been programming 20-50 years would know</a></p>
+</blockquote>
+
+
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/tech/bla/programmer-should-know/">https://blog.openacid.com/tech/bla/programmer-should-know/</a>
+
+
+</p>
+<ul class="page-links" style="display:none;">
+
+
+
+
+    
+        <li style="font-size:0.7em">
+        [What are some things that only someone who has been programming 20-50 years would know]: https://www.quora.com/What-are-some-things-that-only-someone-who-has-been-programming-20-50-years-would-know/answer/John-Byrd-2?share=bf7b4448&srid=uJiB
+        </li>
+    
+
+</ul>
+<p>
+<img src="/assets/images/qrcode-hori.jpg" alt="openacid">
+</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 标签: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#%E6%9D%82%E8%B0%88" class="page__taxonomy-item" rel="tag">杂谈</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#bla" class="page__taxonomy-item" rel="tag">bla</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/categories/#tech" class="page__taxonomy-item" rel="tag">tech</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-04-26T00:00:00+08:00">April 26, 2020</time></p>
+        
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">分享</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E5%87%A0%E4%B8%AA%E6%97%A0%E7%90%86%E5%8F%96%E9%97%B9%E7%9A%84coding%E5%BF%83%E5%BE%97%20https%3A%2F%2Fblog.openacid.com%2Ftech%2Fbla%2Fprogrammer-should-know%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fbla%2Fprogrammer-should-know%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Ftech%2Fbla%2Fprogrammer-should-know%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/storage/ec-3/" class="pagination--pager" title="Erasure-Code-擦除码-3-极限篇
+">向前</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">向后</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">猜您还喜欢</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  24 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-2/" rel="permalink">Erasure-Code-擦除码-2-实现篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  39 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">书接上回
+
+上一篇 第一篇:原理 中, 我们介绍了EC的基本原理,
+实际上EC的存储跟恢复过程可以理解为:
+一条k-1次曲线可以通过k个系数或曲线上的点来确定.
+
+我们也提到:
+
+
+  但这套理论还不能直接应用到线上产品中.
+因为计算机中还要考虑数字大小限制, 例如k个32位整数作为数据,
+通过Vandermon...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/storage/ec-1/" rel="permalink">Erasure-Code-擦除码-1-原理篇
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  13 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">前言
+
+做分布式存储的同学, 一定都知道一个了不地的冗余算法叫作擦除码(Erasure-Code), 
+它让存储以多副本几分之一的成本来达到同样高的可靠性.
+
+虽然web上有很多介绍EC的文字,
+但几乎所有这些文字都为了严(bi)谨(ge)而搞的像牛津词典一样难读,
+懂的人不需要看, 不懂的人看不懂.
+
+能把事情...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/culture/pr/" rel="permalink">Art of Pull Requests(翻译)
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 分钟阅读
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">原文: Art of Pull Requests
+
+
+
+正如我之前写的，
+我们是一个远程团队，团队成员遍布世界各地。
+这意味着code reviews 和 pull requests必须远程完成。
+
+最近，我们团队的一位成员提出了这样的宣言:
+
+
+  作为 PR writer 我会:
+
+  
+    保持PR够小...</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>关注:</strong></li>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 OpenACID-分布式研究小院. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://blog.openacid.com/tech/bla/programmer-should-know/";  // Replace PAGE_URL with your page's canonical URL variable
+      this.page.identifier = "/tech/bla/programmer-should-know"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = 'https://openacid.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  <style> .header-link { display: none !important; } </style> </body >
+</html>
