@@ -47,6 +47,12 @@ code_ptns = (
          # '<span>{txt}</span>'
         ),
 )
+hr_ptns = (
+        (r'<hr */>',
+         # remove <hr/>
+         '',
+        ),
+)
 permlink_ptns = (
         (r'</body>(.*?)',
          # convert /body> to /body > thus it wont match twice
@@ -90,7 +96,7 @@ def a_to_txt_final(sess, cont):
 a_to_txt_ptns = (
         (r'<a href="(?P<href>.*?)".*?>(?P<txt>.*?)</a>',
          handle_a_to_txt,
-         a_to_txt_final, 
+         a_to_txt_final,
         ),
 )
 
@@ -117,6 +123,8 @@ def resource_to_image(fn, outdir, title, imgurl, opt):
         cont = convert_ptn(cont, code_ptns)
     if 'blockquote' in opt:
         cont = convert_ptn(cont, blockquote_ptns)
+    if 'hr' in opt:
+        cont = convert_ptn(cont, hr_ptns)
     if 'permlink' in opt:
         cont = convert_ptn(cont, permlink_ptns)
     if 'li-p' in opt:
@@ -306,7 +314,11 @@ def convert_ptn(cont, ptns):
 
             s = m.start()
             e = m.end()
-            inner = m.groups()[0]
+            gs = m.groups()
+            if len(gs) > 0:
+                inner = gs[0]
+            else:
+                inner = ''
 
             dd()
             dd("### remove:" + ptn)
@@ -449,9 +461,9 @@ def tex_to_image_texvc(tex, imgdir, fn):
 if __name__ == "__main__":
 
     opts = {
-            'wechat': 'math       a-to-txt                     permlink',
-            'weibo':  'math table          pre code blockquote permlink li-p',
-            'zhihu':  'math table          pre                 permlink'
+            'wechat': 'math       a-to-txt                        permlink',
+            'weibo':  'math table          pre code blockquote    permlink li-p',
+            'zhihu':  'math table          pre                 hr permlink'
     }
 
     # _site/tech/zipf/index.hml
