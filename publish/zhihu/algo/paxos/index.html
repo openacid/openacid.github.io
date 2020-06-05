@@ -377,7 +377,7 @@
 <p>经常有人问起raft和paxos的区别, 或在实现中应该选择哪个,
 在不了解paxos之前可能会有这种疑问.
 对于这个问题, 就像是被问及四则运算和算盘有什么区别,
-小店老板应该使用四则远算还是用算盘结账一样.</p>
+小店老板应该使用四则运算还是用算盘结账一样.</p>
 
 <p>记得 Leslie Lamport 2015年时来了一次北京, 那时会场上有人也问了老爷子 paxos和raft有啥区别.</p>
 
@@ -418,7 +418,7 @@ paxos从根本上解释清楚了”WHY”, 但一直缺少一份通俗易懂的�
 <p><strong>slide-00</strong><br />
 <img src="/post-res/paxos/slide-imgs/paxos-00.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-01</strong><br />
 paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成为一个整体系统.
@@ -428,13 +428,13 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-01.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-02</strong><br />
 我是无需解释的目录页.
 <img src="/post-res/paxos/slide-imgs/paxos-02.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-03</strong><br />
 分布式系统的一致性问题最终都归结为分布式存储的一致性.
@@ -443,7 +443,7 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-03.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-04</strong><br />
 几乎所有的分布式存储(甚至单机系统, 参考<a href="https://blog.openacid.com/storage/ec-1" title="第一篇:Erasure-Code-擦除码-1-原理篇">EC第一篇:原理</a>, <a href="https://blog.openacid.com/storage/ec-2" title="第二篇:Erasure-Code-擦除码-2-实现篇">EC第二篇:实现</a>, <a href="https://blog.openacid.com/storage/ec-3" title="第三篇:Erasure-Code-擦除码-3-极限篇">EC第三篇:极限</a>) 都必须用某种冗余的方式在廉价硬件的基础上搭建高可靠的存储.
@@ -452,7 +452,7 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-04.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-05</strong><br />
 在早些年各种各样的复制策略都被提出来来解决各种场景下的需要.
@@ -468,7 +468,7 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 无需解释的目录页
 <img src="/post-res/paxos/slide-imgs/paxos-06.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-07</strong><br />
 <strong>主从异步复制</strong>是最简单的策略之一,
@@ -481,7 +481,7 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-07.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-08</strong><br />
 跟主从异步复制相比, <strong>主从同步复制</strong>提供了完整的可靠性:
@@ -494,7 +494,7 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-08.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-09</strong><br />
 然鹅, 在同步和异步之间, 做一个折中, 看起来是一个不错的方案.
@@ -511,7 +511,7 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-09.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-10</strong><br />
 为了解决半同步复制中数据不一致的问题, 可以将这个复制策略再做一改进:
@@ -523,7 +523,7 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-10.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-11</strong><br />
 然鹅多数派读写的策略也有个<strong>但是</strong>, 就是对于一条数据的更新时,
@@ -545,7 +545,7 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-11.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-12</strong><br />
 是的, <strong>但是</strong>又来了. 这种带时间戳的<strong>多数派读写</strong>依然有问题.
@@ -565,7 +565,7 @@ a=y₂时只有node-3 写成功了, 然后客户端进程就挂掉了,
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-12.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-13</strong><br />
 现在我们已经非常接近最终奥义了,
@@ -584,7 +584,7 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-14.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-15</strong><br />
 在实现中, set命令直接实现为一个多数派写, 这一步非常简单.
@@ -593,7 +593,7 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-15.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-16</strong><br />
 冰雪如你一定已经看到了这种实现方式中的问题:
@@ -606,7 +606,7 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-16.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-17</strong><br />
 提取一下上面提到的问题: 让Y去更新的时候不能直接更新i₂,
@@ -618,7 +618,7 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-17.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-18</strong><br />
 于是我们的问题就转化成一个更简单, 更基础的问题:
@@ -631,7 +631,7 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-18.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-19</strong><br />
 <strong>但是</strong>!!!, 这里还有个并发问题,
@@ -641,7 +641,7 @@ X和Y可能同时做这个<strong>写前读取</strong>的操作,
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-19.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-20</strong><br />
 为了解决上面的问题,
@@ -657,7 +657,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-20.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-21</strong><br />
 以上就是paxos算法的全部核心思想了,
@@ -668,7 +668,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-21.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-22</strong><br />
 <a href="http://www.lamport.org/" title="Leslie Lamport">Leslie Lamport</a> 就这么把这么简单的一个算法写了个paper就获得了图领奖!
@@ -685,7 +685,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-23.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-24</strong><br />
 我们要介绍的paxos实际上是最朴实的classic paxos,
@@ -694,7 +694,7 @@ multi paxso和fast paxos, 它们都是针对paxos的理论层面的优化.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-24.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-25</strong><br />
 paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分布式系统的方法.
@@ -707,7 +707,7 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-25.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-26</strong><br />
 本文尽量按照 <a href="http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple" title="Classic Paxos">Classic Paxos</a> 的术语来描述,</p>
@@ -728,7 +728,7 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-26.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-27</strong><br />
 在存储端(Acceptor)也有几个概念:</p>
@@ -744,7 +744,7 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-27.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-28</strong><br />
 首先是paxos的phase-1, 它相当于之前提到的写前读取过程.
@@ -758,7 +758,7 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-28.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-29</strong><br />
 Proposer
@@ -785,7 +785,7 @@ X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-29.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-30</strong><br />
 在第2阶段phase-2, Proposer X将它选定的值写入到Acceptor中,
@@ -797,7 +797,7 @@ X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-30.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-31</strong><br />
 当然这时(在X收到phase-1应答, 到发送phase-2请求的这段时间),
@@ -818,13 +818,13 @@ Acceptor将v写入本地, 并将phase-2请求中的rnd记录到本地的vrnd中.
 一次不太容易看清楚它们的作用,
 所以我们接下来通过几个例子来看看paxos如何处理各种不同状态并最终使整个系统的状态达成一致.</p>
 
-<hr />
+
 
 <p><strong>slide-32</strong><br />
 没冲突的例子不解释了
 <img src="/post-res/paxos/slide-imgs/paxos-32.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-33</strong><br />
 X和Y同时运行paxos, Y迫使X中断的例子:</p>
@@ -838,7 +838,7 @@ X和Y同时运行paxos, Y迫使X中断的例子:</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-33.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-34</strong><br />
 继续上面的例子, 看X如何处理被抢走写入权的情况:</p>
@@ -864,7 +864,7 @@ X和Y同时运行paxos, Y迫使X中断的例子:</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-34.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-35</strong><br />
 Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入的,
@@ -893,7 +893,7 @@ Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-36.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-37</strong><br />
 第二个优化 <strong>fast-paxos</strong>:</p>
@@ -903,7 +903,7 @@ Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-37.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-38</strong><br />
 fast-paxos为了能在退化成classic paxos时不会选择不同的值,
@@ -914,7 +914,7 @@ fast-paxos为了能在退化成classic paxos时不会选择不同的值,
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-38.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-39</strong><br />
 要解决这个问题, 最粗暴的方法是把fast-quorum设置为n,
@@ -930,7 +930,7 @@ paxos进行修复, 选任何值去修复都没问题.
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-39.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-40</strong><br />
 下面是一个fast-round中X成功, Y失败的冲突的例子:</p>
@@ -942,7 +942,7 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-40.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-41</strong><br />
 再来看一个X和Y都没有达到fast-quorum的冲突:</p>
@@ -960,7 +960,7 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-42.jpg" alt="" /></p>
 
-<hr />
+
 
 <p><strong>slide-43</strong><br />
 广告页, 不解释了
