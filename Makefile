@@ -8,6 +8,7 @@ build:
 export: build
 	# Convert built html to easy-to-publish versions:
 	#   convert math and table to images
+	python2 py/conv.py _site/algo/quorum
 	python2 py/conv.py _site/algo/paxos
 	python2 py/conv.py _site/tech/bla/programmer-should-know
 	python2 py/conv.py _site/storage/ec-3
