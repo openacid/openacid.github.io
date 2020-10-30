@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
-  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
@@ -14,6 +14,9 @@
 
 
   <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
 
 
 <meta property="og:type" content="article">
@@ -77,6 +80,7 @@
 
 <!-- For all browsers -->
 <link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
 
 <!--[if IE]>
   <style>
@@ -113,11 +117,11 @@
 
   <body class="layout--single">
     <nav class="skip-links">
-  <h2 class="screen-reader-text">Skip links</h2>
+  <h2 class="screen-reader-text">跳转链接</h2>
   <ul>
-    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
-    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
-    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+    <li><a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">转到内容</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">转到底部</a></li>
   </ul>
 </nav>
 
@@ -139,11 +143,11 @@
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
-              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
             </li></ul>
         
         <button class="search__toggle" type="button">
-          <span class="visually-hidden">Toggle search</span>
+          <span class="visually-hidden">切换搜索</span>
           <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
             <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
           </svg>
@@ -179,8 +183,6 @@
   
     <div class="author__avatar">
       
-
-      
         <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
       
     </div>
@@ -206,7 +208,7 @@
       
         
           
-            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a></li>
+            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a></li>
           
         
       
@@ -234,7 +236,7 @@
       
         <li>
           <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
           </a>
         </li>
       
@@ -260,7 +262,7 @@
       
         <li>
           <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
           </a>
         </li>
       
@@ -289,10 +291,11 @@
   </div>
 
 
+
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="后分布式时代: 多数派读写的’少数派’实现">
     <meta itemprop="description" content="通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.">
-    <meta itemprop="datePublished" content="October 18, 2020">
+    <meta itemprop="datePublished" content="2020-10-18T00:00:00+08:00">
     
 
     <div class="page__inner-wrap">
@@ -301,15 +304,26 @@
           <h1 id="page-title" class="page__title" itemprop="headline">后分布式时代: 多数派读写的’少数派’实现
 </h1>
           
-            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          19 分钟阅读
+        
+      </span>
+    
+  </p>
 
 
-
-
-  19 分钟阅读
-
-</p>
-          
         </header>
       
 
@@ -349,6 +363,7 @@
   </li>
   <li><a href="#总结-quorum-在分布式系统中的意义">总结: quorum 在分布式系统中的意义</a></li>
 </ul>
+
             </nav>
           </aside>
         
@@ -378,7 +393,7 @@
 要达成这个目标, 核心的手段就是复制(例如一份数据存3个副本).
 而复制过程中的一致性问题, 最后都归结为paxos的解决方案. 这些我们在 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中做了详细的介绍.</p>
 
-<p>在 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> slide-20 中, 我们了解到, paxos是通过2次 <a href="https://zh.wikipedia.org/wiki/Quorum_(分布式系统)" title="多数派读写">多数派读写</a> 来完成强一致的读写:</p>
+<p>在 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 的 <a href="https://blog.openacid.com/algo/paxos/#slide-20" title="paxos的直观解释-20">slide-20</a> 中, 我们了解到, paxos是通过2次 <a href="https://zh.wikipedia.org/wiki/Quorum_(分布式系统)" title="多数派读写">多数派读写</a> 来完成强一致的读写:</p>
 
 <blockquote>
   <p>这个方法之所以能工作也是因为多数派写中, 一个系统最多只能允许一个多数派写成功.
@@ -389,7 +404,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 在 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中也简单介绍了一下 <a href="https://zh.wikipedia.org/wiki/Quorum_(分布式系统)" title="多数派读写">多数派读写</a>:</p>
 
 <blockquote>
-  <p><strong>slide-10</strong>
+  <p><strong><a href="https://blog.openacid.com/algo/paxos/#slide-10" title="paxos的直观解释-10">slide-10</a></strong>
 为了解决半同步复制中数据不一致的问题, 可以将这个复制策略再做一改进: <strong>多数派读写</strong>: 每条数据必须写入到<strong>半数以上</strong>的机器上. 每次读取数据都必须检查<strong>半数以上</strong>的机器上是否有这条数据.</p>
 
   <p>在这种策略下, 数据可靠性足够, 宕机容忍足够, 任一机器故障也能读到全部数据.</p>
@@ -806,6 +821,18 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
         </li>
     
 
+    
+        <li style="font-size:0.7em">
+        [slide-10]: https://blog.openacid.com/algo/paxos/#slide-10
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-20]: https://blog.openacid.com/algo/paxos/#slide-20
+        </li>
+    
+
 </ul>
 <p>
 <img src="/assets/images/qrcode-hori.jpg" alt="openacid">
@@ -886,8 +913,9 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-10-18T00:00:00+08:00">October 18, 2020</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-10-18T00:00:00+08:00">October 18, 2020</time></p>
+
+
       </footer>
 
       <section class="page__share">
@@ -907,10 +935,10 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
   <nav class="pagination">
     
       <a href="/algo/paxos/" class="pagination--pager" title="可靠分布式系统-paxos的直观解释
-">向前</a>
+">上一页</a>
     
     
-      <a href="#" class="pagination--pager disabled">向后</a>
+      <a href="#" class="pagination--pager disabled">下一页</a>
     
   </nav>
 
@@ -941,22 +969,33 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/paxos/" rel="permalink">可靠分布式系统-paxos的直观解释
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  11 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了
 </p>
   </article>
@@ -970,22 +1009,33 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  1 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
 </p>
   </article>
@@ -999,22 +1049,33 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  24 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          24 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
@@ -1028,22 +1089,33 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-2/" rel="permalink">Erasure-Code-擦除码-2-实现篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  39 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          39 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">书接上回
 
 上一篇 第一篇:原理 中, 我们介绍了EC的基本原理,
@@ -1072,7 +1144,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
       <div class="search-content">
         <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
     <label class="sr-only" for="search">
-      Enter your search term...
+      输入您要搜索的关键词...
     </label>
     <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
   </form>
@@ -1137,7 +1209,6 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 
     
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
 
 
 
@@ -1170,10 +1241,10 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://blog.openacid.com/algo/quorum/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/algo/quorum"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://blog.openacid.com/algo/quorum/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/algo/quorum"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
-    (function() { // DON'T EDIT BELOW THIS LINE
+    (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');
       s.src = 'https://openacid.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());

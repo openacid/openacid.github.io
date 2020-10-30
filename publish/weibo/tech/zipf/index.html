@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
-  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
@@ -10,10 +10,13 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>互联网中对象访问频率的91分布 - OpenACID Blog</title>
-<meta name="description" content="在互联网领域, 流行着这么一句话:  90%的流量由10%的内容产生.缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储,就可以以很低的成本提供尽可能好的服务质量.一般符合这种互联网访问模型的曲线是下图这样的.对每个访问的url做独立计数, 并按照从访问最多到最低排序:这句是一个经验结论, 从它可以得出我们的频度分布公式:也就是zipf 模型.这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:即: k的对数跟y的对数呈现线性关系.线性太棒了, 简单又好用!用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情.以下是得出这个结论的愉快的推倒过程.">
+<meta name="description" content="在互联网领域, 流行着这么一句话:     90%的流量由10%的内容产生.   缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储, 就可以以很低的成本提供尽可能好的服务质量.  一般符合这种互联网访问模型的曲线是下图这样的. 对每个访问的url做独立计数, 并按照从访问最多到最低排序:    这句是一个经验结论, 从它可以得出我们的频度分布公式: 也就是zipf 模型.    这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:    即: k的对数跟y的对数呈现线性关系. 线性太棒了, 简单又好用!    用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情. 以下是得出这个结论的愉快的推倒过程.">
 
 
   <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
 
 
 <meta property="og:type" content="article">
@@ -23,7 +26,7 @@
 <meta property="og:url" content="https://blog.openacid.com/tech/zipf/">
 
 
-  <meta property="og:description" content="在互联网领域, 流行着这么一句话:  90%的流量由10%的内容产生.缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储,就可以以很低的成本提供尽可能好的服务质量.一般符合这种互联网访问模型的曲线是下图这样的.对每个访问的url做独立计数, 并按照从访问最多到最低排序:这句是一个经验结论, 从它可以得出我们的频度分布公式:也就是zipf 模型.这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:即: k的对数跟y的对数呈现线性关系.线性太棒了, 简单又好用!用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情.以下是得出这个结论的愉快的推倒过程.">
+  <meta property="og:description" content="在互联网领域, 流行着这么一句话:     90%的流量由10%的内容产生.   缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储, 就可以以很低的成本提供尽可能好的服务质量.  一般符合这种互联网访问模型的曲线是下图这样的. 对每个访问的url做独立计数, 并按照从访问最多到最低排序:    这句是一个经验结论, 从它可以得出我们的频度分布公式: 也就是zipf 模型.    这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:    即: k的对数跟y的对数呈现线性关系. 线性太棒了, 简单又好用!    用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情. 以下是得出这个结论的愉快的推倒过程.">
 
 
 
@@ -77,6 +80,7 @@
 
 <!-- For all browsers -->
 <link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
 
 <!--[if IE]>
   <style>
@@ -113,11 +117,11 @@
 
   <body class="layout--single">
     <nav class="skip-links">
-  <h2 class="screen-reader-text">Skip links</h2>
+  <h2 class="screen-reader-text">跳转链接</h2>
   <ul>
-    <a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a>
-    <a href="#main" class="screen-reader-shortcut">Skip to content</a>
-    <a href="#footer" class="screen-reader-shortcut">Skip to footer</a>
+    <a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a>
+    <a href="#main" class="screen-reader-shortcut">转到内容</a>
+    <a href="#footer" class="screen-reader-shortcut">转到底部</a>
   </ul>
 </nav>
 
@@ -139,11 +143,11 @@
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
-              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
             </li></ul>
         
         <button class="search__toggle" type="button">
-          <span class="visually-hidden">Toggle search</span>
+          <span class="visually-hidden">切换搜索</span>
           <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
             <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
           </svg>
@@ -179,8 +183,6 @@
   
     <div class="author__avatar">
       
-
-      
         <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
       
     </div>
@@ -206,7 +208,7 @@
       
         
           
-            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a>
+            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a>
           
         
       
@@ -234,7 +236,7 @@
       
         
           <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
           </a>
         
       
@@ -260,7 +262,7 @@
       
         
           <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
           </a>
         
       
@@ -289,10 +291,11 @@
   </div>
 
 
+
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="互联网中对象访问频率的91分布">
     <meta itemprop="description" content="在互联网领域, 流行着这么一句话:  90%的流量由10%的内容产生.缓存也由此产生: 只为最频繁访问的10%的内容提供更快的存储,就可以以很低的成本提供尽可能好的服务质量.一般符合这种互联网访问模型的曲线是下图这样的.对每个访问的url做独立计数, 并按照从访问最多到最低排序:这句是一个经验结论, 从它可以得出我们的频度分布公式:也就是zipf 模型.这个公式很好, 好就好在可以直接对其左右两边取对数后, 直接转换成了线性关系:即: k的对数跟y的对数呈现线性关系.线性太棒了, 简单又好用!用这个公式我们可以更好的了解和控制数据的访问模型, 做更多的事情.以下是得出这个结论的愉快的推倒过程.">
-    <meta itemprop="datePublished" content="October 30, 2019">
+    <meta itemprop="datePublished" content="2019-10-30T00:00:00+08:00">
     
 
     <div class="page__inner-wrap">
@@ -301,15 +304,26 @@
           <h1 id="page-title" class="page__title" itemprop="headline">互联网中对象访问频率的91分布
 </h1>
           
-            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 分钟阅读
+        
+      </span>
+    
+  </p>
 
 
-
-
-  2 分钟阅读
-
-</p>
-          
         </header>
       
 
@@ -324,6 +338,7 @@
   <a href="#标准定义">标准定义</a>
   <a href="#有什么用">有什么用</a>
 </ul>
+
             </nav>
           </aside>
         
@@ -541,8 +556,9 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2019-10-30T00:00:00+08:00">October 30, 2019</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2019-10-30T00:00:00+08:00">October 30, 2019</time></p>
+
+
       </footer>
 
       <section class="page__share">
@@ -562,11 +578,11 @@ frequency of elements of rank k, f(k;s,N), is:</p>
   <nav class="pagination">
     
       <a href="/culture/code-of-conduct/" class="pagination--pager" title="OpenACID’s Code of Conduct
-">向前</a>
+">上一页</a>
     
     
       <a href="/tech/cdn/" class="pagination--pager" title="掐指算算: 你的CDN多花了几百万?
-">向后</a>
+">下一页</a>
     
   </nav>
 
@@ -597,22 +613,33 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/quorum/" rel="permalink">后分布式时代: 多数派读写的’少数派’实现
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  21 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          21 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.
 </p>
   </article>
@@ -626,22 +653,33 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/paxos/" rel="permalink">可靠分布式系统-paxos的直观解释
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  13 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          15 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了
 </p>
   </article>
@@ -655,22 +693,33 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  2 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
 </p>
   </article>
@@ -684,22 +733,33 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  25 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          25 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
@@ -718,7 +778,7 @@ frequency of elements of rank k, f(k;s,N), is:</p>
       <div class="search-content">
         <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
     <label class="sr-only" for="search">
-      Enter your search term...
+      输入您要搜索的关键词...
     </label>
     <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
   </form>
@@ -783,7 +843,6 @@ frequency of elements of rank k, f(k;s,N), is:</p>
 
     
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
 
 
 
@@ -816,10 +875,10 @@ frequency of elements of rank k, f(k;s,N), is:</p>
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://blog.openacid.com/tech/zipf/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/tech/zipf"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://blog.openacid.com/tech/zipf/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/tech/zipf"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
-    (function() { // DON'T EDIT BELOW THIS LINE
+    (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');
       s.src = 'https://openacid.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());

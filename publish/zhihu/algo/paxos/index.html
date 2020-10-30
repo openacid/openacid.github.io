@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
-  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
@@ -14,6 +14,9 @@
 
 
   <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
 
 
 <meta property="og:type" content="article">
@@ -77,6 +80,7 @@
 
 <!-- For all browsers -->
 <link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
 
 <!--[if IE]>
   <style>
@@ -113,11 +117,11 @@
 
   <body class="layout--single">
     <nav class="skip-links">
-  <h2 class="screen-reader-text">Skip links</h2>
+  <h2 class="screen-reader-text">跳转链接</h2>
   <ul>
-    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
-    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
-    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+    <li><a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">转到内容</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">转到底部</a></li>
   </ul>
 </nav>
 
@@ -139,11 +143,11 @@
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
-              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
             </li></ul>
         
         <button class="search__toggle" type="button">
-          <span class="visually-hidden">Toggle search</span>
+          <span class="visually-hidden">切换搜索</span>
           <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
             <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
           </svg>
@@ -179,8 +183,6 @@
   
     <div class="author__avatar">
       
-
-      
         <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
       
     </div>
@@ -206,7 +208,7 @@
       
         
           
-            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a></li>
+            <li><a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a></li>
           
         
       
@@ -234,7 +236,7 @@
       
         <li>
           <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
           </a>
         </li>
       
@@ -260,7 +262,7 @@
       
         <li>
           <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
           </a>
         </li>
       
@@ -289,10 +291,11 @@
   </div>
 
 
+
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="可靠分布式系统-paxos的直观解释">
     <meta itemprop="description" content="没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了">
-    <meta itemprop="datePublished" content="June 01, 2020">
+    <meta itemprop="datePublished" content="2020-06-01T00:00:00+08:00">
     
 
     <div class="page__inner-wrap">
@@ -301,15 +304,26 @@
           <h1 id="page-title" class="page__title" itemprop="headline">可靠分布式系统-paxos的直观解释
 </h1>
           
-            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 分钟阅读
+        
+      </span>
+    
+  </p>
 
 
-
-
-  11 分钟阅读
-
-</p>
-          
         </header>
       
 
@@ -320,7 +334,11 @@
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 本文目录</h4></header>
               <ul class="toc__menu">
   <li><a href="#前言">前言</a></li>
-  <li><a href="#分布式系统要解决的问题">分布式系统要解决的问题</a></li>
+  <li><a href="#分布式系统要解决的问题">分布式系统要解决的问题</a>
+    <ul>
+      <li></li>
+    </ul>
+  </li>
   <li><a href="#不太完美的复制策略">不太完美的复制策略</a></li>
   <li><a href="#从多数派读写到paxos的推导">从多数派读写到paxos的推导</a></li>
   <li><a href="#paxos算法描述">paxos算法描述</a></li>
@@ -328,6 +346,7 @@
   <li><a href="#paxos-优化">Paxos 优化</a></li>
   <li><a href="#其他">其他</a></li>
 </ul>
+
             </nav>
           </aside>
         
@@ -413,14 +432,18 @@ paxos从根本上解释清楚了”WHY”, 但一直缺少一份通俗易懂的�
 
 <p>图片是xp之前做过的paxos分享使用的slides, 在此基础上加入了更多口头解释的内容.</p>
 
+<img src="/publish/zhihu/algo/paxos/images/tbl_71858f0657ae5e91a59be6ab005512b7.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
+
 <h1 id="分布式系统要解决的问题">分布式系统要解决的问题</h1>
 
-<p><strong>slide-00</strong><br />
+<p><a id="slide-00"></a>
+<strong>slide-00</strong><br />
 <img src="/post-res/paxos/slide-imgs/paxos-00.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-01</strong><br />
+<p><a id="slide-01"></a>
+<strong>slide-01</strong><br />
 paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成为一个整体系统.
 在这个系统中, 每个机器都必须让系统中的状态达成一致,
 例如三副本集群如果一个机器上上传了一张图片,
@@ -428,15 +451,17 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-01.jpg" alt="" /></p>
 
+<h2><a href="#bar"></a></h2>
 
-
-<p><strong>slide-02</strong><br />
+<p><a id="slide-02"></a>
+<strong>slide-02</strong><br />
 我是无需解释的目录页.
 <img src="/post-res/paxos/slide-imgs/paxos-02.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-03</strong><br />
+<p><a id="slide-03"></a>
+<strong>slide-03</strong><br />
 分布式系统的一致性问题最终都归结为分布式存储的一致性.
 像aws的对象存储可靠性要求是9~13个9.
 而这么高的可靠性都是建立在可靠性没那么高的硬件上的.</p>
@@ -445,7 +470,8 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 
 
-<p><strong>slide-04</strong><br />
+<p><a id="slide-04"></a>
+<strong>slide-04</strong><br />
 几乎所有的分布式存储(甚至单机系统, 参考<a href="https://blog.openacid.com/storage/ec-1" title="第一篇:Erasure-Code-擦除码-1-原理篇">EC第一篇:原理</a>, <a href="https://blog.openacid.com/storage/ec-2" title="第二篇:Erasure-Code-擦除码-2-实现篇">EC第二篇:实现</a>, <a href="https://blog.openacid.com/storage/ec-3" title="第三篇:Erasure-Code-擦除码-3-极限篇">EC第三篇:极限</a>) 都必须用某种冗余的方式在廉价硬件的基础上搭建高可靠的存储.
 而冗余的基础就是多副本策略, 一份数据存多份.
 多副本保证了可靠性, 而副本之间的一致, 就需要paxos这类分布式一致性算法来保证.</p>
@@ -454,7 +480,8 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 
 
-<p><strong>slide-05</strong><br />
+<p><a id="slide-05"></a>
+<strong>slide-05</strong><br />
 在早些年各种各样的复制策略都被提出来来解决各种场景下的需要.
 除了复制的份数之外, 各种各样的算法实际上都是在尝试解决一致的问题.
 从下一页开始简单回顾下各种复制策略,
@@ -464,13 +491,15 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <h1 id="不太完美的复制策略">不太完美的复制策略</h1>
 
-<p><strong>slide-06</strong><br />
+<p><a id="slide-06"></a>
+<strong>slide-06</strong><br />
 无需解释的目录页
 <img src="/post-res/paxos/slide-imgs/paxos-06.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-07</strong><br />
+<p><a id="slide-07"></a>
+<strong>slide-07</strong><br />
 <strong>主从异步复制</strong>是最简单的策略之一,
 它很容易实现, 但存在一个问题:
 客户端收到一个<strong>数据已经安全</strong>(OK)的信息,
@@ -483,7 +512,8 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 
 
-<p><strong>slide-08</strong><br />
+<p><a id="slide-08"></a>
+<strong>slide-08</strong><br />
 跟主从异步复制相比, <strong>主从同步复制</strong>提供了完整的可靠性:
 直到数据真的安全的复制到全部的机器上之后,
 master才告知客户端<strong>数据已经安全</strong>.</p>
@@ -496,7 +526,8 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 
 
-<p><strong>slide-09</strong><br />
+<p><a id="slide-09"></a>
+<strong>slide-09</strong><br />
 然鹅, 在同步和异步之间, 做一个折中, 看起来是一个不错的方案.
 这就是<strong>半同步复制</strong>.
 它要求master在应答客户端之前必须把数据复制到<strong>足够多</strong>的机器上,
@@ -513,7 +544,8 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 
 
-<p><strong>slide-10</strong><br />
+<p><a id="slide-10"></a>
+<strong>slide-10</strong><br />
 为了解决半同步复制中数据不一致的问题, 可以将这个复制策略再做一改进:
 <strong>多数派读写</strong>:
 每条数据必须写入到<strong>半数以上</strong>的机器上.
@@ -525,7 +557,8 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 
 
-<p><strong>slide-11</strong><br />
+<p><a id="slide-11"></a>
+<strong>slide-11</strong><br />
 然鹅多数派读写的策略也有个<strong>但是</strong>, 就是对于一条数据的更新时,
 会产生不一致的状态.
 例如:</p>
@@ -547,7 +580,8 @@ master才告知客户端<strong>数据已经安全</strong>.</p>
 
 
 
-<p><strong>slide-12</strong><br />
+<p><a id="slide-12"></a>
+<strong>slide-12</strong><br />
 是的, <strong>但是</strong>又来了. 这种带时间戳的<strong>多数派读写</strong>依然有问题.
 就是在客户端没有完成一次完整的多数派写的时候:
 例如, 上面的例子中写入, a=x₁写入了node-1和node-2,
@@ -567,7 +601,8 @@ a=y₂时只有node-3 写成功了, 然后客户端进程就挂掉了,
 
 
 
-<p><strong>slide-13</strong><br />
+<p><a id="slide-13"></a>
+<strong>slide-13</strong><br />
 现在我们已经非常接近最终奥义了,
 paxos可以认为是多数派读写的进一步升级,
 paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一致consensus算法.</p>
@@ -576,7 +611,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 <h1 id="从多数派读写到paxos的推导">从多数派读写到paxos的推导</h1>
 
-<p><strong>slide-14</strong><br />
+<p><a id="slide-14"></a>
+<strong>slide-14</strong><br />
 首先为了清晰的呈现出分布式系统中的核心问题: 一致性问题,
 我们先设定一个假象的存储系统,
 在这个系统上, 我们来逐步实现一个强一致的存储,
@@ -586,7 +622,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 
 
-<p><strong>slide-15</strong><br />
+<p><a id="slide-15"></a>
+<strong>slide-15</strong><br />
 在实现中, set命令直接实现为一个多数派写, 这一步非常简单.
 而inc操作逻辑上也很简单, 读取一个变量的值i₁, 给它加上一个数字得到i₂,
 再通过多数派把i₂写回到系统中.</p>
@@ -595,7 +632,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 
 
-<p><strong>slide-16</strong><br />
+<p><a id="slide-16"></a>
+<strong>slide-16</strong><br />
 冰雪如你一定已经看到了这种实现方式中的问题:
 如果有2个并发的客户端进程同时做这个inc的操作,
 在多数派读写的实现中, 必然会产生一个Y客户端覆盖X客户端的问题.
@@ -608,7 +646,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 
 
-<p><strong>slide-17</strong><br />
+<p><a id="slide-17"></a>
+<strong>slide-17</strong><br />
 提取一下上面提到的问题: 让Y去更新的时候不能直接更新i₂,
 而是应该能检测到i₂的存在, 进而将自己的结果保存在下一个版本i₃中,
 再写回系统中.</p>
@@ -620,7 +659,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 
 
-<p><strong>slide-18</strong><br />
+<p><a id="slide-18"></a>
+<strong>slide-18</strong><br />
 于是我们的问题就转化成一个更简单, 更基础的问题:
 如何确定一个值(例如iⱼ)已经被写入了.</p>
 
@@ -633,7 +673,8 @@ paxos中通过2次原本并不严谨的多数派读写, 实现了严谨的强一
 
 
 
-<p><strong>slide-19</strong><br />
+<p><a id="slide-19"></a>
+<strong>slide-19</strong><br />
 <strong>但是</strong>!!!, 这里还有个并发问题,
 X和Y可能同时做这个<strong>写前读取</strong>的操作,
 并且同时得出一个结论: 还没有其他进程在写入, 我可以写.
@@ -643,7 +684,8 @@ X和Y可能同时做这个<strong>写前读取</strong>的操作,
 
 
 
-<p><strong>slide-20</strong><br />
+<p><a id="slide-20"></a>
+<strong>slide-20</strong><br />
 为了解决上面的问题,
 存储节点还需要增加一个功能, 就是它必须记住谁最后一个做过<strong>写前读取</strong>的操作.
 并且只允许最后一个完成<strong>写前读取</strong>的进程可以进行后续写入,
@@ -659,7 +701,8 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 
 
-<p><strong>slide-21</strong><br />
+<p><a id="slide-21"></a>
+<strong>slide-21</strong><br />
 以上就是paxos算法的全部核心思想了,
 是不是很简单? 剩下的就是如何实现的简单问题了:
 如何标识一个客户端如X和Y,
@@ -670,7 +713,8 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 
 
-<p><strong>slide-22</strong><br />
+<p><a id="slide-22"></a>
+<strong>slide-22</strong><br />
 <a href="http://www.lamport.org/" title="Leslie Lamport">Leslie Lamport</a> 就这么把这么简单的一个算法写了个paper就获得了图领奖!
 骚年, 改变世界就这么容易!</p>
 
@@ -680,14 +724,16 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p>接下来的篇幅中我们将用计算机的语言准确的描述整个paxos运行的过程.</p>
 
-<p><strong>slide-23</strong><br />
+<p><a id="slide-23"></a>
+<strong>slide-23</strong><br />
 首先明确要解决的问题:</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-23.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-24</strong><br />
+<p><a id="slide-24"></a>
+<strong>slide-24</strong><br />
 我们要介绍的paxos实际上是最朴实的classic paxos,
 在这之后我们顺提下几个老爷子对paxos的优化,
 multi paxso和fast paxos, 它们都是针对paxos的理论层面的优化.</p>
@@ -696,7 +742,8 @@ multi paxso和fast paxos, 它们都是针对paxos的理论层面的优化.</p>
 
 
 
-<p><strong>slide-25</strong><br />
+<p><a id="slide-25"></a>
+<strong>slide-25</strong><br />
 paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分布式系统的方法.
 但paxos核心算法中只解决网络延迟/乱序的问题,
 它不试图解决存储不可靠和消息错误的问题,
@@ -709,7 +756,8 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 
 
-<p><strong>slide-26</strong><br />
+<p><a id="slide-26"></a>
+<strong>slide-26</strong><br />
 本文尽量按照 <a href="http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple" title="Classic Paxos">Classic Paxos</a> 的术语来描述,</p>
 <blockquote>
   <p>老爷子后面的一篇 <a href="http://lamport.azurewebsites.net/pubs/pubs.html#fast-paxos" title="Fast Paxos">Fast Paxos</a> 实现了fast-paxos, 同时包含了classic-paxos,
@@ -730,7 +778,8 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 
 
-<p><strong>slide-27</strong><br />
+<p><a id="slide-27"></a>
+<strong>slide-27</strong><br />
 在存储端(Acceptor)也有几个概念:</p>
 <ul>
   <li>last_rnd 是Acceptor记住的最后一次进行<strong>写前读取</strong>的Proposer(客户端)是谁,
@@ -746,7 +795,8 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 
 
-<p><strong>slide-28</strong><br />
+<p><a id="slide-28"></a>
+<strong>slide-28</strong><br />
 首先是paxos的phase-1, 它相当于之前提到的写前读取过程.
 它用来在存储节点(Acceptor)上记录一个标识: 我后面要写入;
 并从Acceptor上读出是否有之前未完成的paxos运行. 如果有则尝试恢复它;
@@ -760,7 +810,8 @@ paxos算法中解决了如何在不可靠硬件基础上构建一个可靠的分
 
 
 
-<p><strong>slide-29</strong><br />
+<p><a id="slide-29"></a>
+<strong>slide-29</strong><br />
 Proposer
 X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有联系到多于半数的acceptor,
 整个系统就hang住了, 这也是paxos声称的只能运行少于半数的节点失效.</p>
@@ -787,7 +838,8 @@ X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有�
 
 
 
-<p><strong>slide-30</strong><br />
+<p><a id="slide-30"></a>
+<strong>slide-30</strong><br />
 在第2阶段phase-2, Proposer X将它选定的值写入到Acceptor中,
 这个值可能是它自己要写入的值, 或者是它从某个Acceptor上读到的v(修复).</p>
 
@@ -799,7 +851,8 @@ X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有�
 
 
 
-<p><strong>slide-31</strong><br />
+<p><a id="slide-31"></a>
+<strong>slide-31</strong><br />
 当然这时(在X收到phase-1应答, 到发送phase-2请求的这段时间),
 可能已经有其他Proposer又完成了一个rnd更大的phase-1,
 所以这时X不一定能成功运行完phase-2.</p>
@@ -820,13 +873,15 @@ Acceptor将v写入本地, 并将phase-2请求中的rnd记录到本地的vrnd中.
 
 
 
-<p><strong>slide-32</strong><br />
+<p><a id="slide-32"></a>
+<strong>slide-32</strong><br />
 没冲突的例子不解释了
 <img src="/post-res/paxos/slide-imgs/paxos-32.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-33</strong><br />
+<p><a id="slide-33"></a>
+<strong>slide-33</strong><br />
 X和Y同时运行paxos, Y迫使X中断的例子:</p>
 <ul>
   <li>X成功完成了写前读取(phase-1), 将rnd=1写入到左边2个Acceptor.</li>
@@ -840,7 +895,8 @@ X和Y同时运行paxos, Y迫使X中断的例子:</p>
 
 
 
-<p><strong>slide-34</strong><br />
+<p><a id="slide-34"></a>
+<strong>slide-34</strong><br />
 继续上面的例子, 看X如何处理被抢走写入权的情况:</p>
 
 <p>这时X的phase-2没成功, 它需要重新来一遍, 用更大的rnd=3.</p>
@@ -866,7 +922,8 @@ X和Y同时运行paxos, Y迫使X中断的例子:</p>
 
 
 
-<p><strong>slide-35</strong><br />
+<p><a id="slide-35"></a>
+<strong>slide-35</strong><br />
 Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入的,
 但并不是整个算法执行的关键角色, 只有在最后在被通知一下.</p>
 
@@ -874,7 +931,8 @@ Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入�
 
 <h1 id="paxos-优化">Paxos 优化</h1>
 
-<p><strong>slide-36</strong><br />
+<p><a id="slide-36"></a>
+<strong>slide-36</strong><br />
 第一个优化 <strong>multi-paxos</strong>:</p>
 
 <p>paxos诞生之初为人诟病的一个方面就是每写入一个值就需要2轮rpc:phase-1和phase-2.
@@ -895,7 +953,8 @@ Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入�
 
 
 
-<p><strong>slide-37</strong><br />
+<p><a id="slide-37"></a>
+<strong>slide-37</strong><br />
 第二个优化 <strong>fast-paxos</strong>:</p>
 
 <p>fast-paxos通过增加quorum的数量来达到一次rpc就能达成一致的目的.
@@ -905,7 +964,8 @@ Paxos 还有一个不太重要的角色Learner, 是为了让系统完整加入�
 
 
 
-<p><strong>slide-38</strong><br />
+<p><a id="slide-38"></a>
+<strong>slide-38</strong><br />
 fast-paxos为了能在退化成classic paxos时不会选择不同的值,
 就必须扩大quorum的值.
 也就是说fast-round时, quorum的大小跟classic paxos的大小不一样.
@@ -916,7 +976,8 @@ fast-paxos为了能在退化成classic paxos时不会选择不同的值,
 
 
 
-<p><strong>slide-39</strong><br />
+<p><a id="slide-39"></a>
+<strong>slide-39</strong><br />
 要解决这个问题, 最粗暴的方法是把fast-quorum设置为n,
 也就是全部的acceptor都写入成功才认为fast-round成功(实际上是退化到了主从同步复制).
 这样, 如果X和Y两个proposer并发写入, 谁也不会成功, 因此X和Y都退化到classic
@@ -932,7 +993,8 @@ paxos进行修复, 选任何值去修复都没问题.
 
 
 
-<p><strong>slide-40</strong><br />
+<p><a id="slide-40"></a>
+<strong>slide-40</strong><br />
 下面是一个fast-round中X成功, Y失败的冲突的例子:</p>
 
 <p>X已经成功写入到4(fast-quorum&gt;¾n)个acceptor,
@@ -944,7 +1006,8 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
 
 
-<p><strong>slide-41</strong><br />
+<p><a id="slide-41"></a>
+<strong>slide-41</strong><br />
 再来看一个X和Y都没有达到fast-quorum的冲突:</p>
 
 <p>这时X和Y都不会认为自己的fast-round成功了, 因此修复过程选择任何值都是可以的.
@@ -955,14 +1018,16 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
 <h1 id="其他">其他</h1>
 
-<p><strong>slide-42</strong><br />
+<p><a id="slide-42"></a>
+<strong>slide-42</strong><br />
 一个很容易验证的优化, 各种情况下都能得到一致的结果.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-42.jpg" alt="" /></p>
 
 
 
-<p><strong>slide-43</strong><br />
+<p><a id="slide-43"></a>
+<strong>slide-43</strong><br />
 广告页, 不解释了
 <img src="/post-res/paxos/slide-imgs/paxos-43.jpg" alt="" /></p>
 
@@ -1135,8 +1200,9 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-06-01T00:00:00+08:00">June 01, 2020</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-06-01T00:00:00+08:00">June 1, 2020</time></p>
+
+
       </footer>
 
       <section class="page__share">
@@ -1156,11 +1222,11 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
   <nav class="pagination">
     
       <a href="/tech/bla/programmer-should-know/" class="pagination--pager" title="几个无理取闹的coding心得
-">向前</a>
+">上一页</a>
     
     
       <a href="/algo/quorum/" class="pagination--pager" title="后分布式时代: 多数派读写的’少数派’实现
-">向后</a>
+">下一页</a>
     
   </nav>
 
@@ -1191,22 +1257,33 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/quorum/" rel="permalink">后分布式时代: 多数派读写的’少数派’实现
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  21 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          21 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.
 </p>
   </article>
@@ -1220,22 +1297,33 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  1 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
 </p>
   </article>
@@ -1249,22 +1337,33 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  24 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          24 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
@@ -1278,22 +1377,33 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-2/" rel="permalink">Erasure-Code-擦除码-2-实现篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  39 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          39 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">书接上回
 
 上一篇 第一篇:原理 中, 我们介绍了EC的基本原理,
@@ -1322,7 +1432,7 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
       <div class="search-content">
         <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
     <label class="sr-only" for="search">
-      Enter your search term...
+      输入您要搜索的关键词...
     </label>
     <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
   </form>
@@ -1372,7 +1482,6 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
 
     
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
 
 
 
@@ -1405,10 +1514,10 @@ Y只写入1个, 这时Y进入classic-round进行息修复, 可以看到,
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://blog.openacid.com/algo/paxos/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/algo/paxos"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://blog.openacid.com/algo/paxos/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/algo/paxos"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
-    (function() { // DON'T EDIT BELOW THIS LINE
+    (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');
       s.src = 'https://openacid.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());

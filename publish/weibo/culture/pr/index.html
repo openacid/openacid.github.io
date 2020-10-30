@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
-  Minimal Mistakes Jekyll Theme 4.17.2 by Michael Rose
-  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
   Free for personal and commercial use under the MIT license
   https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
 -->
@@ -10,10 +10,13 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Art of Pull Requests(翻译) - OpenACID Blog</title>
-<meta name="description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
+<meta name="description" content="原文: Art of Pull Requests    正如我之前写的， 我们是一个远程团队，团队成员遍布世界各地。 这意味着code reviews 和 pull requests必须远程完成。  最近，我们团队的一位成员提出了这样的宣言:     作为 PR writer 我会:         保持PR够小     使用标签表明PR是许多部分之一     发布PR后在Slack上也提一下         作为 PR reviewer 我会:         一有空就review。     只要比以前好就批准吧.     尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.     建议而不是拒绝，特别是当用标签来标识多个部分的时候.      我们来看看这个。 本质是:PR需要小而快!  这也符合程序员的誓言:     我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。   但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。  请求越大，review时间越长  我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。 我们应该致力于连续的产生好的代码。  我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!    因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR! 你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。 因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。    PR越长，review的人就越累  如果review很累，开发人员就不想review了。 但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!  给出上下文  让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。 添加一个好的描述和一些截图:    防止上下文切换  让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务. review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。 所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!  审稿人也需要帮助  如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。  所以审查经常!  在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法 之后，或者每次你自己打开一个pull request之后。  我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。 如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!  专注于重要的事情  所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。 CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)， 这样review可以很容易地集中在逻辑和体系结构上。  不要太严肃  PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。 友好。 使用表情符号和动图让读者对你的建议会心一笑:    评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。    PR不适合进行长时间的架构讨论  不要过度使用PR讨论。 反正也太迟了，代码已经写好了! 使用其他渠道，如每日/每周的开发者会议。 PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。 如果你的团队中有下级，试着使用结对编程， 不要通过PR来教，否则会令人沮丧。  如果代码比以前更好，那么批准它  如果发现有什么东西可以变得更好，打开一个issue或ticket。 当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。 如果PR只是部分ticket，则它更容易被优先处理。 另一个PR肯定会很快到来，可以立即解决这个问题。  不要害怕  在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。 当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。 接受这一点需要勇气和信任!  原文: Art of Pull Requests">
 
 
   <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
 
 
 <meta property="og:type" content="article">
@@ -23,7 +26,7 @@
 <meta property="og:url" content="https://blog.openacid.com/culture/pr/">
 
 
-  <meta property="og:description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
+  <meta property="og:description" content="原文: Art of Pull Requests    正如我之前写的， 我们是一个远程团队，团队成员遍布世界各地。 这意味着code reviews 和 pull requests必须远程完成。  最近，我们团队的一位成员提出了这样的宣言:     作为 PR writer 我会:         保持PR够小     使用标签表明PR是许多部分之一     发布PR后在Slack上也提一下         作为 PR reviewer 我会:         一有空就review。     只要比以前好就批准吧.     尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.     建议而不是拒绝，特别是当用标签来标识多个部分的时候.      我们来看看这个。 本质是:PR需要小而快!  这也符合程序员的誓言:     我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。   但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。  请求越大，review时间越长  我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。 我们应该致力于连续的产生好的代码。  我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!    因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR! 你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。 因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。    PR越长，review的人就越累  如果review很累，开发人员就不想review了。 但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!  给出上下文  让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。 添加一个好的描述和一些截图:    防止上下文切换  让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务. review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。 所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!  审稿人也需要帮助  如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。  所以审查经常!  在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法 之后，或者每次你自己打开一个pull request之后。  我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。 如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!  专注于重要的事情  所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。 CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)， 这样review可以很容易地集中在逻辑和体系结构上。  不要太严肃  PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。 友好。 使用表情符号和动图让读者对你的建议会心一笑:    评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。    PR不适合进行长时间的架构讨论  不要过度使用PR讨论。 反正也太迟了，代码已经写好了! 使用其他渠道，如每日/每周的开发者会议。 PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。 如果你的团队中有下级，试着使用结对编程， 不要通过PR来教，否则会令人沮丧。  如果代码比以前更好，那么批准它  如果发现有什么东西可以变得更好，打开一个issue或ticket。 当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。 如果PR只是部分ticket，则它更容易被优先处理。 另一个PR肯定会很快到来，可以立即解决这个问题。  不要害怕  在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。 当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。 接受这一点需要勇气和信任!  原文: Art of Pull Requests">
 
 
 
@@ -77,6 +80,7 @@
 
 <!-- For all browsers -->
 <link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
 
 <!--[if IE]>
   <style>
@@ -113,11 +117,11 @@
 
   <body class="layout--single">
     <nav class="skip-links">
-  <h2 class="screen-reader-text">Skip links</h2>
+  <h2 class="screen-reader-text">跳转链接</h2>
   <ul>
-    <a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a>
-    <a href="#main" class="screen-reader-shortcut">Skip to content</a>
-    <a href="#footer" class="screen-reader-shortcut">Skip to footer</a>
+    <a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a>
+    <a href="#main" class="screen-reader-shortcut">转到内容</a>
+    <a href="#footer" class="screen-reader-shortcut">转到底部</a>
   </ul>
 </nav>
 
@@ -139,11 +143,11 @@
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
-              <a href="https://github.com/orgs/openacid/people" >About Us</a>
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
             </li></ul>
         
         <button class="search__toggle" type="button">
-          <span class="visually-hidden">Toggle search</span>
+          <span class="visually-hidden">切换搜索</span>
           <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
             <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
           </svg>
@@ -179,8 +183,6 @@
   
     <div class="author__avatar">
       
-
-      
         <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
       
     </div>
@@ -206,7 +208,7 @@
       
         
           
-            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i> 个人博客</a>
+            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a>
           
         
       
@@ -234,7 +236,7 @@
       
         
           <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
           </a>
         
       
@@ -260,7 +262,7 @@
       
         
           <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
-            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i> Weibo
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
           </a>
         
       
@@ -289,10 +291,11 @@
   </div>
 
 
+
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Art of Pull Requests(翻译)">
     <meta itemprop="description" content="原文: Art of Pull Requests正如我之前写的，我们是一个远程团队，团队成员遍布世界各地。这意味着code reviews 和 pull requests必须远程完成。最近，我们团队的一位成员提出了这样的宣言:  作为 PR writer 我会:      保持PR够小    使用标签表明PR是许多部分之一    发布PR后在Slack上也提一下    作为 PR reviewer 我会:      一有空就review。    只要比以前好就批准吧.    尽量不要reject一个PR, 有时可以发一个tiket来作为这个PR的补充, 或要求下一个PR来补充这个PR.    建议而不是拒绝，特别是当用标签来标识多个部分的时候.  我们来看看这个。 本质是:PR需要小而快!这也符合程序员的誓言:  我会发布频繁和小的release，这样我就不会妨碍他人工作的推进。但是，我们都知道，PR的问题是通常它们要在review状态下持续一段时间。请求越大，review时间越长我们希望尽可能地接近head开发方法，在这种方法中，代码很容易进入master/develop。我们应该致力于连续的产生好的代码。我们需要与长期存在的feature分支作斗争，因为它们是所有邪恶的根源!因此，PR需要能够快速地查看，以便快速地合并代码。 但这只适用于小的PR!你不会在一个大的PR上得到一个好的review，它要花很长时间才能把它merge。因此，一些公司对每一份PR的行数都有限制。一般来说，它们的长度应该少于300行，否则它们就不适合被review了。PR越长，review的人就越累如果review很累，开发人员就不想review了。但是我们需要团队尽可能频繁地检查代码，所以不要让他们感到困难!给出上下文让review人员更容易理解您的更改。 他们可能不会像你一样熟悉你正在做的事情。添加一个好的描述和一些截图:防止上下文切换让PR提交者尽早收到review评论，这样他就不需要从他已经在处理的下一个任务，切换回上一个任务.review花费的时间越长，开发者就越难以从其他任务中切换回来并进行更改。所以，让你的PR尽可能小，并尽可能频繁地创建它们:至少一天一次! 或者更频繁!审稿人也需要帮助如果您一天只review一次PR，那么每天打开多个PR的想法对您的团队来说是行不通的。所以审查经常!在每一次休息之后，在你开始一张新ticket之前，在每一次番茄工作法之后，或者每次你自己打开一个pull request之后。我们的团队引入了打开的PR上限, 与看板中的WIP限制类似。如果达到限制, 任何人都不允许打开一个PR，首先review别人PR来清空队列!专注于重要的事情所有的代码样式都应该首先由一些自动化的任务来检查—这不是一个人的任务。CI应该帮助处理大量的代码检查(静态分析:反模式、复杂性、潜在的内存泄漏)，这样review可以很容易地集中在逻辑和体系结构上。不要太严肃PR是与团队成员的讨论。 不要把它当成教学课程。 提出建议不要要求他们。友好。 使用表情符号和动图让读者对你的建议会心一笑:评论是对同事的反馈，也有积极的反馈，如果某件事做得很好，你应该心存感激。PR不适合进行长时间的架构讨论不要过度使用PR讨论。 反正也太迟了，代码已经写好了!使用其他渠道，如每日/每周的开发者会议。PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用。如果你的团队中有下级，试着使用结对编程，不要通过PR来教，否则会令人沮丧。如果代码比以前更好，那么批准它如果发现有什么东西可以变得更好，打开一个issue或ticket。当然，这需要一种持续处理技术债务的工作文化，这样ticket就不会被积压淹没。如果PR只是部分ticket，则它更容易被优先处理。另一个PR肯定会很快到来，可以立即解决这个问题。不要害怕在像我们这样的远程工作环境中，当PR可能在一夜之间被合并时可能会很可怕——您甚至没有机会看到或评论请求。当一个团队成长时，这是正常的。 您不能控制、检查或知道任何一行代码。接受这一点需要勇气和信任!原文: Art of Pull Requests">
-    <meta itemprop="datePublished" content="December 20, 2019">
+    <meta itemprop="datePublished" content="2019-12-20T00:00:00+08:00">
     
 
     <div class="page__inner-wrap">
@@ -301,15 +304,26 @@
           <h1 id="page-title" class="page__title" itemprop="headline">Art of Pull Requests(翻译)
 </h1>
           
-            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 分钟阅读
+        
+      </span>
+    
+  </p>
 
 
-
-
-  1 分钟阅读
-
-</p>
-          
         </header>
       
 
@@ -330,6 +344,7 @@
   <a href="#如果代码比以前更好那么批准它">如果代码比以前更好，那么批准它</a>
   <a href="#不要害怕">不要害怕</a>
 </ul>
+
             </nav>
           </aside>
         
@@ -546,8 +561,9 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2019-12-20T00:00:00+08:00">December 20, 2019</time></p>
-        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2019-12-20T00:00:00+08:00">December 20, 2019</time></p>
+
+
       </footer>
 
       <section class="page__share">
@@ -567,11 +583,11 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
   <nav class="pagination">
     
       <a href="/tech/cdn/" class="pagination--pager" title="掐指算算: 你的CDN多花了几百万?
-">向前</a>
+">上一页</a>
     
     
       <a href="/storage/ec-1/" class="pagination--pager" title="Erasure-Code-擦除码-1-原理篇
-">向后</a>
+">下一页</a>
     
   </nav>
 
@@ -602,22 +618,33 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/quorum/" rel="permalink">后分布式时代: 多数派读写的’少数派’实现
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  21 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          21 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.
 </p>
   </article>
@@ -631,22 +658,33 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/algo/paxos/" rel="permalink">可靠分布式系统-paxos的直观解释
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  13 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          15 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了
 </p>
   </article>
@@ -660,22 +698,33 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  2 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
 </p>
   </article>
@@ -689,22 +738,33 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-    <h2 class="archive__item-title" itemprop="headline">
+    <h2 class="archive__item-title no_toc" itemprop="headline">
       
         <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
 </a>
       
     </h2>
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
 
-
-
-
-  25 分钟阅读
-
-</p>
+  <p class="page__meta">
     
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          25 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
     <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
@@ -723,7 +783,7 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
       <div class="search-content">
         <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
     <label class="sr-only" for="search">
-      Enter your search term...
+      输入您要搜索的关键词...
     </label>
     <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
   </form>
@@ -773,7 +833,6 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
 
     
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://kit.fontawesome.com/4eee35f757.js"></script>
 
 
 
@@ -806,10 +865,10 @@ PR的作用在于，确保质量水平提高，并发现潜在的bug和副作用
     
   <script>
     var disqus_config = function () {
-      this.page.url = "https://blog.openacid.com/culture/pr/";  // Replace PAGE_URL with your page's canonical URL variable
-      this.page.identifier = "/culture/pr"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+      this.page.url = "https://blog.openacid.com/culture/pr/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/culture/pr"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
-    (function() { // DON'T EDIT BELOW THIS LINE
+    (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');
       s.src = 'https://openacid.disqus.com/embed.js';
       s.setAttribute('data-timestamp', +new Date());
