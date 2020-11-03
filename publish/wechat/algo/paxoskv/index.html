@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>200行实现基于paxos的kv存储 - OpenACID Blog</title>
+<!-- begin _includes/seo.html --><title>200行代码实现基于paxos的kv存储 - OpenACID Blog</title>
 <meta name="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
 
 
@@ -22,7 +22,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:site_name" content="OpenACID Blog">
-<meta property="og:title" content="200行实现基于paxos的kv存储">
+<meta property="og:title" content="200行代码实现基于paxos的kv存储">
 <meta property="og:url" content="https://blog.openacid.com/algo/paxoskv/">
 
 
@@ -293,7 +293,7 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="200行实现基于paxos的kv存储">
+    <meta itemprop="headline" content="200行代码实现基于paxos的kv存储">
     <meta itemprop="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
     <meta itemprop="datePublished" content="2020-10-28T00:00:00+08:00">
     
@@ -301,7 +301,7 @@
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">200行实现基于paxos的kv存储
+          <h1 id="page-title" class="page__title" itemprop="headline">200行代码实现基于paxos的kv存储
 </h1>
           
 
@@ -317,7 +317,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          27 分钟阅读
+          30 分钟阅读
         
       </span>
     
@@ -379,7 +379,7 @@
 
 
 
-<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行实现基于paxos的kv存储" class="page__hero-image">
+<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行代码实现基于paxos的kv存储" class="page__hero-image">
 
         
 
@@ -403,6 +403,8 @@ Paxos的原理本文不再介绍了,
 
 <p>🚀</p>
 
+<p>跑一下:</p>
+
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/openacid/paxoskv.git
 <span class="nb">cd </span>paxoskv
 go <span class="nb">test</span> <span class="nt">-v</span> ./...
@@ -417,6 +419,52 @@ go <span class="nb">test</span> <span class="nt">-v</span> ./...
 </ul>
 
 <p>测试代码描述了几个paxos运行例子的行为, 运行测试可以确认paxos的实现符合预期.</p>
+
+<p>本文中 protobuf 的数据结构定义如下:</p>
+
+<div class="language-proto highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">service</span> <span class="n">PaxosKV</span> <span class="p">{</span>
+    <span class="k">rpc</span> <span class="n">Prepare</span> <span class="p">(</span><span class="n">Proposer</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Acceptor</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">rpc</span> <span class="n">Accept</span> <span class="p">(</span><span class="n">Proposer</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Acceptor</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">BallotNum</span> <span class="p">{</span>
+    <span class="kt">int64</span> <span class="na">N</span>          <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int64</span> <span class="na">ProposerId</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">Value</span> <span class="p">{</span>
+    <span class="kt">int64</span> <span class="na">Vi64</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">PaxosInstanceId</span> <span class="p">{</span>
+    <span class="kt">string</span> <span class="na">Key</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int64</span>  <span class="na">Ver</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">Acceptor</span> <span class="p">{</span>
+    <span class="n">BallotNum</span> <span class="na">LastBal</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">Value</span>     <span class="na">Val</span>     <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">BallotNum</span> <span class="na">VBal</span>    <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">Proposer</span> <span class="p">{</span>
+    <span class="n">PaxosInstanceId</span> <span class="na">Id</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">BallotNum</span>       <span class="na">Bal</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">Value</span>           <span class="na">Val</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>以及主要的函数实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// struct KVServer</span>
+<span class="n">Storage</span> <span class="o">:</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="n">Versions</span>
+<span class="k">func</span> <span class="n">Accept</span><span class="p">(</span><span class="n">c</span> <span class="n">context</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">r</span> <span class="o">*</span><span class="n">Proposer</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">Acceptor</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Prepare</span><span class="p">(</span><span class="n">c</span> <span class="n">context</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">r</span> <span class="o">*</span><span class="n">Proposer</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">Acceptor</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">getLockedVersion</span><span class="p">(</span><span class="n">id</span> <span class="o">*</span><span class="n">PaxosInstanceId</span><span class="p">)</span> <span class="o">*</span><span class="n">Version</span>
+
+<span class="c">// struct Proposer</span>
+<span class="k">func</span> <span class="n">Phase1</span><span class="p">(</span><span class="n">acceptorIds</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">quorum</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">Value</span><span class="p">,</span> <span class="o">*</span><span class="n">BallotNum</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">Phase2</span><span class="p">(</span><span class="n">acceptorIds</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">quorum</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">BallotNum</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">RunPaxos</span><span class="p">(</span><span class="n">acceptorIds</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">val</span> <span class="o">*</span><span class="n">Value</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">Value</span><span class="p">)</span>
+<span class="k">func</span> <span class="n">rpcToAll</span><span class="p">(</span><span class="n">acceptorIds</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">,</span> <span class="n">action</span> <span class="kt">string</span><span class="p">)</span> <span class="p">([]</span><span class="o">*</span><span class="n">Acceptor</span><span class="p">)</span>
+
+<span class="k">func</span> <span class="n">ServeAcceptors</span><span class="p">(</span><span class="n">acceptorIds</span> <span class="p">[]</span><span class="kt">int64</span><span class="p">)</span> <span class="p">([]</span><span class="o">*</span><span class="n">grpc</span><span class="o">.</span><span class="n">Server</span><span class="p">)</span>
+</code></pre></div></div>
 
 <h1 id="从头实现paxoskv">从头实现paxoskv</h1>
 

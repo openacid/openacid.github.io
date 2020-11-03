@@ -68,6 +68,19 @@ li_p_ptns = (
         ),
 )
 
+#  add margin-top to h1 h2 ...
+h_margin_ptns = (
+        (r'([^>]|^)<h1 id=',
+         '{txt}<br/><h1 id='
+        ),
+        (r'([^>]|^)<h2 id=',
+         '{txt}<br/><h2 id='
+        ),
+        (r'([^>]|^)<h3 id=',
+         '{txt}<br/><h3 id='
+        ),
+)
+
 def handle_a_to_txt(sess, cont, m):
 
     s = m.start()
@@ -129,6 +142,8 @@ def resource_to_image(fn, outdir, title, imgurl, opt):
         cont = convert_ptn(cont, permlink_ptns)
     if 'li-p' in opt:
         cont = convert_ptn(cont, li_p_ptns)
+    if 'h-margin' in opt:
+        cont = convert_ptn(cont, h_margin_ptns)
     if 'a-to-txt' in opt:
         cont = convert_xxx(cont, a_to_txt_ptns)
 
@@ -322,7 +337,7 @@ def convert_ptn(cont, ptns):
 
             dd()
             dd("### remove:" + ptn)
-            dd("### keep:  ",  inner)
+            dd("### keep:  ",  repr(inner))
 
             newtxt = repl.format(
                     txt=inner)
@@ -462,7 +477,7 @@ if __name__ == "__main__":
 
     opts = {
             'wechat': 'math       a-to-txt                        permlink',
-            'weibo':  'math table          pre code blockquote    permlink li-p',
+            'weibo':  'math table          pre code blockquote    permlink li-p h-margin',
             'zhihu':  'math table          pre                 hr permlink'
     }
 

@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>200行实现基于paxos的kv存储 - OpenACID Blog</title>
+<!-- begin _includes/seo.html --><title>200行代码实现基于paxos的kv存储 - OpenACID Blog</title>
 <meta name="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
 
 
@@ -22,7 +22,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:site_name" content="OpenACID Blog">
-<meta property="og:title" content="200行实现基于paxos的kv存储">
+<meta property="og:title" content="200行代码实现基于paxos的kv存储">
 <meta property="og:url" content="https://blog.openacid.com/algo/paxoskv/">
 
 
@@ -293,7 +293,7 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="200行实现基于paxos的kv存储">
+    <meta itemprop="headline" content="200行代码实现基于paxos的kv存储">
     <meta itemprop="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
     <meta itemprop="datePublished" content="2020-10-28T00:00:00+08:00">
     
@@ -301,7 +301,7 @@
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">200行实现基于paxos的kv存储
+          <h1 id="page-title" class="page__title" itemprop="headline">200行代码实现基于paxos的kv存储
 </h1>
           
 
@@ -317,7 +317,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          27 分钟阅读
+          30 分钟阅读
         
       </span>
     
@@ -379,7 +379,7 @@
 
 
 
-<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行实现基于paxos的kv存储" class="page__hero-image">
+<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行代码实现基于paxos的kv存储" class="page__hero-image">
 
         
 
@@ -403,6 +403,8 @@ Paxos的原理本文不再介绍了,
 
 <p>🚀</p>
 
+<p>跑一下:</p>
+
 <div class="language-sh highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/paxoskv/images/tbl_0444f703c229c01fa8e58e3997ce9887.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>这个项目中除了paxos实现, 用3个test case描述了3个paxos运行的例子,</p>
@@ -414,6 +416,14 @@ Paxos的原理本文不再介绍了,
 </ul>
 
 <p>测试代码描述了几个paxos运行例子的行为, 运行测试可以确认paxos的实现符合预期.</p>
+
+<p>本文中 protobuf 的数据结构定义如下:</p>
+
+<div class="language-proto highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/paxoskv/images/tbl_1084c031f7dde4a896202318743581e9.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>以及主要的函数实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/paxoskv/images/tbl_9ed037a8d0162c811fbb77b10647c410.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <h1 id="从头实现paxoskv">从头实现paxoskv</h1>
 
@@ -1020,7 +1030,7 @@ snapshot的方式存储数据.</p>
     <h4 class="page__share-title">分享</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=200%E8%A1%8C%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Epaxos%E7%9A%84kv%E5%AD%98%E5%82%A8%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=200%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Epaxos%E7%9A%84kv%E5%AD%98%E5%82%A8%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
   <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 

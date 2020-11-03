@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>200行实现基于paxos的kv存储 - OpenACID Blog</title>
+<!-- begin _includes/seo.html --><title>200行代码实现基于paxos的kv存储 - OpenACID Blog</title>
 <meta name="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
 
 
@@ -22,7 +22,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:site_name" content="OpenACID Blog">
-<meta property="og:title" content="200行实现基于paxos的kv存储">
+<meta property="og:title" content="200行代码实现基于paxos的kv存储">
 <meta property="og:url" content="https://blog.openacid.com/algo/paxoskv/">
 
 
@@ -293,7 +293,7 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="200行实现基于paxos的kv存储">
+    <meta itemprop="headline" content="200行代码实现基于paxos的kv存储">
     <meta itemprop="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
     <meta itemprop="datePublished" content="2020-10-28T00:00:00+08:00">
     
@@ -301,7 +301,7 @@
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">200行实现基于paxos的kv存储
+          <br/><h1 id="page-title" class="page__title" itemprop="headline">200行代码实现基于paxos的kv存储
 </h1>
           
 
@@ -317,7 +317,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          27 分钟阅读
+          30 分钟阅读
         
       </span>
     
@@ -379,11 +379,11 @@
 
 
 
-<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行实现基于paxos的kv存储" class="page__hero-image">
+<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行代码实现基于paxos的kv存储" class="page__hero-image">
 
         
 
-        <h1 id="前言">前言</h1>
+        <br/><h1 id="前言">前言</h1>
 
 <p>写完 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 之后,
 网友都说疗效甚好, 但是也会对这篇教程中一些环节提出疑问(有疑问说明真的看懂了 🤔 ) ,
@@ -399,9 +399,11 @@ Paxos的原理本文不再介绍了,
 
 <p>文中的代码可能做了简化, 完整代码实现在 <a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto#L16">paxoskv</a>  这个项目中(naive分支).</p>
 
-<h1 id="运行和使用">运行和使用</h1>
+<br/><h1 id="运行和使用">运行和使用</h1>
 
 <p>🚀</p>
+
+<p>跑一下:</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_0444f703c229c01fa8e58e3997ce9887.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
@@ -415,14 +417,22 @@ Paxos的原理本文不再介绍了,
 
 <p>测试代码描述了几个paxos运行例子的行为, 运行测试可以确认paxos的实现符合预期.</p>
 
-<h1 id="从头实现paxoskv">从头实现paxoskv</h1>
+<p>本文中 protobuf 的数据结构定义如下:</p>
 
-<h2 id="paxos-相关的数据结构">Paxos 相关的数据结构</h2>
+<div class="language-proto highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_1084c031f7dde4a896202318743581e9.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>以及主要的函数实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_9ed037a8d0162c811fbb77b10647c410.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<br/><h1 id="从头实现paxoskv">从头实现paxoskv</h1>
+
+<br/><h2 id="paxos-相关的数据结构">Paxos 相关的数据结构</h2>
 
 <p>在这个例子中我们的数据结构和服务框架使用 <a href="https://developers.google.com/protocol-buffers">protobuf</a> 和 <a href="https://grpc.io/">grpc</a> 实现,
 首先是最底层的paxos数据结构:</p>
 
-<h3 id="proposer-和-acceptor">Proposer 和 Acceptor</h3>
+<br/><h3 id="proposer-和-acceptor">Proposer 和 Acceptor</h3>
 
 <p>在 <a href="https://blog.openacid.com/algo/paxos/#slide-27">slide-27</a> 中我们介绍了1个 Acceptor 所需的字段:</p>
 
@@ -466,7 +476,7 @@ Paxos的原理本文不再介绍了,
 
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_c10ec5b63867b482a6c392891d1ced6a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
-<h3 id="定义rpc消息结构">定义RPC消息结构</h3>
+<br/><h3 id="定义rpc消息结构">定义RPC消息结构</h3>
 
 <p>RPC消息定义了Proposer和Acceptor之间的通讯.</p>
 
@@ -499,7 +509,7 @@ Paxos的原理本文不再介绍了,
 
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_98aa382b59537675629cfa9b50c01d68.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
-<h2 id="使用protobuf和grpc生成服务框架">使用protobuf和grpc生成服务框架</h2>
+<br/><h2 id="使用protobuf和grpc生成服务框架">使用protobuf和grpc生成服务框架</h2>
 
 <p>🚀</p>
 
@@ -536,7 +546,7 @@ server端只有一个interface, 后面我们需要来完成它的实现:</p>
 
 <div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_4914d5ed0de02d81103edfe1c4b223d2.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
-<h2 id="实现存储的服务器端">实现存储的服务器端</h2>
+<br/><h2 id="实现存储的服务器端">实现存储的服务器端</h2>
 
 <p><a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go">impl.go</a> 是所有实现部分, 我们定义一个KVServer结构体, 用来实现grpc服务的interface PaxosKVServer;
 其中使用一个内存里的map结构模拟数据的存储:</p>
@@ -547,7 +557,7 @@ server端只有一个interface, 后面我们需要来完成它的实现:</p>
 Versions对应一个key的一系列变化.
 Storage就是所有key的所有变化.</p>
 
-<h3 id="实现-acceptor-的-grpc-服务-handler">实现 Acceptor 的 grpc 服务 handler</h3>
+<br/><h3 id="实现-acceptor-的-grpc-服务-handler">实现 Acceptor 的 grpc 服务 handler</h3>
 
 <p>Acceptor, 是这个系统里的server端, 监听一个端口,
 等待Proposer发来的请求并处理, 然后给出应答.</p>
@@ -588,7 +598,7 @@ Storage就是所有key的所有变化.</p>
 
 <p>Acceptor 的逻辑到此完整了, 再看Proposer:</p>
 
-<h3 id="实现proposer-逻辑">实现Proposer 逻辑</h3>
+<br/><h3 id="实现proposer-逻辑">实现Proposer 逻辑</h3>
 
 <p>Proposer的运行分2个阶段, Phase1 和 Phase2, 与 Prepare 和 Accept 对应.</p>
 
@@ -635,7 +645,7 @@ number再重试.</p>
 因为在 Phase1 和 Phase2 之间可能有其他 Proposer 使用更大的ballot number打断了当前Proposer的执行,
 就像<a href="https://blog.openacid.com/algo/paxos/#slide-33">slide-33</a> 的冲突解决的例子中描述的那样. 后面讲.</p>
 
-<h2 id="完整的paxos逻辑">完整的paxos逻辑</h2>
+<br/><h2 id="完整的paxos逻辑">完整的paxos逻辑</h2>
 
 <p>完整的 paxos 由 Proposer 负责, 包括: 如何选择一个值, 使得一致性得以保证.
 如 <a href="https://blog.openacid.com/algo/paxos/#slide-29">slide-29</a> 中描述的:</p>
@@ -677,7 +687,7 @@ number再重试.</p>
 
 <p>这样不断的重试循环, 写操作最终都能成功写入一个值(一个key的一个版本的值).</p>
 
-<h1 id="实现读操作">实现读操作</h1>
+<br/><h1 id="实现读操作">实现读操作</h1>
 
 <p>在我们这个NB(naive and bsice)的系统中, 读和写一样都要通过一次paxos算法来完成.
 因为写入过程就是一次paxos执行,
@@ -714,7 +724,7 @@ number再重试.</p>
 <p>接着我们用测试用例实现1下 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中列出的2个例子,
 从代码看poxos的运行:</p>
 
-<h1 id="文中例子">文中例子</h1>
+<br/><h1 id="文中例子">文中例子</h1>
 
 <p>第1个例子是 paxos 无冲突的运行 <a href="https://blog.openacid.com/algo/paxos/#slide-32">slide-32</a>:</p>
 
@@ -730,7 +740,7 @@ number再重试.</p>
 
 <p><img src="/post-res/paxos/slide-imgs/paxos-33.jpg" alt="" /></p>
 
-<h1 id="下一步">下一步</h1>
+<br/><h1 id="下一步">下一步</h1>
 
 <p>我们实现了指定key, ver的存储系统, 但相比真正生产可用的kv存储, 还缺少一些东西:</p>
 
@@ -1014,7 +1024,7 @@ snapshot的方式存储数据.</p>
     <h4 class="page__share-title">分享</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=200%E8%A1%8C%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Epaxos%E7%9A%84kv%E5%AD%98%E5%82%A8%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=200%E8%A1%8C%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Epaxos%E7%9A%84kv%E5%AD%98%E5%82%A8%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
   <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
