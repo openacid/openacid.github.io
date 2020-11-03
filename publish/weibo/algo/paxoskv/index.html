@@ -1,0 +1,1330 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>200行实现基于paxos的kv存储 - OpenACID Blog</title>
+<meta name="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
+
+
+  <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="OpenACID Blog">
+<meta property="og:title" content="200行实现基于paxos的kv存储">
+<meta property="og:url" content="https://blog.openacid.com/algo/paxoskv/">
+
+
+  <meta property="og:description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-10-28T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://blog.openacid.com/algo/paxoskv/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "OpenACID-分布式研究小院",
+      "url": "https://blog.openacid.com/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="OpenACID Blog Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180"    href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest"                            href="/assets/images/favicon/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">跳转链接</h2>
+  <ul>
+    <a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a>
+    <a href="#main" class="screen-reader-shortcut">转到内容</a>
+    <a href="#footer" class="screen-reader-shortcut">转到底部</a>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logo/icon-lemon-margin.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          OpenACID Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">切换搜索</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="http://schema.org/Person">
+  
+  
+  <p>
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">张炎泼(xp)</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>正在学画画, 主业是码农</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      <!--
+  
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  
+-->
+    </ul>
+  </div>
+
+  </p>
+  
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="200行实现基于paxos的kv存储">
+    <meta itemprop="description" content="用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分">
+    <meta itemprop="datePublished" content="2020-10-28T00:00:00+08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">200行实现基于paxos的kv存储
+</h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          27 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 本文目录</h4></header>
+              <ul class="toc__menu">
+  <a href="#前言">前言</a>
+  <a href="#运行和使用">运行和使用</a>
+  <a href="#从头实现paxoskv">从头实现paxoskv</a>
+    <ul>
+      <a href="#paxos-相关的数据结构">Paxos 相关的数据结构</a>
+        <ul>
+          <a href="#proposer-和-acceptor">Proposer 和 Acceptor</a>
+          <a href="#定义rpc消息结构">定义RPC消息结构</a>
+        </ul>
+      
+      <a href="#使用protobuf和grpc生成服务框架">使用protobuf和grpc生成服务框架</a>
+      <a href="#实现存储的服务器端">实现存储的服务器端</a>
+        <ul>
+          <a href="#实现-acceptor-的-grpc-服务-handler">实现 Acceptor 的 grpc 服务 handler</a>
+          <a href="#实现proposer-逻辑">实现Proposer 逻辑</a>
+            <ul>
+              <a href="#phase1">Phase1</a>
+              <a href="#client-与-server-端的连接">client 与 server 端的连接</a>
+              <a href="#phase2">Phase2</a>
+            </ul>
+          
+        </ul>
+      
+      <a href="#完整的paxos逻辑">完整的paxos逻辑</a>
+    </ul>
+  
+  <a href="#实现读操作">实现读操作</a>
+  <a href="#文中例子">文中例子</a>
+  <a href="#下一步">下一步</a>
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/algo/paxoskv/">https://blog.openacid.com/algo/paxoskv/</a>
+
+
+</p>
+
+
+        
+          
+
+
+
+<img src="/post-res/paxoskv/paxoskv-banner-small.png" alt="200行实现基于paxos的kv存储" class="page__hero-image">
+
+        
+
+        <h1 id="前言">前言</h1>
+
+<p>写完 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 之后,
+网友都说疗效甚好, 但是也会对这篇教程中一些环节提出疑问(有疑问说明真的看懂了 🤔 ) ,
+例如怎么把只能确定一个值的paxos应用到实际场景中.</p>
+
+<p>既然<strong>Talk is cheap</strong>, 那么就<strong>Show me the code</strong>,
+这次我们把教程中描述的内容直接用代码实现出来, 希望能覆盖到教程中的涉及的每个细节. 帮助大家理解paxos的运行机制.</p>
+
+<p><strong>这是一个基于paxos, 200行代码的kv存储系统的简单实现, 作为 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 这篇教程中的代码示例部分</strong>.
+Paxos的原理本文不再介绍了,
+本文提到的数据结构使用<a href="https://developers.google.com/protocol-buffers">protobuf</a>定义,
+网络部分使用<a href="https://grpc.io/">grpc</a>定义. 另外200行go代码实现paxos存储.</p>
+
+<p>文中的代码可能做了简化, 完整代码实现在 <a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto#L16">paxoskv</a>  这个项目中(naive分支).</p>
+
+<h1 id="运行和使用">运行和使用</h1>
+
+<p>🚀</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_0444f703c229c01fa8e58e3997ce9887.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这个项目中除了paxos实现, 用3个test case描述了3个paxos运行的例子,</p>
+
+<ul>
+  <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L11">TestCase1SingleProposer</a>: 无冲突运行.
+  <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L57">TestCase2DoubleProposer</a>: 有冲突运行.
+  <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/example_set_get_test.go">Example_setAndGetByKeyVer</a>: 作为key-val使用.
+</ul>
+
+<p>测试代码描述了几个paxos运行例子的行为, 运行测试可以确认paxos的实现符合预期.</p>
+
+<h1 id="从头实现paxoskv">从头实现paxoskv</h1>
+
+<h2 id="paxos-相关的数据结构">Paxos 相关的数据结构</h2>
+
+<p>在这个例子中我们的数据结构和服务框架使用 <a href="https://developers.google.com/protocol-buffers">protobuf</a> 和 <a href="https://grpc.io/">grpc</a> 实现,
+首先是最底层的paxos数据结构:</p>
+
+<h3 id="proposer-和-acceptor">Proposer 和 Acceptor</h3>
+
+<p>在 <a href="https://blog.openacid.com/algo/paxos/#slide-27">slide-27</a> 中我们介绍了1个 Acceptor 所需的字段:</p>
+
+
+  <p>在存储端(Acceptor)也有几个概念:</p>
+
+  <ul>
+    last_rnd 是Acceptor记住的最后一次进行写前读取的Proposer(客户端)是谁, 以此来决定谁可以在后面真正把一个值写到存储中.
+    v 是最后被写入的值.
+    vrnd 跟v是一对, 它记录了在哪个Round中v被写入了.
+  </ul>
+
+
+<p><img src="/post-res/paxos/slide-imgs/paxos-27.jpg" alt="" /></p>
+
+<p>原文中这些名词是参考了 <a href="http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple" title="paxos made simple">paxos made simple</a> 中的名称, 但在 <a href="http://www.lamport.org/" title="Leslie Lamport">Leslie Lamport</a>
+后面的几篇paper中都换了名称, 为了后续方便, 在<a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto#L16">paxoskv</a>的代码实现中也做了相应的替换:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_ccfe8146ebf077802f00ffa06f711d7a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>Proposer的字段也很简单, 它需要记录:</p>
+<ul>
+  当前的ballot number: Bal,
+  以及它选择在Phase2运行的值: Val (<a href="https://blog.openacid.com/algo/paxos/#slide-29">slide-29</a>).
+</ul>
+
+<p>于是在这个项目中用protobuf定义这两个角色的数据结构, 如代码 <a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto">paxoskv.proto</a> 中的声明, 如下:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_ef96cab550e6fd0a507e3a6838f93a9c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>其中Proposer还需要一个PaxosInstanceId,
+来标识当前的paxos实例为哪个key的哪个version在做决定, <a href="http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple" title="paxos made simple">paxos made simple</a>
+中只描述了一个paxos实例的算法(对应一个key的一次修改), 要实现多次修改,
+就需要增加这个字段来区分不同的paxos实例:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_6d2028df06507ca23508e69fdd72a385.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p><a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto">paxoskv.proto</a> 还定义了一个BallotNum, 
+因为要保证全系统内的BallotNum都有序且不重复,
+一般的做法就是用一个本地单调递增的整数, 和一个全局唯一的id组合起来实现:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_c10ec5b63867b482a6c392891d1ced6a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<h3 id="定义rpc消息结构">定义RPC消息结构</h3>
+
+<p>RPC消息定义了Proposer和Acceptor之间的通讯.</p>
+
+<p>在一个paxos系统中, 至少要有4个消息:</p>
+<ul>
+  Phase1的 Prepare-request, Prepare-reply,
+  和Phase2的 Accept-request, Accept-reply,
+</ul>
+
+<p>如<a href="https://blog.openacid.com/algo/paxos/#slide-28">slide-28</a> 所描述的(原文中使用rnd, 这里使用Bal, 都是同一个概念):</p>
+
+
+  <p>Phase-1(Prepare):</p>
+
+  <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_63cdf0a159e749ec294006ead924a4c3.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>  </div>
+
+  <p>Phase-2(Accept):</p>
+
+  <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_ec535305a8d684e97239d1a5a6178a0b.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>  </div>
+
+
+<p>在Prepare-request或Accept-request中, 发送的是一部分或全部的Proposer的字段,
+因此我们在代码中:</p>
+<ul>
+  直接把Proposer的结构体作为request的结构体.
+  同样把Acceptor的结构体作为reply的结构体.
+</ul>
+
+<p>在使用的时候只使用其中几个字段.  对应我们的 RPC 服务 <a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto#L16">PaxosKV</a> 定义如下:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_98aa382b59537675629cfa9b50c01d68.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<h2 id="使用protobuf和grpc生成服务框架">使用protobuf和grpc生成服务框架</h2>
+
+<p>🚀</p>
+
+<p>protobuf可以将<a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto">paxoskv.proto</a>直接生成go代码(
+代码库中已经包含了生成好的代码: <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxoskv.pb.go">paxoskv.pb.go</a>, 只有修改<a href="https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto">paxoskv.proto</a>
+之后才需要重新生成)</p>
+
+<ul>
+  <b>首先安装protobuf的编译器 protoc, 可以根据
+<a href="https://grpc.io/docs/protoc-installation/">install-protoc</a> 中的步骤安装, 一般简单的一行命令就可以了:</b>
+
+    <ul>
+      Linux: apt install -y protobuf-compiler
+      Mac: brew install protobuf
+    </ul>
+
+    <p>安装好之后通过protoc --version确认版本, 至少应该是3.x: libprotoc 3.13.0</p>
+  
+  <b>安装protoc的go语言生成插件 protoc-gen-go:</b>
+
+    <p>go get -u github.com/golang/protobuf/protoc-gen-go</p>
+  
+  <b>重新编译protokv.proto文件: 直接make gen 或:</b>
+    <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_746b94eb5c51f1dbc92ee3f5f86620e9.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>    </div>
+  
+</ul>
+
+<p>生成后的<a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxoskv.pb.go">paxoskv.pb.go</a>代码中可以看到, 其中主要的数据结构例如Acceptor的定义:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_f32b73137d8687c366a54d482bbfc2da.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>以及KV服务的client端和server端的代码, client端是实现好的,
+server端只有一个interface, 后面我们需要来完成它的实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_4914d5ed0de02d81103edfe1c4b223d2.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<h2 id="实现存储的服务器端">实现存储的服务器端</h2>
+
+<p><a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go">impl.go</a> 是所有实现部分, 我们定义一个KVServer结构体, 用来实现grpc服务的interface PaxosKVServer;
+其中使用一个内存里的map结构模拟数据的存储:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_5a14d9a95eb64c7cc33aa91c03144c38.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>其中Version对应一个key的一次变化, 也就是对应一个paxos实例.
+Versions对应一个key的一系列变化.
+Storage就是所有key的所有变化.</p>
+
+<h3 id="实现-acceptor-的-grpc-服务-handler">实现 Acceptor 的 grpc 服务 handler</h3>
+
+<p>Acceptor, 是这个系统里的server端, 监听一个端口,
+等待Proposer发来的请求并处理, 然后给出应答.</p>
+
+<p>根据paxos的定义, Acceptor的逻辑很简单:
+在 <a href="https://blog.openacid.com/algo/paxos/#slide-28">slide-28</a> 中描述:</p>
+
+<p><img src="/post-res/paxos/slide-imgs/paxos-28.jpg" alt="img" /></p>
+
+<p>根据教程里的描述, 为 KVServer 定义handle Prepare-request的代码:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_ba14aff1bd78b7c9dfb96efdd5a97370.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这段代码分3步:</p>
+<ul>
+  取得paxos实例,
+  生成应答: Acceptor总是返回LastBal, Val, VBal 这3个字段, 所以直接把Acceptor赋值给reply.
+  最后更新Acceptor的状态: 然后按照paxos算法描述, 如果请求中的ballot number更大, 则记录下来,
+表示不在接受更小ballot number的Proposer.
+</ul>
+
+<p>其中getLockedVersion()
+从KVServer.Storage中根据request 发来的PaxosInstanceId中的字段key和ver获取一个指定Acceptor的实例:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_08715bee95a850d8cf0fd7164360ee94.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>handle Accept-request的处理类似, 在 <a href="https://blog.openacid.com/algo/paxos/#slide-31">slide-31</a> 中描述:
+<img src="/post-res/paxos/slide-imgs/paxos-31.jpg" alt="img" /></p>
+
+<p>Accept() 要记录3个值,</p>
+<ul>
+  LastBal: Acceptor看到的最大的ballot number;
+  Val: Proposer选择的值,
+  以及VBal: Proposer的ballot number:
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_a18c76adfc1afcb9d98e1d27ac4374e8.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>Acceptor 的逻辑到此完整了, 再看Proposer:</p>
+
+<h3 id="实现proposer-逻辑">实现Proposer 逻辑</h3>
+
+<p>Proposer的运行分2个阶段, Phase1 和 Phase2, 与 Prepare 和 Accept 对应.</p>
+
+<h4 id="phase1">Phase1</h4>
+
+<p>在 <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go">impl.go</a> 的实现中, Proposer.Phase1()函数负责Phase1的逻辑:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_589a7069a90fa0aaff78005f94cd0e6c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这段代码首先通过 rpcToAll() 向所有Acceptor发送Prepare-request请求,
+然后找出所有的成功的reply:</p>
+
+<ul>
+  如果发现一个更大的ballot number, 表示一个Prepare<strong>失败</strong>: 有更新的Proposer存在;
+  否则, 它是一个<strong>成功</strong>的应答,
+再看它有没有返回一个已经被Acceptor接受(voted)的值.
+</ul>
+
+<p>最后, 成功应答如果达到多数派(quorum), 则认为Phase1 完成,
+返回最后一个被voted的值, 也就是VBal最大的那个. 让上层调用者继续Phase2;</p>
+
+<p>如果没有达到quorum, 这时可能是有多个Proposer并发运行而造成冲突, 有更大的ballot number, 这时则把见到的最大ballot number返回, 由上层调用者提升ballot
+number再重试.</p>
+
+<h4 id="client-与-server-端的连接">client 与 server 端的连接</h4>
+
+<p>上面用到的 rpcToAll 在这个项目中的实现client端(Proposer)到server端(Acceptor)的通讯, 它是一个十分 <del>简洁美观</del> 简陋的 grpc 客户端实现:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_1ea02c0b3af526925235baae931c34ee.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<h4 id="phase2">Phase2</h4>
+
+<p>Proposer运行的Phase2
+在<a href="https://blog.openacid.com/algo/paxos/#slide-30">slide-30</a> 中描述, 比Phase1更简单:</p>
+
+
+  <p>在第2阶段phase-2, Proposer X将它选定的值写入到Acceptor中, 这个值可能是它自己要写入的值, 或者是它从某个Acceptor上读到的v(修复).</p>
+
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_556937480ec3880dea568b06ab497973.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>我们看到, 它只需要确认成 Phase2 的功应答数量达到quorum就可以了.
+另外同样它也有责任在 Phase2 失败时返回看到的更大的ballot number,
+因为在 Phase1 和 Phase2 之间可能有其他 Proposer 使用更大的ballot number打断了当前Proposer的执行,
+就像<a href="https://blog.openacid.com/algo/paxos/#slide-33">slide-33</a> 的冲突解决的例子中描述的那样. 后面讲.</p>
+
+<h2 id="完整的paxos逻辑">完整的paxos逻辑</h2>
+
+<p>完整的 paxos 由 Proposer 负责, 包括: 如何选择一个值, 使得一致性得以保证.
+如 <a href="https://blog.openacid.com/algo/paxos/#slide-29">slide-29</a> 中描述的:</p>
+
+  <p>Proposer X收到多数(quorum)个应答, 就认为是可以继续运行的.如果没有联系到多于半数的acceptor, 整个系统就hang住了, 这也是paxos声称的只能运行少于半数的节点失效.
+这时Proposer面临2种情况:</p>
+
+  <p>所有应答中都没有任何非空的v, 这表示系统之前是干净的, 没有任何值已经被其他paxos客户端完成了写入(因为一个多数派读一定会看到一个多数派写的结果). 这时Proposer X继续将它要写的值在phase-2中真正写入到多于半数的Acceptor中.</p>
+
+  <p>如果收到了某个应答包含被写入的v和vrnd, 这时, Proposer X 必须假设有其他客户端(Proposer) 正在运行, 虽然X不知道对方是否已经成功结束, 但任何已经写入的值都不能被修改!, 所以X必须保持原有的值. 于是X将看到的最大vrnd对应的v作为X的phase-2将要写入的值.</p>
+
+  <p>这时实际上可以认为X执行了一次(不知是否已经中断的)其他客户端(Proposer)的修复.</p>
+
+
+<p><img src="/post-res/paxos/slide-imgs/paxos-29.jpg" alt="img" /></p>
+
+<p>基于 Acceptor 的服务端和 Proposer 2个 Phase 的实现,
+最后把这些环节组合到一起组成一个完整的paxos, 
+在我们的代码 <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go#L46">RunPaxos</a> 这个函数中完成这些事情:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_020c71e242998311395943c42efe6b78.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这段代码完成了几件事: 运行 Phase1, 有voted的值就选它, 没有就选自己要写的值val,
+然后运行 Phase2.</p>
+
+<p>就像 Phase1 Phase2 中描述的一样, 任何一个阶段, 如果没达到quorum, 就需要提升遇到的更大的ballot number,
+重试去解决遇到的ballot number冲突.</p>
+
+<p>这个函数接受2个参数:</p>
+<ul>
+  所有Acceptor的列表(用一个整数的id表示一个Acceptor),
+  以及要提交的值.
+</ul>
+
+<p>其中, 按照paxos的描述, 这个值val<strong>不一定能提交</strong>:
+如果paxos在 Phase1 完成后看到了其他已经接受的值(voted value), 那就要选择已接收的值, 放弃val.
+遇到这种情况, 在我们的系统中, 例如要写入key=foo, ver=3的值为bar,
+如果没能选择bar, 就要选择下一个版本key=foo, ver=4再尝试写入.</p>
+
+<p>这样不断的重试循环, 写操作最终都能成功写入一个值(一个key的一个版本的值).</p>
+
+<h1 id="实现读操作">实现读操作</h1>
+
+<p>在我们这个NB(naive and bsice)的系统中, 读和写一样都要通过一次paxos算法来完成.
+因为写入过程就是一次paxos执行,
+而paxos只保证在一个quorum中写入确定的值, 不保证所有节点都有这个值.
+因此一次读操作如果要读到最后写入的值,
+至少要进行一次<strong>多数派读</strong>.</p>
+
+<p>但多数派读还不够: 它可能读到一个未完成的paxos写入, 如 <a href="https://blog.openacid.com/algo/paxos/#slide-11">slide-11</a> 中描述的脏读问题,
+读取到的最大VBal的值, 可能不是确定的值(写入到多数派).</p>
+
+<p>例如下面的状态:</p>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_f681bbaaa099fbafeb485105360f5a0f.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<p>如果Proposer试图读, 在 Phase1 联系到A0 A1这2个Acceptor,
+那么foo和bar这2个值哪个是确定下来的, 要取决于A2的状态.
+所以这时要再把最大VBal的值跑完一次 Phase2, 让它被确定下来,
+然后才能把结果返回给上层(否则另一个Proposer可能联系到A1 和 A2, 然后认为Val=bar是被确定的值).</p>
+
+<p>当然如果 Proposer 在读取流程的 Phase1 成功后没有看到任何已经voted的值(例如没有看到foo或bar),
+就不用跑 Phase2 了.</p>
+
+<p>所以在这个版本的实现中, 读操作也是一次 <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go#L46">RunPaxos</a> 函数的调用, 除了它并不propose任何新的值,
+为了支持读操作, 所以在上面的代码中 Phase2 之前加入一个判断,
+<strong>如果传入的val和已voted的值都为空, 则直接返回</strong>:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_cf630a640e8c38c46e795867f54da972.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p><a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/example_set_get_test.go">Example_setAndGetByKeyVer</a> 这个测试用例展示了如何使用paxos实现一个kv存储,
+实现读和写的代码大概这样:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_2641e7a0b994d9693915f5b2b99e590e.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>到现在为止, 本文中涉及到的功能都实现完了, 完整实现在 <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go">impl.go</a> 中.</p>
+
+<p>接着我们用测试用例实现1下 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中列出的2个例子,
+从代码看poxos的运行:</p>
+
+<h1 id="文中例子">文中例子</h1>
+
+<p>第1个例子是 paxos 无冲突的运行 <a href="https://blog.openacid.com/algo/paxos/#slide-32">slide-32</a>:</p>
+
+<p><img src="/post-res/paxos/slide-imgs/paxos-32.jpg" alt="" /></p>
+
+<p>把它写成test case, 确认教程中每步操作之后的结果都如预期
+<a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L11">TestCase1SingleProposer</a>:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/paxoskv/images/tbl_f80d0d8b960ddb3ceb4f8332ee392275.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>第2个例子对应2个Proposer遇到冲突并解决冲突的例子, 略长不贴在文中了,
+代码可以在 <a href="https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L57">TestCase2DoubleProposer</a> 看到</p>
+
+<p><img src="/post-res/paxos/slide-imgs/paxos-33.jpg" alt="" /></p>
+
+<h1 id="下一步">下一步</h1>
+
+<p>我们实现了指定key, ver的存储系统, 但相比真正生产可用的kv存储, 还缺少一些东西:</p>
+
+<ul>
+  <b>写操作一般都不需要用户指定ver, 所以还需要实现<strong>对指定key查找最大ver的功能</strong>.
+这些跟paxos关系不大, 现在这个实现中就省去了这些逻辑. 以后再讲. 🤔</b>
+  
+  <b>其次为了让读操作不需要指定ver, 还需要一个<strong>snapshot</strong>功能, 也就是保存一个key-value的map,
+这个map中只需要记录每个key最新的value值(以及ver等).
+有了这个map之后, 已经确认的值对应的version就可以删掉了. 也就是说Versions
+结构只作为每个key的<strong>修改日志</strong>存在, 用于存储每次修改对应的paxos实例.</b>
+  
+  <b>snapshot功能还会引入应另外一个需求, 就是<a href="http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple" title="paxos made simple">paxos made simple</a> 中的 learn 的行为,
+  对应Phase3, 本文中描述的这个存储中, 只有Proposer知道某个key-ver达到多数派,
+  Acceptor还不知道, (所以读的时候还要走一遍paxos).
+  在论文中的描述是Acceptor接受一个值时(vote), 也要把这个事情通知其他 Learner角色,
+  我们可以给每个Acceptor也设定成Learner: <strong>Acceptor vote一个值时除了应答Proposer,
+  也广播这个事件给其他Acceptor</strong>, 这样每个Acceptor也就可以知道哪个值是达到quorum了(safe), 可以直接被读取.</b>
+
+    <p>但在实际实现时, 这种方法产生的消息会达到 n² 级别的数量.
+  所以一般做法是让Proposer做这件事: 当Proposer收到一个quorum的Phase2应答后,
+  再广播一条消息告诉所有的Acceptor: 这个paxos实例已经safe了,
+  这个消息在大多数系统中都就称作<strong>Commit</strong>.</p>
+  
+</ul>
+
+<p>以上这3块内容, 后续播出, 下个版本的实现将使用经典的log 加
+snapshot的方式存储数据.</p>
+
+<p>各位朋友对哪些方面感兴趣, 欢迎催更 🤔…</p>
+
+<hr />
+
+<p>本文用到的代码在 paxoskv 项目的 naive 分支上:
+<a href="https://github.com/openacid/paxoskv/tree/naive">https://github.com/openacid/paxoskv/tree/naive</a></p>
+
+<p>如有什么本文遗漏的地方, 或有任何好想法, 欢迎随时交流讨论,</p>
+
+<p>本文相关问题可以在 paxoskv 这个项目上提 基hub <a href="https://github.com/openacid/paxoskv/issues/new/choose">issue</a>.</p>
+
+
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/algo/paxoskv/">https://blog.openacid.com/algo/paxoskv/</a>
+
+
+</p>
+<ul class="page-links" style="display:none;">
+
+
+
+
+    
+        <li style="font-size:0.7em">
+        [paxos made simple]: http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Leslie Lamport]: http://www.lamport.org/
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [protobuf]: https://developers.google.com/protocol-buffers
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [install-protoc]: https://grpc.io/docs/protoc-installation/
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [grpc]: https://grpc.io/
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [paxos的直观解释]: https://blog.openacid.com/algo/paxos
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-11]: https://blog.openacid.com/algo/paxos/#slide-11
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-27]: https://blog.openacid.com/algo/paxos/#slide-27
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-28]: https://blog.openacid.com/algo/paxos/#slide-28
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-29]: https://blog.openacid.com/algo/paxos/#slide-29
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-30]: https://blog.openacid.com/algo/paxos/#slide-30
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-31]: https://blog.openacid.com/algo/paxos/#slide-31
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-32]: https://blog.openacid.com/algo/paxos/#slide-32
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slide-33]: https://blog.openacid.com/algo/paxos/#slide-33
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [issue]: https://github.com/openacid/paxoskv/issues/new/choose
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [https://github.com/openacid/paxoskv/tree/naive]: https://github.com/openacid/paxoskv/tree/naive
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [paxoskv]: https://github.com/openacid/paxoskv/tree/naive
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [paxoskv.proto]: https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [PaxosKV]: https://github.com/openacid/paxoskv/blob/naive/proto/paxoskv.proto#L16
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [paxoskv.pb.go]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxoskv.pb.go
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [impl.go]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [RunPaxos]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/impl.go#L46
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [TestCase1SingleProposer]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L11
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [TestCase2DoubleProposer]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/paxos_slides_case_test.go#L57
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [Example_setAndGetByKeyVer]: https://github.com/openacid/paxoskv/blob/naive/paxoskv/example_set_get_test.go
+        </li>
+    
+
+</ul>
+<p>
+<img src="/assets/images/qrcode-hori.jpg" alt="openacid">
+</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 标签: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#distributed" class="page__taxonomy-item" rel="tag">distributed</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#kv" class="page__taxonomy-item" rel="tag">kv</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#paxos" class="page__taxonomy-item" rel="tag">paxos</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#replication" class="page__taxonomy-item" rel="tag">replication</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E5%88%86%E5%B8%83%E5%BC%8F" class="page__taxonomy-item" rel="tag">分布式</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E5%AD%98%E5%82%A8" class="page__taxonomy-item" rel="tag">存储</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#algo" class="page__taxonomy-item" rel="tag">algo</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-10-28T00:00:00+08:00">October 28, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">分享</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=200%E8%A1%8C%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8Epaxos%E7%9A%84kv%E5%AD%98%E5%82%A8%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fpaxoskv%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/algo/quorum/" class="pagination--pager" title="后分布式时代: 多数派读写的’少数派’实现
+">上一页</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">下一页</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">猜您还喜欢</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/quorum/" rel="permalink">后分布式时代: 多数派读写的’少数派’实现
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          19 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/paxos/" rel="permalink">可靠分布式系统-paxos的直观解释
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          24 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      输入您要搜索的关键词...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <strong>关注:</strong>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 OpenACID-分布式研究小院. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://blog.openacid.com/algo/paxoskv/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/algo/paxoskv"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://openacid.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  <style> .header-link { display: none !important; } </style> </body >
+</html>
