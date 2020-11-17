@@ -1,0 +1,1008 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.20.2 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="zh" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>slimarray: gzip的压缩率, 即时访问 - OpenACID Blog</title>
+<meta name="description" content="slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用">
+
+
+  <meta name="author" content="张炎泼(xp)">
+  
+  <meta property="article:author" content="张炎泼(xp)">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="OpenACID Blog">
+<meta property="og:title" content="slimarray: gzip的压缩率, 即时访问">
+<meta property="og:url" content="https://blog.openacid.com/algo/slimarray/">
+
+
+  <meta property="og:description" content="slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-11-15T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://blog.openacid.com/algo/slimarray/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "OpenACID-分布式研究小院",
+      "url": "https://blog.openacid.com/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="OpenACID Blog Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<link rel="apple-touch-icon" sizes="180x180"    href="/assets/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+<link rel="manifest"                            href="/assets/images/favicon/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">跳转链接</h2>
+  <ul>
+    <a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a>
+    <a href="#main" class="screen-reader-shortcut">转到内容</a>
+    <a href="#footer" class="screen-reader-shortcut">转到底部</a>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logo/icon-lemon-margin.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          OpenACID Blog
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="https://github.com/orgs/openacid/people">About Us</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">切换搜索</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="http://schema.org/Person">
+  
+  
+  <p>
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/author/xp.jpg" alt="张炎泼(xp)" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">张炎泼(xp)</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>正在学画画, 主业是码农</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <a href="https://drmingdrmer.github.io/" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">个人博客</span></a>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://github.com/drmingdrmer" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        
+          <a href="https://www.weibo.com/drdrxp" itemprop="sameAs" rel="nofollow noopener noreferrer">
+            <i class="fab fa-fw fa-weibo" aria-hidden="true"></i><span class="label">Weibo</span>
+          </a>
+        
+      
+
+      
+
+      
+
+      
+
+      <!--
+  
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  
+-->
+    </ul>
+  </div>
+
+  </p>
+  
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="slimarray: gzip的压缩率, 即时访问">
+    <meta itemprop="description" content="slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用">
+    <meta itemprop="datePublished" content="2020-11-15T00:00:00+08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <br/><h1 id="page-title" class="page__title" itemprop="headline">slimarray: gzip的压缩率, 即时访问
+</h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 本文目录</h4></header>
+              <ul class="toc__menu">
+  <a href="#场景和问题">场景和问题</a>
+  <a href="#初步想法-前缀压缩">初步想法: 前缀压缩</a>
+  <a href="#找到趋势函数">找到趋势函数</a>
+  <a href="#寻找最佳分段拟合策略">寻找最佳分段拟合策略</a>
+  <a href="#实现">实现</a>
+    <ul>
+      <a href="#描述分区的数据结构-span">描述分区的数据结构: span</a>
+      <a href="#读取过程">读取过程</a>
+      <a href="#求和的优化设计">求和的优化设计</a>
+    </ul>
+  
+</ul>
+
+            </nav>
+          </aside>
+        
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/algo/slimarray/">https://blog.openacid.com/algo/slimarray/</a>
+
+
+</p>
+
+
+        
+          
+
+
+
+<img src="/post-res/slimarray/slimarray-banner-small.jpg" alt="slimarray: gzip的压缩率, 即时访问" class="page__hero-image">
+
+        
+
+        <p><br /></p>
+
+<p><a href="https://github.com/openacid/slimarray"><svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg> slimarray</a></p>
+
+<br/><h1 id="场景和问题">场景和问题</h1>
+
+<p>在时序数据库, 或列存储为基础的系统中, 很常见的形式就是存储一个整数数组,
+例如 <a href="https://github.com/openacid/slim" title="slim">slim</a> 这个项目按天统计的 star 数:</p>
+
+<p><a href="https://starchart.cc/openacid/slim"><img src="https://starchart.cc/openacid/slim.svg" alt="Stargazers over time" /></a></p>
+
+<p>这类数据有有很明显的统一的变化趋势, 对这类数据的存储,
+我们可以利用数据分布的特点, 将整体数据的大小压缩到<strong>几分之一</strong>.
+这就是 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 要做的事情.</p>
+
+<p>使用 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a>, 可以将数据容量减小到gzip差不多的大小,
+同时还能允许直接访问这些数据!
+测试中我们选择了2组随机数, 以及现实中的2份数据, 一个ipv4的数据库, 一个 <a href="https://github.com/openacid/slim" title="slim">slim</a> 的star变化数据, 服用 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 后效果如下:</p>
+
+<img src="/publish/weibo/algo/slimarray/images/tbl_6aec8a3b59557f0420ec736577b233ae.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
+
+<p>本文手把手的介绍 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 的原理, 实现:</p>
+
+<br/><h1 id="初步想法-前缀压缩">初步想法: 前缀压缩</h1>
+
+<p>假设我们有一个包含4个元素的uint32的整数数组:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_da313e1a0f8675032319094e99b00c56.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>前缀压缩的思路就是把每个元素的公共部分提取出来单独存储, 这样每个单独元素就只需要存储它跟公共部分差异的部分, 从而大大降低存储空间. (因为公共部分在大多数情况中都在前面(例如现实中大部分被存储的数据都是排序的, 或近似于排序的), 所以一般提取公共部分的压缩都是前缀压缩)</p>
+
+<p>在这个例子中, 我们看到最小的数是1005, 那么就把它作为公共部分提取出来, 再单独存储每个数字剩余的部分(和prefix的差异), 最后存储的内容如下:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_b5b01f7fc023a6e3d35b6ce2ca1b516a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>可以看到这种表示方法中, 固定的部分Prefix大小不变, 影响整个存储效率的是deltas, 而它只需要记录每个原始值跟前缀之间的差, 最大是5, 也就是说每个delta 只需要<strong>3 bit</strong>就够了.</p>
+
+<p>当数据较多时, 均摊空间开销将近似于3 bit/elt.</p>
+
+<p>现在我们换一个视角, 我们可以把要存储的数值看做是一个坐标系中的4个点:
+横轴表示数组下标, 纵轴表示数字的值.</p>
+
+<p>于是前缀压缩就可以看成是: 记录一条水平直线(y = 1005), 再记录数组中实际数值跟这条直线之间的y轴方向距离:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_f458127e8171712a4e4d2bcaaf2dff4c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>🤔!!!</p>
+
+<p>从坐标系这种视角, 似乎还可以进一步减小存储空间,
+考虑到现实中, 一个数组中的数值, 可能是趋向于一个持续的变化(如递增的), 而不是围绕某个特定值的(如1005).</p>
+
+<p>例如大家的账上余额, 应该是逐月递增的🤔.</p>
+
+<p>所以, 先描述这个趋势, 再用delta数组去修正到正确值, 应该可以更大程度的降低delta的取值范围. 作者经过仔细认真的观察和研究, 突然间发现可以定义一条直线方程, 再通过delta数组去修正, 就是这个样子:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_b8327142be7fe014b36381d8fe796d05.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这样描述数值趋势, delta的最大值只有3, 只需要2个bit就可以了.
+于是当数据量增大时, 均摊空间效率就是 2 bit/elt.</p>
+
+<p>显然,  用更高次的曲线去拟合, 可以更贴合原始点, 得到更高的压缩率.
+例如使用2次曲线, 可以得到如下一份配置:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_c16ba9789cf0902194e6244809df9059.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>这里每个delta只需要1个bit就够了.</p>
+
+<p>按照这种思路, <strong>在给定数组中找到一条曲线来描述点的趋势,</strong>
+<strong>再用一个比较小的delta数组修正曲线到实际点的距离, 得到原始值, 就可以实现大幅度的数据压缩. 而且所有的数据都无需解压全部数据就直接读取任意一个.</strong></p>
+
+<br/><h1 id="找到趋势函数">找到趋势函数</h1>
+
+<p>寻找这样一条曲线就使用线性回归,
+例如在 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 中使用2次曲线 f(x) = β₁ + β₂x + β₃x², 所要做的就是确定每个βᵢ的值,
+以使得f(xⱼ) - yⱼ的均方差最小. xⱼ是数组下标0, 1, 2…; yⱼ是数组中每个元素的值.</p>
+
+<img src="/publish/weibo/algo/slimarray/images/CDATA_X_=_begin_bmatrix_1_x_1_x_1_2_1_x_2_x_2_2_vdots_vdots_vdo-3091635a353d00f0a079b17e0fe3bc68.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+X = \begin{bmatrix}
+1      & x_1    & x_1^2 \\
+1      & x_2    & x_2^2 \\
+\vdots & \vdots & \vdots    \\
+1      & x_n    & x_n^2
+\end{bmatrix}
+,
+
+\vec{\beta} =
+\begin{bmatrix}
+\beta_1 \\
+\beta_2 \\
+\beta_3 \\
+\end{bmatrix}
+,
+
+Y =
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{bmatrix} %]]>"/>
+
+<p>现在要找到一组β, 使得均方差最小:</p>
+
+<img src="/publish/weibo/algo/slimarray/images/X_vec_beta_-Y_2_-a99a66a6238f28d0d7dfd5bcc5e7eeba.png" style="display: block; margin: 0 auto 1.3em auto" _alt="||X{\vec {\beta }}-Y||^{2}"/>
+
+<p>在上面这个函数里, 把 β 看做变量, 要找极值的话就看这个函数对 β 的导数何时为0:</p>
+
+<img src="/publish/weibo/algo/slimarray/images/CDATA_begin_aligned_frac_partial_X_vec_beta_-Y_2_partial_vec_be-017aa94088f7f1c72403528afdc80566.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+\begin{aligned}
+& \frac
+{\partial||X{\vec {\beta }}-Y||^{2}}
+{\partial\vec \beta }
+\\
+= & \frac{\partial ((X \vec \beta -Y)^{T}(X{\vec {\beta }}-Y))}
+         {\partial \vec \beta}
+\\
+= & \frac{\partial (Y^{T}Y-Y^{T}X{\vec {\beta }}-{\vec {\beta }}^{T}X^{T}Y+{\vec {\beta }}^{T}X^{T}X{\vec {\beta }})}
+{\partial \vec \beta}
+\\
+= & -2X^{T}Y+2X^{T}X{\vec {\beta }}
+\end{aligned} %]]>"/>
+
+<p>于是得到 β 跟点集的关系为:</p>
+
+<img src="/publish/weibo/algo/slimarray/images/vec_hat_beta_=_X_T_X_-1_X_T_Y-e14ebc0b21e9651c18206da3f85d30e4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="{\vec {\hat {\beta }}}=(X^{T}X)^{-1}X^{T}Y"/>
+
+<p><strong>构建slimarray, 也就是压缩数据的过程, 就是把数组下标作为向量X, 数组元素的值作为向量Y,带入到上面的式子取得β,</strong>
+<strong>再逐点计算曲线到点的距离, 生成delta数组.</strong></p>
+
+<br/><h1 id="寻找最佳分段拟合策略">寻找最佳分段拟合策略</h1>
+
+<ul>
+  <b>但是我们看到曲线的存储也有开销, 例如y = 1005.6 - 1.6x + x² 这样一个二次曲线,
+  需要3个浮点数(3个64bit)来存储, 高次曲线可以获得更小的delta数组, 但本身的存储开销变大. 同时更高次的曲线, 在还原原始数组时的计算量也更高(计算开销跟曲线次数是O(n²)的关系). 在经过一些测试后, <strong>slimarray的实现中选择了二次曲线, 它在存储空间和计算性能方面的平衡最好</strong>.</b>
+  
+  <b>同时, 一条曲线也可能无法描述整个数组的趋势, 实现时需要把数组分成多段, 逐段拟合, 压缩.在我们的实现中, 将数组拆分成 <strong>每16个数字一组</strong>, 对每16个数字拟合一条曲线和对应的delta数组.</b>
+
+    <p>然后再尝试将相邻的2组合并, 用一条曲线去拟合, 看最终得到的空间效率是否更低,
+  也就是对比3个系数+32个delta₁ 的开销 跟 6个系数+32个delta₂ 的开销.
+  如果相邻2组数字的趋势差不多, 那么合并之后, 可以省掉3个系数的存储空间,
+  而且很可能delta所需的bit宽度不会因为拟合之后变大, 那么就进一步节省了空间.</p>
+
+    <p>重复这个步骤寻找可以合并的相邻的组, 最终得到这个算法下最优的配置.</p>
+  
+</ul>
+
+<br/><h1 id="实现">实现</h1>
+
+<br/><h2 id="描述分区的数据结构-span">描述分区的数据结构: span</h2>
+
+<p>最后我们将整个数组划分为若干个16*k 大小的分区(span)后, 接下来需要将每个 span 的信息存储起来.</p>
+
+<p>我们用一个 bitmap 来表示 span 对应原始数组的区间:
+bitmap 中的一个 bit 代表 16 个数组元素, 置位的位置表示一个 span 的最后一个16个数字的位置, 例如:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_0527000e9db5f3fe9ad2da6d9db743cd.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>在上面这个 bitmap 中的前3个 span 对应的区间分别是:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_e1aaa62474040d701f7246d27f199fe8.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+<p>当需要从数组下标i找到对应的 span 时, 就统计一下 bitmap 中第 i/16 个 bit 之前1的个数:</p>
+
+<p>这个操作非常快, 在go代码中对应的是math/bit.OnesCount()函数(其他语言中也叫做population count), 一般只需要一个汇编指令:</p>
+
+<p>spanIndex = OnesCount(bitmap &amp; (1&lt;&lt;(i/16) - 1))</p>
+
+<br/><h2 id="读取过程">读取过程</h2>
+
+<p>读取过程通过找span, 读取span配置,还原原始数据几个步骤完成, 假设 slimarray 的对象是sa:</p>
+
+<ul>
+  通过下标i 得到 spanIndex: spanIndex = OnesCount(sa.bitmap &amp; (1&lt;&lt;(i/16) - 1));
+  通过 spanIndex 得到多项式的3个系数: [b₀, b₁, b₂] = sa.polynomials[spanIndex: spanIndex + 3];
+  读取 delta 数组起始位置, 和 delta 数组中每个 delta 的 bit 宽度: config=sa.configs[spanIndex];
+  delta 的值保存在 delta 数组的config.offset + i*config.width的位置, 从这个位置读取width个 bit 得到 delta 的值.
+  计算 nums[i] 的值: b₀ + b₁*i + b₂*i² 再加上 delta 的值.
+</ul>
+
+<p>简化的读取逻辑如下:</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/slimarray/images/tbl_6097ed7201845a78ebe43672aa92c2e7.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+
+
+  <p>实际实现中, 还将整个数组划分成多个1024元素大小的段, 以减少x变大时产生的误差.</p>
+
+
+<p>在用曲线拟合的方式中还有一些额外的好处, 例如某些对整个数组的统计操作可以通过曲线的计算来简化:</p>
+
+<br/><h2 id="求和的优化设计">求和的优化设计</h2>
+
+<p>对 slimarray 中一段数据的求和运算会变得非常高效,
+对n个数字yᵢ的求和可以转化为简单的数值计算:</p>
+
+<img src="/publish/weibo/algo/slimarray/images/CDATA_begin_aligned_sum_y_i_=_sum_beta_0_sum__1_i_sum_beta_2_i_-e86d7f9837c9200c36640b109d9cb862.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+\begin{aligned}
+\sum y_i = & \sum\beta_0 + \sumβ_1 i + \sum \beta_2 i^2 + \sum d_i \\
+         = & \beta_0 n \\
+      & + \beta_1 \frac{1}{2} n (n+1) \\
+      & + \beta_2 \frac{1}{6} n (n+1) (2n+1) \\
+      & + \sum d_i
+\end{aligned} %]]>"/>
+
+<ul>
+  <b>如果只需要近似结果(忽略Σdᵢ), 那么一个 O(n) 的遍历累加就直接被转换成O(1)的计算.</b>
+  
+  <b>如果要精确值, 因为dᵢ的宽度比较小, 在实现时将 4 bit 或 8 bit 打包到一个或多个uint64里,
+计算求和可以通过 SIMD 指令来优化, 例如对128个 4 bit 数的求和运算就可以通过: _mm512_reduce_add_epi64(_mm512_sad_epu8(a, _mm512_setzero_si512())) 来完成.</b>
+  
+</ul>
+
+<p>如果有必要, 也可以也存储一个span的Σdᵢ的值, 这样每个 span 需要额外的 64bit, 换来的是对 span 范围内的求和操作优化到 O(1) 的复杂度.</p>
+
+<p><a href="https://github.com/openacid/slimarray"><svg height="24" class="octicon octicon-mark-github" viewBox="0 0 16 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg> slimarray</a></p>
+
+
+        <p style="font-size: 0.7rem; font-weight: bolder;">
+本文链接: <a href="https://blog.openacid.com/algo/slimarray/">https://blog.openacid.com/algo/slimarray/</a>
+
+
+</p>
+<ul class="page-links" style="display:none;">
+
+
+
+
+    
+        <li style="font-size:0.7em">
+        [slim]: https://github.com/openacid/slim
+        </li>
+    
+
+    
+        <li style="font-size:0.7em">
+        [slimarray]: https://github.com/openacid/slimarray
+        </li>
+    
+
+</ul>
+<p>
+<img src="/assets/images/qrcode-hori.jpg" alt="openacid">
+</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> 标签: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/tags/#array" class="page__taxonomy-item" rel="tag">array</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#compress" class="page__taxonomy-item" rel="tag">compress</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#succinct" class="page__taxonomy-item" rel="tag">succinct</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/tags/#%E6%95%B0%E7%BB%84" class="page__taxonomy-item" rel="tag">数组</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/#algo" class="page__taxonomy-item" rel="tag">algo</a>
+    
+    </span>
+  </p>
+
+
+        
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time datetime="2020-11-15T00:00:00+08:00">November 15, 2020</time></p>
+
+
+      </footer>
+
+      <section class="page__share">
+  
+    <h4 class="page__share-title">分享</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=slimarray%3A+gzip%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%8E%87%2C+%E5%8D%B3%E6%97%B6%E8%AE%BF%E9%97%AE%20https%3A%2F%2Fblog.openacid.com%2Falgo%2Fslimarray%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fslimarray%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblog.openacid.com%2Falgo%2Fslimarray%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="分享 LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/algo/paxoskv/" class="pagination--pager" title="200行代码实现基于paxos的kv存储
+">上一页</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">下一页</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">留下评论</h4>
+      <section id="disqus_thread"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">猜您还喜欢</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/paxoskv/" rel="permalink">200行代码实现基于paxos的kv存储
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          30 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/quorum/" rel="permalink">后分布式时代: 多数派读写的’少数派’实现
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          19 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/paxos/" rel="permalink">可靠分布式系统-paxos的直观解释
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/tech/bla/programmer-should-know/" rel="permalink">几个无理取闹的coding心得
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      输入您要搜索的关键词...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+
+
+<script language="javascript" type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      jax: ["input/TeX", "output/SVG"],
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"> </script>
+
+
+
+
+<!-- end custom footer snippets -->
+
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <strong>关注:</strong>
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    <a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2020 OpenACID-分布式研究小院. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69976993-2']);
+  
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+
+
+
+
+
+    
+  <script>
+    var disqus_config = function () {
+      this.page.url = "https://blog.openacid.com/algo/slimarray/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/algo/slimarray"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+    };
+    (function() { /* DON'T EDIT BELOW THIS LINE */
+      var d = document, s = d.createElement('script');
+      s.src = 'https://openacid.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+  
+
+
+
+
+
+  <style> .header-link { display: none !important; } </style> </body >
+</html>
