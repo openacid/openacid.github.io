@@ -55,6 +55,10 @@ excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip
 | 1,000,000 | IPv4 DB                 | 2 MB      | 2 MB          | 16 bit/elt | 50%   |
 | 600       | [slim][] star count     | 602 byte  | 832 byte      | 10 bit/elt | 26%   |
 
+在达到gzip同等压缩率的前提下, 构建 slimarray 和 访问的性能也非常高:
+- 构建 slimarray 时, 平均每秒可压缩 6百万 个数组元素;
+- 读取一个数组元素平均花费 7 ns/op.
+
 本文手把手的介绍 [slimarray] 的原理, 实现:
 
 # 初步想法: 前缀压缩

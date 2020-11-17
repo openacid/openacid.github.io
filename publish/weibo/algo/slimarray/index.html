@@ -386,6 +386,12 @@
 
 <img src="/publish/weibo/algo/slimarray/images/tbl_6aec8a3b59557f0420ec736577b233ae.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
 
+<p>在达到gzip同等压缩率的前提下, 构建 slimarray 和 访问的性能也非常高:</p>
+<ul>
+  构建 slimarray 时, 平均每秒可压缩 6百万 个数组元素;
+  读取一个数组元素平均花费 7 ns/op.
+</ul>
+
 <p>本文手把手的介绍 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 的原理, 实现:</p>
 
 <br/><h1 id="初步想法-前缀压缩">初步想法: 前缀压缩</h1>
