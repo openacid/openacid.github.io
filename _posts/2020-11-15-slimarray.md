@@ -38,7 +38,7 @@ excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip
 在时序数据库, 或列存储为基础的系统中, 很常见的形式就是存储一个整数数组,
 例如 [slim] 这个项目按天统计的 star 数:
 
-[![Stargazers over time](https://starchart.cc/openacid/slim.svg)](https://starchart.cc/openacid/slim)
+[![Stargazers over time](/post-res/slimarray/slim.jpg)](https://starchart.cc/openacid/slim)
 
 这类数据有有很明显的统一的变化趋势, 对这类数据的存储,
 我们可以利用数据分布的特点, 将整体数据的大小压缩到**几分之一**.
