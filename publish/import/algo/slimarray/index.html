@@ -384,7 +384,7 @@
 同时还能允许直接访问这些数据!
 测试中我们选择了2组随机数, 以及现实中的2份数据, 一个ipv4的数据库, 一个 <a href="https://github.com/openacid/slim" title="slim">slim</a> 的star变化数据, 服用 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 后效果如下:</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/tbl_6aec8a3b59557f0420ec736577b233ae.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
+<img src="/publish/import/algo/slimarray/images/tbl_6aec8a3b59557f0420ec736577b233ae.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/>
 
 <p>在达到gzip同等压缩率的前提下, 构建 slimarray 和 访问的性能也非常高:</p>
 <ul>
@@ -398,13 +398,13 @@
 
 <p>假设我们有一个包含4个元素的uint32的整数数组:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_da313e1a0f8675032319094e99b00c56.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_da313e1a0f8675032319094e99b00c56.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>前缀压缩的思路就是把每个元素的公共部分提取出来单独存储, 这样每个单独元素就只需要存储它跟公共部分差异的部分, 从而大大降低存储空间. (因为公共部分在大多数情况中都在前面(例如现实中大部分被存储的数据都是排序的, 或近似于排序的), 所以一般提取公共部分的压缩都是前缀压缩)</p>
 
 <p>在这个例子中, 我们看到最小的数是1005, 那么就把它作为公共部分提取出来, 再单独存储每个数字剩余的部分(和prefix的差异), 最后存储的内容如下:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_b5b01f7fc023a6e3d35b6ce2ca1b516a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_b5b01f7fc023a6e3d35b6ce2ca1b516a.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>可以看到这种表示方法中, 固定的部分Prefix大小不变, 影响整个存储效率的是deltas, 而它只需要记录每个原始值跟前缀之间的差, 最大是5, 也就是说每个delta 只需要<strong>3 bit</strong>就够了.</p>
 
@@ -415,7 +415,7 @@
 
 <p>于是前缀压缩就可以看成是: 记录一条水平直线(<code class="highlighter-rouge">y = 1005</code>), 再记录数组中实际数值跟这条直线之间的y轴方向距离:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_f458127e8171712a4e4d2bcaaf2dff4c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_f458127e8171712a4e4d2bcaaf2dff4c.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>🤔!!!</p>
 
@@ -426,7 +426,7 @@
 
 <p>所以, 先描述这个趋势, 再用delta数组去修正到正确值, 应该可以更大程度的降低delta的取值范围. 作者经过仔细认真的观察和研究, 突然间发现可以定义一条直线方程, 再通过delta数组去修正, 就是这个样子:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_b8327142be7fe014b36381d8fe796d05.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_b8327142be7fe014b36381d8fe796d05.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>这样描述数值趋势, delta的最大值只有3, 只需要2个bit就可以了.
 于是当数据量增大时, 均摊空间效率就是 2 bit/elt.</p>
@@ -434,7 +434,7 @@
 <p>显然,  用更高次的曲线去拟合, 可以更贴合原始点, 得到更高的压缩率.
 例如使用2次曲线, 可以得到如下一份配置:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_c16ba9789cf0902194e6244809df9059.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_c16ba9789cf0902194e6244809df9059.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>这里每个delta只需要1个bit就够了.</p>
 
@@ -447,7 +447,7 @@
 例如在 <a href="https://github.com/openacid/slimarray" title="slimarray">slimarray</a> 中使用2次曲线 <code class="highlighter-rouge">f(x) = β₁ + β₂x + β₃x²</code>, 所要做的就是确定每个βᵢ的值,
 以使得<code class="highlighter-rouge">f(xⱼ) - yⱼ</code>的均方差最小. xⱼ是数组下标0, 1, 2…; yⱼ是数组中每个元素的值.</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/CDATA_X_=_begin_bmatrix_1_x_1_x_1_2_1_x_2_x_2_2_vdots_vdots_vdo-3091635a353d00f0a079b17e0fe3bc68.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+<img src="/publish/import/algo/slimarray/images/CDATA_X_=_begin_bmatrix_1_x_1_x_1_2_1_x_2_x_2_2_vdots_vdots_vdo-3091635a353d00f0a079b17e0fe3bc68.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 X = \begin{bmatrix}
 1      & x_1    & x_1^2 \\
 1      & x_2    & x_2^2 \\
@@ -474,11 +474,11 @@ y_n
 
 <p>现在要找到一组β, 使得均方差最小:</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/X_vec_beta_-Y_2_-a99a66a6238f28d0d7dfd5bcc5e7eeba.png" style="display: block; margin: 0 auto 1.3em auto" _alt="||X{\vec {\beta }}-Y||^{2}"/>
+<img src="/publish/import/algo/slimarray/images/X_vec_beta_-Y_2_-a99a66a6238f28d0d7dfd5bcc5e7eeba.png" style="display: block; margin: 0 auto 1.3em auto" _alt="||X{\vec {\beta }}-Y||^{2}"/>
 
 <p>在上面这个函数里, 把 β 看做变量, 要找极值的话就看这个函数对 β 的导数何时为0:</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/CDATA_begin_aligned_frac_partial_X_vec_beta_-Y_2_partial_vec_be-017aa94088f7f1c72403528afdc80566.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+<img src="/publish/import/algo/slimarray/images/CDATA_begin_aligned_frac_partial_X_vec_beta_-Y_2_partial_vec_be-017aa94088f7f1c72403528afdc80566.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{aligned}
 & \frac
 {\partial||X{\vec {\beta }}-Y||^{2}}
@@ -495,7 +495,7 @@ y_n
 
 <p>于是得到 β 跟点集的关系为:</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/vec_hat_beta_=_X_T_X_-1_X_T_Y-e14ebc0b21e9651c18206da3f85d30e4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="{\vec {\hat {\beta }}}=(X^{T}X)^{-1}X^{T}Y"/>
+<img src="/publish/import/algo/slimarray/images/vec_hat_beta_=_X_T_X_-1_X_T_Y-e14ebc0b21e9651c18206da3f85d30e4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="{\vec {\hat {\beta }}}=(X^{T}X)^{-1}X^{T}Y"/>
 
 <p><strong>构建slimarray, 也就是压缩数据的过程, 就是把数组下标作为向量X, 数组元素的值作为向量Y,带入到上面的式子取得β,</strong>
 <strong>再逐点计算曲线到点的距离, 生成delta数组.</strong></p>
@@ -528,11 +528,11 @@ y_n
 <p>我们用一个 bitmap 来表示 span 对应原始数组的区间:
 bitmap 中的一个 bit 代表 16 个数组元素, 置位的位置表示一个 span 的最后一个16个数字的位置, 例如:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_0527000e9db5f3fe9ad2da6d9db743cd.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_0527000e9db5f3fe9ad2da6d9db743cd.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>在上面这个 bitmap 中的前3个 span 对应的区间分别是:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_e1aaa62474040d701f7246d27f199fe8.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_e1aaa62474040d701f7246d27f199fe8.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>当需要从数组下标<code class="highlighter-rouge">i</code>找到对应的 span 时, 就统计一下 bitmap 中第 <code class="highlighter-rouge">i/16</code> 个 bit 之前1的个数:</p>
 
@@ -554,7 +554,7 @@ bitmap 中的一个 bit 代表 16 个数组元素, 置位的位置表示一个 s
 
 <p>简化的读取逻辑如下:</p>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/slimarray/images/tbl_6097ed7201845a78ebe43672aa92c2e7.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
+<div class="language-go highlighter-rouge"><div class="highlight"><img src="/publish/import/algo/slimarray/images/tbl_6097ed7201845a78ebe43672aa92c2e7.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <blockquote>
   <p>实际实现中, 还将整个数组划分成多个1024元素大小的段, 以减少x变大时产生的误差.</p>
@@ -567,7 +567,7 @@ bitmap 中的一个 bit 代表 16 个数组元素, 置位的位置表示一个 s
 <p>对 slimarray 中一段数据的求和运算会变得非常高效,
 对n个数字yᵢ的求和可以转化为简单的数值计算:</p>
 
-<img src="/publish/zhihu/algo/slimarray/images/CDATA_begin_aligned_sum_y_i_=_sum_beta_0_sum__1_i_sum_beta_2_i_-e86d7f9837c9200c36640b109d9cb862.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
+<img src="/publish/import/algo/slimarray/images/CDATA_begin_aligned_sum_y_i_=_sum_beta_0_sum__1_i_sum_beta_2_i_-e86d7f9837c9200c36640b109d9cb862.png" style="display: block; margin: 0 auto 1.3em auto" _alt="% <![CDATA[
 \begin{aligned}
 \sum y_i = & \sum\beta_0 + \sumβ_1 i + \sum \beta_2 i^2 + \sum d_i \\
          = & \beta_0 n \\
@@ -1014,5 +1014,5 @@ bitmap 中的一个 bit 代表 16 个数组元素, 置位的位置表示一个 s
 
 
 
-  <style> .header-link { display: none !important; } </style> </body >
+  </body>
 </html>
