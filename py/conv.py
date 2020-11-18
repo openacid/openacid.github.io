@@ -478,7 +478,8 @@ if __name__ == "__main__":
     opts = {
             'wechat': 'math       a-to-txt                        permlink',
             'weibo':  'math table          pre code blockquote    permlink li-p h-margin',
-            'zhihu':  'math table          pre                 hr permlink'
+            'zhihu':  'math table          pre                 hr permlink',
+            'import': 'math table          pre                            ',
     }
 
     # _site/tech/zipf/index.hml
