@@ -6,6 +6,7 @@ import os
 import re
 import urllib.parse
 import k3proc
+import k3down2
 import sys
 
 default_encoding = sys.getdefaultencoding()
@@ -167,27 +168,21 @@ zhihu_math_link = '{newline}<img src="https://www.zhihu.com/equation?tex={texurl
 mathjax_to_zhihulink_patterns = (
         # block math
         (r'<script type="math/tex; mode=display">% <!\[CDATA\[(.*?)%]]></script>',
-         zhihu_math_link,
-         '\n', # newline
-         '\\\\', # alignment: zhihu use two back slash to center-align equotion
+         True,
         ),
         (r'<script type="math/tex; mode=display">(.*?)</script>',
-         zhihu_math_link,
-         '\n', # newline
-         '\\\\', # alignment: zhihu use two back slash to center-align equotion
+         True,
         ),
 
         # inline math
         (r'<script type="math/tex">(.*?)</script>',
-         zhihu_math_link,
-         '',
-         '',
+         False,
         ),
 )
 
 def convert_tex_to_zhihulink(cont, imgdir, imgurl):
 
-    for ptn, repl, newline, alignment in mathjax_to_zhihulink_patterns:
+    for ptn, block in mathjax_to_zhihulink_patterns:
 
         while True:
             m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
@@ -198,20 +193,13 @@ def convert_tex_to_zhihulink(cont, imgdir, imgurl):
             e = m.end()
             tex = m.groups()[0]
             dd()
-            dd("### convert tex to zhihulink... ", newline, alignment)
+            dd("### convert tex to zhihulink... ", block)
             dd("    ",  tex)
 
             tex = re.sub(r'\n', '', tex)
-            texurl = urllib.parse.quote(tex)
             dd("    tex: ", tex)
-            dd("    texurl: ", texurl)
 
-            imgtag = repl.format(
-                    tex=tex,
-                    texurl=texurl,
-                    newline=newline,
-                    alignment=alignment,
-                    )
+            imgtag = k3down2.tex_to_zhihu(tex, block)
 
             dd("    rendered zhihulink: ", imgtag)
 
@@ -221,6 +209,11 @@ def convert_tex_to_zhihulink(cont, imgdir, imgurl):
 
 mathjax_patterns = (
         # block math
+        (r'<script type="math/tex; mode=display">% <!\[CDATA\[(.*?)%]]></script>',
+         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
+         True,
+        ),
+
         (r'<script type="math/tex; mode=display">(.*?)</script>',
          '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
          True,
@@ -491,10 +484,11 @@ def tex_to_image_pdflatex(tex, imgdir, fn, is_block):
         'convert',
         '-density', '160',
         '-quality', '100',
-        croppedfn, 'png:-'
+        croppedfn, 'png:-', 
+            text=False
     )
 
-    with open(dst, 'w') as f:
+    with open(dst, 'wb') as f:
         f.write(pngdata)
 
 

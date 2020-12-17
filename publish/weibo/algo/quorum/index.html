@@ -301,7 +301,7 @@
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">后分布式时代: 多数派读写的’少数派’实现
+          <br/><h1 id="page-title" class="page__title" itemprop="headline">后分布式时代: 多数派读写的’少数派’实现
 </h1>
           
 
@@ -317,7 +317,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          19 分钟阅读
+          17 分钟阅读
         
       </span>
     
@@ -383,11 +383,11 @@
 
         
 
-        <h1 id="前言">前言</h1>
+        <br/><h1 id="前言">前言</h1>
 
 <p>paxos可以看做是2次 <a href="https://zh.wikipedia.org/wiki/Quorum_(分布式系统)" title="多数派读写">多数派读写</a> 完成一次强一致读写.  多数派要求半数以上的参与者(paxos中的Acceptor)接受某笔操作.  但 <a href="https://zh.wikipedia.org/wiki/Quorum_(分布式系统)" title="多数派读写">多数派读写</a> 并不一定需要多于半数的参与者, 分布式系统中某些场合的优化, 可以通过减少参与者数量来完成的.</p>
 
-<h1 id="多数派读写分布式系统的基础">多数派读写:分布式系统的基础</h1>
+<br/><h1 id="多数派读写分布式系统的基础">多数派读写:分布式系统的基础</h1>
 
 <p>分布式系统中, 其中一个基础的问题是如何在不可靠硬件(低可用性)基础上构建可靠(高可用性)的服务,
 要达成这个目标, 核心的手段就是复制(例如一份数据存3个副本).
@@ -435,7 +435,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 我们有时希望通过减少必须参与的节点数量, 从而提升系统的性能.
 于是我们先从概念开始, 看看quorum-rw中的quorum是什么:</p>
 
-<h2 id="quorum-vs-majority">Quorum vs Majority</h2>
+<br/><h2 id="quorum-vs-majority">Quorum vs Majority</h2>
 
 <p>在很多paper中, 是不区分quorum和majority的差别的:</p>
 
@@ -448,14 +448,21 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
   
 </ul>
 
-<p>一般我们提到quorum(或majority)时, 都是指一个节点集合Q, 本文中我们把一个系统中所有quorum的集合记为ℚ:
-ℚ = {Q₁, Q₂...},
-其中Qₓ = {aᵢ, aⱼ...} 是一个节点(paxos中的Acceptor)的集合, 例如一个三节点系统{a, b, c}, 它的majority的quorum集合 ℚ = {
-{a, b},
-{b, c},
-{c, a},
-{a, b, c}
-}.</p>
+<p>一般我们提到quorum(或majority)时, 都是指一个节点集合Q, 本文中我们把一个系统中所有quorum的集合记为:
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-e00a2260c10c79813dd9a3e9622c0497.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ Q_1, Q_2... \}"/>,
+其中
+<img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 1.2em" _alt="Q_k = \{a_i, a_j...\}"/>
+是一个节点(paxos中的Acceptor)的集合, 例如一个三节点系统{a, b, c}, 它的majority的quorum集合:</p>
+
+<img src="/publish/weibo/algo/quorum/images/begin_bmatrix_mathbb_Q_=_a_b_b_c_c_a_a_b_c_end_bmatrix_-dd2931895a0eaf9332057cfc1cce523d.png" style="display: block; margin: 0 auto 1.3em auto" _alt="
+\begin{bmatrix}
+\mathbb{Q} = \{
+& \{a, b\}, \\
+& \{b, c\}, \\
+& \{c, a\}, \\
+& \{a, b, c\} \\
+\} \\
+\end{bmatrix} "/>
 
 <p>现在再回到问题, 要保证quorum-rw的正确性, 就要求一次成功的写入, 必须能成功读取,
 从这点看, 过半数这个要求是可以放宽的:</p>
@@ -471,9 +478,9 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <p>我们看几个非majority的quorum的例子, 这些quorum都不是传统意义上的majority,
 但都可以实现majority同样的功能, 为quorum-rw或paxos提供正确性保证:</p>
 
-<h1 id="不是majority的quorum们">不是majority的quorum们</h1>
+<br/><h1 id="不是majority的quorum们">不是majority的quorum们</h1>
 
-<h2 id="带权重的quorum">带权重的quorum</h2>
+<br/><h2 id="带权重的quorum">带权重的quorum</h2>
 
 <p>{a, b, c, d, e} 5个节点中, 把a, b, c三个节点部署到一起: { abc, d, e}(abc必须同时选).
 如果选abc, 就记3票, d, e只记一票.</p>
@@ -485,27 +492,27 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 那么quorum-rw算法, 如果选择任意一个quorum写, 另一个进程选择任意一个quorum读,
 都可以实现安全的读写.</p>
 
-<h2 id="包含特定元素的quorum">包含特定元素的quorum</h2>
+<br/><h2 id="包含特定元素的quorum">包含特定元素的quorum</h2>
 
 <p>从上面的例子, 可以直接去掉majority的概念, 就是一类特殊的quorum集合:
-<strong>ℚ 中每个quorum都必须包含某个特定元素</strong>:</p>
+<strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中每个quorum都必须包含某个特定元素</strong>:</p>
 
 <p>如果集群是3个节点{a,b,c}, 定义每个quorum都必须包含a, 那么:
-ℚ = { {a}, {a,b}, {a,c}, {a,b,c} }.</p>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_a_a_b_a_c_a_b_c_-0841771fa0d628b20965c30fcf07f64e.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{a\}, \{a,b\}, \{a,c\}, \{a,b,c\} \}"/>.</p>
 
 <p>任意2个quorum都有交集{a}, 用这个quorum定义来运行paxos, 仍然是正确的. (可以试试跑一个之前
 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中的例子里的paxos)</p>
 
-<h2 id="45-加-25的quorum">4/5 加 2/5的quorum</h2>
+<br/><h2 id="45-加-25的quorum">4/5 加 2/5的quorum</h2>
 
 <p>在一个5节点集群{a,b,c,d,e} 中, quorum定义为:至少包含4个元素, 或是{a,b}
-那么ℚ 就是:</p>
+那么<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 就是:</p>
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/quorum/images/tbl_318708580515bdeb111510536f497521.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>任一4个元素的quorum都有交集, 任一4元素的quorum也和{a,b}有交集.
 能用来跑paxos.</p>
 
-<h2 id="hierarchical-quorum-3x3">Hierarchical quorum 3x3</h2>
+<br/><h2 id="hierarchical-quorum-3x3">Hierarchical quorum 3x3</h2>
 
 <p><a href="https://zookeeper.apache.org/doc/r3.3.2/zookeeperHierarchicalQuorums.html" title="hierarchical quorum">hierarchical quorum</a> 是一个分层的quorum定义,
 假设集群有9个节点, 排列成3x3的矩阵, 这里quorum的定义为: <strong>至少包括2行, 每行中至少包含2个节点</strong>.</p>
@@ -516,10 +523,14 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p>以此quorum定义替代majority, 运行多数派读写或paxos一样是正确的.</p>
 
-<h2 id="hierarchical-quorum-2xn">Hierarchical quorum 2xn</h2>
+<br/><h2 id="hierarchical-quorum-2xn">Hierarchical quorum 2xn</h2>
 
 <p>继续沿用hierarchical quorum 的定义, 但只选2行.
-因为一个2节点的系统{x, y}, quorum集合可以是 ℚ = { {x}, {x, y} }(或 ℚ = { {x, y}, {y} }),
+因为一个2节点的系统{x, y}, quorum集合可以是
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_x_y_-421e1d785a7058c72944e943dab77295.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{x\}, \{x, y\} \}"/>
+(或
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_y_y_-492372d566ecbf8d465917cd2f333d38.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{x, y\}, \{y\} \}"/>
+),
 (这里x, y代表一行).</p>
 
 <p>于是这个场景中的quorum 可以描述为:
@@ -535,7 +546,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <p><a href="https://raft.github.io/" title="raft">raft</a> 使用了这种quorum定义来完成集群变更, 基于hierarchical
 quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blob/master/JOINT-CONSENSUS.md" title="joint consensus">joint consensus</a>.</p>
 
-<h1 id="通过设计-quorum-降低延迟">通过设计 quorum 降低延迟</h1>
+<br/><h1 id="通过设计-quorum-降低延迟">通过设计 quorum 降低延迟</h1>
 
 <p>任何一种quorum的定义, 都可以用来替代majority来实现quorum-rw, 或paxos, 并严格保证正确性.
 但是, 选择一种quorum, 将直接影响系统的性能和可用性.</p>
@@ -544,7 +555,7 @@ quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blo
 完成一次quorum-rw或paxos的消息量就越少, 如果可以选择到更近的节点,
 那么整个系统的延迟就有可能会降低.</p>
 
-<h1 id="quorum-决定了系统的可用性">quorum 决定了系统的可用性</h1>
+<br/><h1 id="quorum-决定了系统的可用性">quorum 决定了系统的可用性</h1>
 
 <p>另一方面, 不同的quorum的选择, 会直接影响系统的可用性:</p>
 
@@ -559,7 +570,7 @@ quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blo
 
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/quorum/images/tbl_a77f0500d714666d823e0f941557a686.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
-<h2 id="系统可用性的-quorum-定义">系统可用性的 quorum 定义</h2>
+<br/><h2 id="系统可用性的-quorum-定义">系统可用性的 quorum 定义</h2>
 
 <p>一个分布式系统的可用性, 可以从一下几方面去考虑, 假设:</p>
 <ul>
@@ -579,13 +590,13 @@ quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blo
   </ul>
 
 
-<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: P(ℚ) = ΣP(Qᵢ), for every Qᵢ ∈ ℚ.
+<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_=_P_Q_i_Q_i_mathbb_Q_-f0c95729bfae43418fdc035733a888e3.png" style="height: 1.2em" _alt="P( \mathbb{Q} ) = ΣP(Q_i), Q_i ∈ \mathbb{Q}"/>.
 quorum出现的概率是: P(Qᵢ) = (1-p)ˣpⁿ⁻ˣ,
 其中x是一个quorum包含的节点个数: x = |Qᵢ|</strong>.</p>
 
 
   <p>🌰 对一个三节点的系统 {a, b, c}
-majority 的quorum集合𝕄 = { {a, b}, {b, c}, {c, a}, {a, b, c} },
+majority 的quorum集合 <img src="/publish/weibo/algo/quorum/images/mathbb_M_=_a_b_b_c_c_a_a_b_c_-23cfdbb609c8da2d930c756147033ec6.png" style="height: 1.2em" _alt="\mathbb{M} = \{ \{a, b\}, \{b, c\}, \{c, a\}, \{a, b, c\} \}"/>,
 那么3个节点可能出现的所有状态, 以及对应的整个系统是否可用如就如下展示:</p>
   <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/quorum/images/tbl_f3117fe6a30579af47468130e98406f4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>  </div>
 
@@ -598,41 +609,42 @@ C(3, 2)(1-p)²p¹ + C(3, 3)(1-p)³p⁰ ~= 1-4p² ~= 0.9996, 大约3个9</p>
 此时系统中每个quorum都包含c, c在线或停机直接决定了系统的可用性, 所以系统可用性也就是直接等于了c节点的可用性.</p>
 
 
-<h2 id="quorum-的可用性分析">quorum 的可用性分析</h2>
+<br/><h2 id="quorum-的可用性分析">quorum 的可用性分析</h2>
 
 <p>然后我们来看看为什么非majority的quorum 会降低系统的可用性:</p>
 
 <ul>
-  假设majority quorum的集合为𝕄, 也就是所有大小过半的节点集合;
-  对某一个quorum集合ℚ = {Q₁, Q₂...},
-其中 Qₓ = {aᵢ, aⱼ...} 是一个节点集合,
-Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: Qᵢ ∩ Qⱼ ≠ ø;
+  假设majority quorum的集合为 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/>, 也就是所有大小过半的节点集合;
+  对某一个quorum集合<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-0300b7ecf345bff450cb0e64c41512ee.png" style="height: 1.2em" _alt="\mathbb{Q} = \{Q_1, Q_2...\}"/>,
+其中 <img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 1.2em" _alt="Q_k = \{a_i, a_j...\}"/> 是一个节点集合,
+Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: <img src="/publish/weibo/algo/quorum/images/Q_i_Q_j_emptyset-eb293bdee267b02346229797a482b428.png" style="height: 1.2em" _alt="Q_i ∩ Q_j ≠ \emptyset"/>;
   单机停机几率 p = 0.01;
 </ul>
 
-<p>我们可以对ℚ 做一个变换f(ℚ):</p>
+<p>我们可以对<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 做一个变换 <img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_-c0360728970cb8a651d2b8213eb7e794.png" style="height: 1.2em" _alt="f(\mathbb{Q})"/>:</p>
 
-<p>从ℚ 中选择最小的一个Qᵢ: Qᵢ满足∀Qⱼ: |Qᵢ| ≤ |Qⱼ| (如果有多个最小的, 选任意一个), 从ℚ 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
+<p>从 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中选择最小的一个Qᵢ: Qᵢ满足∀Qⱼ: |Qᵢ| ≤ |Qⱼ| (如果有多个最小的, 选任意一个), 从<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
 
-<p>ℚ' = ℚ \ {Qᵢ} ∪ {~Qᵢ}</p>
-
-
-  <p><strong>ℚ’也还是一个合法quorum集合</strong>:
-因为对任意一个Qⱼ, 如果|Qⱼ| ≥ |Qᵢ| 且Qⱼ ≠ Qᵢ, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
-所以 ~Qᵢ 和 Qⱼ一定有交集.</p>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_mathbb_Q_backslash_Q_i_overline_Q_i_-6bedd36c358f20421ac0da8f18960890.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\mathbb{Q}' = {\mathbb{Q}} \backslash \{ Q_i\} ∪ \{\overline{Q_i}\}"/>
 
 
-<p>重复这个步骤直到ℚ 中所有quorum的大小都大于半数. 最后ℚ 就变成了一个𝕄 的子集:
-f(ℚ) ⊆ M</p>
+  <p><strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-143566156ff233bc361dca7746848c36.png" style="height: 1.2em" _alt="\mathbb{Q}'"/>也还是一个合法quorum集合</strong>:
+因为对任意一个Qⱼ, 如果<img src="/publish/weibo/algo/quorum/images/Q_j_Q_i_-09252ae53dad9594116d5743bd86d558.png" style="height: 1.2em" _alt="|Q_j| ≥ |Q_i|"/>  且 <img src="/publish/weibo/algo/quorum/images/Q_j_Q_i-f01f9ce8e1842fe5b3c6f355f7e417c0.png" style="height: 1.2em" _alt="Q_j ≠ Q_i"/>, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
+所以 <img src="/publish/weibo/algo/quorum/images/overline_Q_i_-dc953923411319e68f647380206b40ee.png" style="height: 1.2em" _alt="\overline{Q_i}"/> 和 <img src="/publish/weibo/algo/quorum/images/Q_j-beb195239568309b3e3a0ce19bb5b987.png" style="height: 1.2em" _alt="Q_j"/> 一定有交集.</p>
 
-<p>这样, <strong>任何一个ℚ 都可以跟 𝕄 的一个子集建立一个一一映射.
-而𝕄 的子集的可用性一定不大于𝕄 的可用性</strong>: P(subset(𝕄)) ≤ P(𝕄).</p>
+
+<p>重复这个步骤直到 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中所有quorum的大小都大于半数. 最后 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 就变成了一个<img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的子集:
+<img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_mathbb_M_-e94281416192cc68e816ac47569d1bab.png" style="height: 1.2em" _alt="f(\mathbb{Q}) ⊆ \mathbb{M}"/></p>
+
+<p>这样, <strong>任何一个 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 都可以跟 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的一个子集建立一个一一映射.
+而 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的子集的可用性一定不大于 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的可用性</strong>:
+<img src="/publish/weibo/algo/quorum/images/P_subset_mathbb_M_P_mathbb_M_-ef721cbecb39ae76f7c9908faa93262f.png" style="height: 1.2em" _alt="P(subset(\mathbb{M})) ≤ P(\mathbb{M})"/>.</p>
 
 <p>而且, <strong>对一个不大于半数的Qᵢ(x = |Qᵢ| ≤ ⌊n⌋/2), 它的补集在随机停机过程中出现的几率更大</strong>:</p>
 
-<p>(1-p)ˣpⁿ⁻ˣ ≤ (1-p)ⁿ⁻ˣpˣ ⇒ P(Qᵢ) ≤ P(~Qᵢ)  ⇒ P(ℚ) ≤ P(f(Q)).</p>
+<img src="/publish/weibo/algo/quorum/images/1-p_xp_n-x_1-p_n-x_p_x_P_Q_i_P_overline_Q_i_P_mathbb_Q_P_f_Q_-017b7aa618c35a0595bfbcd1018dc5ff.png" style="display: block; margin: 0 auto 1.3em auto" _alt="(1-p)^xp^{n-x} ≤ (1-p)^{n-x}p^x ⇒ P(Q_i) ≤ P(\overline{Q_i})  ⇒ P(\mathbb{Q}) ≤ P(f(Q))"/>
 
-<p>∴ P(ℚ) ≤ P(f(ℚ)) ≤ P(𝕄), 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
+<p>∴ <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_P_f_mathbb_Q_P_mathbb_M_-172504fa84b0e9403f6402c683085813.png" style="height: 1.2em" _alt="P(\mathbb{Q}) ≤ P(f(\mathbb{Q})) ≤ P(\mathbb{M})"/>, 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
 
 
   <p>🌰 例如我们算下, 3x3 的 hierarchical quoru m的可用性:</p>
@@ -649,9 +661,9 @@ f(ℚ) ⊆ M</p>
 差不多相当于7节点的majority 可用性.</p>
 
 
-<h1 id="应用场景">应用场景</h1>
+<br/><h1 id="应用场景">应用场景</h1>
 
-<h2 id="zookeeper-使用-hierarchical-quorum-的例子">zookeeper 使用 hierarchical quorum 的例子</h2>
+<br/><h2 id="zookeeper-使用-hierarchical-quorum-的例子">zookeeper 使用 hierarchical quorum 的例子</h2>
 
 <p>🌰 <a href="https://zookeeper.apache.org/" title="zookeeper">zookeeper</a> 的配置允许分组的概念, 就是使用了这种quorum定义, 它允许多于半数(5个/9个)节点停机.
 例如在我们之前实现的3机房部署中, 就使用了3个机房(DC),
@@ -684,7 +696,7 @@ quorum的延迟低.</p>
 那么9节点宕机2个节点的几率大约是0.0033,
 差不多在99分位上, 延迟可以从60ms降低到30ms.</p>
 
-<h2 id="用-quorum-来优化链路选择-边缘存储场景">用 quorum 来优化链路选择: 边缘存储场景</h2>
+<br/><h2 id="用-quorum-来优化链路选择-边缘存储场景">用 quorum 来优化链路选择: 边缘存储场景</h2>
 
 <p>🌰 传统的存储+CDN架构是用户传输到中心, 之后在下载时, 再通过边缘机房访问,
 边缘机房没有则回中心拉取.
@@ -715,7 +727,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 那就通过quorum {e₁, c} 直接完成一次多数派写入.
 或者当时跟中心连接抖动, 那么它也可以联系e₂, e₃, 通过quorum {e₁, e₂, e₃}完成一次多数派写入.</p>
 
-<h1 id="总结-quorum-在分布式系统中的意义">总结: quorum 在分布式系统中的意义</h1>
+<br/><h1 id="总结-quorum-在分布式系统中的意义">总结: quorum 在分布式系统中的意义</h1>
 
 <p>几年前在一个机房里用paxos协同起来的分布式系统, 可以看做是分布式的从0到1的一步, 解决了<strong>分布</strong>问题.</p>
 
@@ -931,7 +943,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 ">上一页</a>
     
     
-      <a href="/algo/paxoskv/" class="pagination--pager" title="200行实现基于paxos的kv存储
+      <a href="/algo/paxoskv/" class="pagination--pager" title="200行代码实现基于paxos的kv存储
 ">下一页</a>
     
   </nav>
@@ -965,7 +977,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/algo/paxoskv/" rel="permalink">200行实现基于paxos的kv存储
+        <a href="/algo/slimarray/" rel="permalink">slimarray: gzip的压缩率, 即时访问
 </a>
       
     </h2>
@@ -983,7 +995,47 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          30 分钟阅读
+          15 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/paxoskv/" rel="permalink">200行代码实现基于paxos的kv存储
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          33 分钟阅读
         
       </span>
     
@@ -1071,46 +1123,6 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 
 
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
-</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          24 分钟阅读
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
 </div>

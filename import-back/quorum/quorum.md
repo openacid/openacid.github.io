@@ -221,7 +221,7 @@ c1  c2  c3
 > - majority 3 节点的停机概率是: `Pm3 = C(3, 2)(1-p)²p + C(3, 3)(1-p)³`
 > - Pm3也就是每个机房的停机概率, 把每个机房看做一个大的节点, 因此3个机房组成的majority quorum的不在线几率是: `Ph9 = C(3, 2)(1-Pm3)²Pm3 + C(3, 3)(1-Pm3)³`
 >
-> 我们用 [hierarchical-quorum.py](http://120.53.13.159/post-res/quorum/hierarchical-quorum.py) 这个小程序计算如下:
+> 我们用 [hierarchical-quorum.py](https://blog.openacid.com/post-res/quorum/hierarchical-quorum.py) 这个小程序计算如下:
 >
 > ```
 > failure-rate:

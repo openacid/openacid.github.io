@@ -317,7 +317,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          19 分钟阅读
+          17 分钟阅读
         
       </span>
     
@@ -450,14 +450,13 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
   </li>
 </ul>
 
-<p>一般我们提到quorum(或majority)时, 都是指一个节点集合Q, 本文中我们把一个系统中所有quorum的集合记为ℚ:
-<code class="highlighter-rouge">ℚ = {Q₁, Q₂...}</code>,
-其中<code class="highlighter-rouge">Qₓ = {aᵢ, aⱼ...}</code> 是一个节点(paxos中的Acceptor)的集合, 例如一个三节点系统<code class="highlighter-rouge">{a, b, c}</code>, 它的majority的quorum集合 <code class="highlighter-rouge">ℚ = {
-{a, b},
-{b, c},
-{c, a},
-{a, b, c}
-}</code>.</p>
+<p>一般我们提到quorum(或majority)时, 都是指一个节点集合Q, 本文中我们把一个系统中所有quorum的集合记为:
+<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%20%3D%20%5C%7B%20Q_1%2C%20Q_2...%20%5C%7D" alt="\mathbb{Q} = \{ Q_1, Q_2... \}" class="ee_img tr_noresize" eeimg="1">,
+其中
+<img src="https://www.zhihu.com/equation?tex=Q_k%20%3D%20%5C%7Ba_i%2C%20a_j...%5C%7D" alt="Q_k = \{a_i, a_j...\}" class="ee_img tr_noresize" eeimg="1">
+是一个节点(paxos中的Acceptor)的集合, 例如一个三节点系统<code class="highlighter-rouge">{a, b, c}</code>, 它的majority的quorum集合:</p>
+
+<img src="https://www.zhihu.com/equation?tex=%5Cbegin%7Bbmatrix%7D%5Cmathbb%7BQ%7D%20%3D%20%5C%7B%26%20%5C%7Ba%2C%20b%5C%7D%2C%20%5C%5C%26%20%5C%7Bb%2C%20c%5C%7D%2C%20%5C%5C%26%20%5C%7Bc%2C%20a%5C%7D%2C%20%5C%5C%26%20%5C%7Ba%2C%20b%2C%20c%5C%7D%20%5C%5C%5C%7D%20%5C%5C%5Cend%7Bbmatrix%7D%20%5C%5C" alt="\begin{bmatrix}\mathbb{Q} = \{& \{a, b\}, \\& \{b, c\}, \\& \{c, a\}, \\& \{a, b, c\} \\\} \\\end{bmatrix} \\" class="ee_img tr_noresize" eeimg="1">
 
 <p>现在再回到问题, 要保证quorum-rw的正确性, 就要求一次成功的写入, 必须能成功读取,
 从这点看, 过半数这个要求是可以放宽的:</p>
@@ -490,10 +489,10 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <h2 id="包含特定元素的quorum">包含特定元素的quorum</h2>
 
 <p>从上面的例子, 可以直接去掉majority的概念, 就是一类特殊的quorum集合:
-<strong>ℚ 中每个quorum都必须包含某个特定元素</strong>:</p>
+<strong><img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 中每个quorum都必须包含某个特定元素</strong>:</p>
 
 <p>如果集群是3个节点<code class="highlighter-rouge">{a,b,c}</code>, 定义每个quorum都必须包含a, 那么:
-<code class="highlighter-rouge">ℚ = { {a}, {a,b}, {a,c}, {a,b,c} }</code>.</p>
+<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%20%3D%20%5C%7B%20%5C%7Ba%5C%7D%2C%20%5C%7Ba%2Cb%5C%7D%2C%20%5C%7Ba%2Cc%5C%7D%2C%20%5C%7Ba%2Cb%2Cc%5C%7D%20%5C%7D" alt="\mathbb{Q} = \{ \{a\}, \{a,b\}, \{a,c\}, \{a,b,c\} \}" class="ee_img tr_noresize" eeimg="1">.</p>
 
 <p>任意2个quorum都有交集<code class="highlighter-rouge">{a}</code>, 用这个quorum定义来运行paxos, 仍然是正确的. (可以试试跑一个之前
 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中的例子里的paxos)</p>
@@ -501,7 +500,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <h2 id="45-加-25的quorum">4/5 加 2/5的quorum</h2>
 
 <p>在一个5节点集群<code class="highlighter-rouge">{a,b,c,d,e}</code> 中, quorum定义为:至少包含4个元素, 或是<code class="highlighter-rouge">{a,b}</code>
-那么ℚ 就是:</p>
+那么<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 就是:</p>
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/quorum/images/tbl_318708580515bdeb111510536f497521.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>任一4个元素的quorum都有交集, 任一4元素的quorum也和<code class="highlighter-rouge">{a,b}</code>有交集.
@@ -521,7 +520,11 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <h2 id="hierarchical-quorum-2xn">Hierarchical quorum 2xn</h2>
 
 <p>继续沿用hierarchical quorum 的定义, 但只选2行.
-因为一个2节点的系统<code class="highlighter-rouge">{x, y}</code>, quorum集合可以是 <code class="highlighter-rouge">ℚ = { {x}, {x, y} }</code>(或 <code class="highlighter-rouge">ℚ = { {x, y}, {y} }</code>),
+因为一个2节点的系统<code class="highlighter-rouge">{x, y}</code>, quorum集合可以是
+<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%20%3D%20%5C%7B%20%5C%7Bx%5C%7D%2C%20%5C%7Bx%2C%20y%5C%7D%20%5C%7D" alt="\mathbb{Q} = \{ \{x\}, \{x, y\} \}" class="ee_img tr_noresize" eeimg="1">
+(或
+<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%20%3D%20%5C%7B%20%5C%7Bx%2C%20y%5C%7D%2C%20%5C%7By%5C%7D%20%5C%7D" alt="\mathbb{Q} = \{ \{x, y\}, \{y\} \}" class="ee_img tr_noresize" eeimg="1">
+),
 (这里x, y代表一行).</p>
 
 <p>于是这个场景中的quorum 可以描述为:
@@ -581,13 +584,13 @@ quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blo
   </ul>
 </blockquote>
 
-<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: <code class="highlighter-rouge">P(ℚ) = ΣP(Qᵢ), for every Qᵢ ∈ ℚ</code>.
+<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: <img src="https://www.zhihu.com/equation?tex=P%28%20%5Cmathbb%7BQ%7D%20%29%20%3D%20%CE%A3P%28Q_i%29%2C%20Q_i%20%E2%88%88%20%5Cmathbb%7BQ%7D" alt="P( \mathbb{Q} ) = ΣP(Q_i), Q_i ∈ \mathbb{Q}" class="ee_img tr_noresize" eeimg="1">.
 quorum出现的概率是: P(Qᵢ) = (1-p)ˣpⁿ⁻ˣ,
 其中x是一个quorum包含的节点个数: x = |Qᵢ|</strong>.</p>
 
 <blockquote>
   <p>🌰 对一个三节点的系统 <code class="highlighter-rouge">{a, b, c}</code>
-majority 的quorum集合<code class="highlighter-rouge">𝕄 = { {a, b}, {b, c}, {c, a}, {a, b, c} }</code>,
+majority 的quorum集合 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D%20%3D%20%5C%7B%20%5C%7Ba%2C%20b%5C%7D%2C%20%5C%7Bb%2C%20c%5C%7D%2C%20%5C%7Bc%2C%20a%5C%7D%2C%20%5C%7Ba%2C%20b%2C%20c%5C%7D%20%5C%7D" alt="\mathbb{M} = \{ \{a, b\}, \{b, c\}, \{c, a\}, \{a, b, c\} \}" class="ee_img tr_noresize" eeimg="1">,
 那么3个节点可能出现的所有状态, 以及对应的整个系统是否可用如就如下展示:</p>
   <div class="highlighter-rouge"><div class="highlight"><img src="/publish/zhihu/algo/quorum/images/tbl_f3117fe6a30579af47468130e98406f4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>  </div>
 
@@ -605,36 +608,37 @@ C(3, 2)(1-p)²p¹ + C(3, 3)(1-p)³p⁰ ~= 1-4p² ~= 0.9996, 大约3个9</p>
 <p>然后我们来看看为什么非majority的quorum 会降低系统的可用性:</p>
 
 <ul>
-  <li>假设majority quorum的集合为<code class="highlighter-rouge">𝕄</code>, 也就是所有大小过半的节点集合;</li>
-  <li>对某一个quorum集合<code class="highlighter-rouge">ℚ = {Q₁, Q₂...}</code>,
-其中 <code class="highlighter-rouge">Qₓ = {aᵢ, aⱼ...}</code> 是一个节点集合,
-Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: <code class="highlighter-rouge">Qᵢ ∩ Qⱼ ≠ ø</code>;</li>
+  <li>假设majority quorum的集合为 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D" alt="\mathbb{M}" class="ee_img tr_noresize" eeimg="1">, 也就是所有大小过半的节点集合;</li>
+  <li>对某一个quorum集合<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%20%3D%20%5C%7BQ_1%2C%20Q_2...%5C%7D" alt="\mathbb{Q} = \{Q_1, Q_2...\}" class="ee_img tr_noresize" eeimg="1">,
+其中 <img src="https://www.zhihu.com/equation?tex=Q_k%20%3D%20%5C%7Ba_i%2C%20a_j...%5C%7D" alt="Q_k = \{a_i, a_j...\}" class="ee_img tr_noresize" eeimg="1"> 是一个节点集合,
+Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: <img src="https://www.zhihu.com/equation?tex=Q_i%20%E2%88%A9%20Q_j%20%E2%89%A0%20%5Cemptyset" alt="Q_i ∩ Q_j ≠ \emptyset" class="ee_img tr_noresize" eeimg="1">;</li>
   <li>单机停机几率 p = 0.01;</li>
 </ul>
 
-<p>我们可以对ℚ 做一个变换<code class="highlighter-rouge">f(ℚ)</code>:</p>
+<p>我们可以对<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 做一个变换 <img src="https://www.zhihu.com/equation?tex=f%28%5Cmathbb%7BQ%7D%29" alt="f(\mathbb{Q})" class="ee_img tr_noresize" eeimg="1">:</p>
 
-<p>从ℚ 中选择最小的一个Qᵢ: Qᵢ满足<code class="highlighter-rouge">∀Qⱼ: |Qᵢ| ≤ |Qⱼ|</code> (如果有多个最小的, 选任意一个), 从ℚ 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
+<p>从 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 中选择最小的一个Qᵢ: Qᵢ满足<code class="highlighter-rouge">∀Qⱼ: |Qᵢ| ≤ |Qⱼ|</code> (如果有多个最小的, 选任意一个), 从<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
 
-<p><code class="highlighter-rouge">ℚ' = ℚ \ {Qᵢ} ∪ {~Qᵢ}</code></p>
+<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%27%20%3D%20%7B%5Cmathbb%7BQ%7D%7D%20%5Cbackslash%20%5C%7B%20Q_i%5C%7D%20%E2%88%AA%20%5C%7B%5Coverline%7BQ_i%7D%5C%7D%5C%5C" alt="\mathbb{Q}' = {\mathbb{Q}} \backslash \{ Q_i\} ∪ \{\overline{Q_i}\}\\" class="ee_img tr_noresize" eeimg="1">
 
 <blockquote>
-  <p><strong>ℚ’也还是一个合法quorum集合</strong>:
-因为对任意一个Qⱼ, 如果<code class="highlighter-rouge">|Qⱼ| ≥ |Qᵢ|</code> 且<code class="highlighter-rouge">Qⱼ ≠ Qᵢ</code>, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
-所以 ~Qᵢ 和 Qⱼ一定有交集.</p>
+  <p><strong><img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D%27" alt="\mathbb{Q}'" class="ee_img tr_noresize" eeimg="1">也还是一个合法quorum集合</strong>:
+因为对任意一个Qⱼ, 如果<img src="https://www.zhihu.com/equation?tex=%7CQ_j%7C%20%E2%89%A5%20%7CQ_i%7C" alt="|Q_j| ≥ |Q_i|" class="ee_img tr_noresize" eeimg="1">  且 <img src="https://www.zhihu.com/equation?tex=Q_j%20%E2%89%A0%20Q_i" alt="Q_j ≠ Q_i" class="ee_img tr_noresize" eeimg="1">, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
+所以 <img src="https://www.zhihu.com/equation?tex=%5Coverline%7BQ_i%7D" alt="\overline{Q_i}" class="ee_img tr_noresize" eeimg="1"> 和 <img src="https://www.zhihu.com/equation?tex=Q_j" alt="Q_j" class="ee_img tr_noresize" eeimg="1"> 一定有交集.</p>
 </blockquote>
 
-<p>重复这个步骤直到ℚ 中所有quorum的大小都大于半数. 最后ℚ 就变成了一个𝕄 的子集:
-<code class="highlighter-rouge">f(ℚ) ⊆ M</code></p>
+<p>重复这个步骤直到 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 中所有quorum的大小都大于半数. 最后 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 就变成了一个<img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D" alt="\mathbb{M}" class="ee_img tr_noresize" eeimg="1"> 的子集:
+<img src="https://www.zhihu.com/equation?tex=f%28%5Cmathbb%7BQ%7D%29%20%E2%8A%86%20%5Cmathbb%7BM%7D" alt="f(\mathbb{Q}) ⊆ \mathbb{M}" class="ee_img tr_noresize" eeimg="1"></p>
 
-<p>这样, <strong>任何一个ℚ 都可以跟 𝕄 的一个子集建立一个一一映射.
-而𝕄 的子集的可用性一定不大于𝕄 的可用性</strong>: <code class="highlighter-rouge">P(subset(𝕄)) ≤ P(𝕄)</code>.</p>
+<p>这样, <strong>任何一个 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BQ%7D" alt="\mathbb{Q}" class="ee_img tr_noresize" eeimg="1"> 都可以跟 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D" alt="\mathbb{M}" class="ee_img tr_noresize" eeimg="1"> 的一个子集建立一个一一映射.
+而 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D" alt="\mathbb{M}" class="ee_img tr_noresize" eeimg="1"> 的子集的可用性一定不大于 <img src="https://www.zhihu.com/equation?tex=%5Cmathbb%7BM%7D" alt="\mathbb{M}" class="ee_img tr_noresize" eeimg="1"> 的可用性</strong>:
+<img src="https://www.zhihu.com/equation?tex=P%28subset%28%5Cmathbb%7BM%7D%29%29%20%E2%89%A4%20P%28%5Cmathbb%7BM%7D%29" alt="P(subset(\mathbb{M})) ≤ P(\mathbb{M})" class="ee_img tr_noresize" eeimg="1">.</p>
 
 <p>而且, <strong>对一个不大于半数的Qᵢ(<code class="highlighter-rouge">x = |Qᵢ| ≤ ⌊n⌋/2</code>), 它的补集在随机停机过程中出现的几率更大</strong>:</p>
 
-<p><code class="highlighter-rouge">(1-p)ˣpⁿ⁻ˣ ≤ (1-p)ⁿ⁻ˣpˣ</code> ⇒ <code class="highlighter-rouge">P(Qᵢ) ≤ P(~Qᵢ) </code> ⇒ <code class="highlighter-rouge">P(ℚ) ≤ P(f(Q))</code>.</p>
+<img src="https://www.zhihu.com/equation?tex=%281-p%29%5Exp%5E%7Bn-x%7D%20%E2%89%A4%20%281-p%29%5E%7Bn-x%7Dp%5Ex%20%E2%87%92%20P%28Q_i%29%20%E2%89%A4%20P%28%5Coverline%7BQ_i%7D%29%20%20%E2%87%92%20P%28%5Cmathbb%7BQ%7D%29%20%E2%89%A4%20P%28f%28Q%29%29%5C%5C" alt="(1-p)^xp^{n-x} ≤ (1-p)^{n-x}p^x ⇒ P(Q_i) ≤ P(\overline{Q_i})  ⇒ P(\mathbb{Q}) ≤ P(f(Q))\\" class="ee_img tr_noresize" eeimg="1">
 
-<p>∴ <code class="highlighter-rouge">P(ℚ) ≤ P(f(ℚ)) ≤ P(𝕄)</code>, 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
+<p>∴ <img src="https://www.zhihu.com/equation?tex=P%28%5Cmathbb%7BQ%7D%29%20%E2%89%A4%20P%28f%28%5Cmathbb%7BQ%7D%29%29%20%E2%89%A4%20P%28%5Cmathbb%7BM%7D%29" alt="P(\mathbb{Q}) ≤ P(f(\mathbb{Q})) ≤ P(\mathbb{M})" class="ee_img tr_noresize" eeimg="1">, 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
 
 <blockquote>
   <p>🌰 例如我们算下, 3x3 的 hierarchical quoru m的可用性:</p>
@@ -938,7 +942,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 ">上一页</a>
     
     
-      <a href="/algo/paxoskv/" class="pagination--pager" title="200行实现基于paxos的kv存储
+      <a href="/algo/paxoskv/" class="pagination--pager" title="200行代码实现基于paxos的kv存储
 ">下一页</a>
     
   </nav>
@@ -972,7 +976,7 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/algo/paxoskv/" rel="permalink">200行实现基于paxos的kv存储
+        <a href="/algo/slimarray/" rel="permalink">slimarray: gzip的压缩率, 即时访问
 </a>
       
     </h2>
@@ -990,7 +994,47 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          30 分钟阅读
+          15 分钟阅读
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/algo/paxoskv/" rel="permalink">200行代码实现基于paxos的kv存储
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          33 分钟阅读
         
       </span>
     
@@ -1078,46 +1122,6 @@ quorum定义成带权重的quorum: 一个quorum所包含的节点权重之和至
 
 
     <p class="archive__item-excerpt" itemprop="description">来自一个莫得感情的coding万年户
-</p>
-  </article>
-</div>
-
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc" itemprop="headline">
-      
-        <a href="/storage/ec-3/" rel="permalink">Erasure-Code-擦除码-3-极限篇
-</a>
-      
-    </h2>
-    
-
-  <p class="page__meta">
-    
-
-    
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          24 分钟阅读
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt" itemprop="description">没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑
 </p>
   </article>
 </div>
