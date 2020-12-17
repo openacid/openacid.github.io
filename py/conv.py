@@ -4,11 +4,19 @@
 import hashlib
 import os
 import re
-import proc
+import urllib.parse
+import k3proc
 import sys
 
+default_encoding = sys.getdefaultencoding()
+if hasattr(sys, 'getfilesystemencoding'):
+    default_encoding = sys.getfilesystemencoding()
+
 def dd(*msg):
-    print ''.join([str(x) for x in msg])
+    print(''.join([str(x) for x in msg]))
+
+def tobytes(s):
+    return bytes(s, default_encoding)
 
 def jp(*ps):
     return os.path.join(*ps)
@@ -126,8 +134,12 @@ def resource_to_image(fn, outdir, title, imgurl, opt):
     with open(fn) as f:
         cont = f.read()
 
+    opt = opt.split()
+
+    if 'zhihumath' in opt:
+        cont = convert_tex_to_zhihulink(cont, imgdir, imgurl)
     if 'math' in opt:
-        cont = convert_math(cont, imgdir, imgurl)
+        cont = convert_tex_to_img(cont, imgdir, imgurl)
     if 'table' in opt:
         cont = convert_html_to_image(cont, imgdir, imgurl, tbl_patterns)
     if 'pre' in opt:
@@ -151,7 +163,63 @@ def resource_to_image(fn, outdir, title, imgurl, opt):
     with open(os.path.join(outdir, "index.html"), 'w') as f:
         f.write(cont)
 
-patterns = (
+zhihu_math_link = '{newline}<img src="https://www.zhihu.com/equation?tex={texurl}{alignment}" alt="{tex}" class="ee_img tr_noresize" eeimg="1">{newline}'
+mathjax_to_zhihulink_patterns = (
+        # block math
+        (r'<script type="math/tex; mode=display">% <!\[CDATA\[(.*?)%]]></script>',
+         zhihu_math_link,
+         '\n', # newline
+         '\\\\', # alignment: zhihu use two back slash to center-align equotion
+        ),
+        (r'<script type="math/tex; mode=display">(.*?)</script>',
+         zhihu_math_link,
+         '\n', # newline
+         '\\\\', # alignment: zhihu use two back slash to center-align equotion
+        ),
+
+        # inline math
+        (r'<script type="math/tex">(.*?)</script>',
+         zhihu_math_link,
+         '',
+         '',
+        ),
+)
+
+def convert_tex_to_zhihulink(cont, imgdir, imgurl):
+
+    for ptn, repl, newline, alignment in mathjax_to_zhihulink_patterns:
+
+        while True:
+            m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
+            if m is None:
+                break
+
+            s = m.start()
+            e = m.end()
+            tex = m.groups()[0]
+            dd()
+            dd("### convert tex to zhihulink... ", newline, alignment)
+            dd("    ",  tex)
+
+            tex = re.sub(r'\n', '', tex)
+            texurl = urllib.parse.quote(tex)
+            dd("    tex: ", tex)
+            dd("    texurl: ", texurl)
+
+            imgtag = repl.format(
+                    tex=tex,
+                    texurl=texurl,
+                    newline=newline,
+                    alignment=alignment,
+                    )
+
+            dd("    rendered zhihulink: ", imgtag)
+
+            cont = cont[:s] + imgtag + cont[e:]
+
+    return cont
+
+mathjax_patterns = (
         # block math
         (r'<script type="math/tex; mode=display">(.*?)</script>',
          '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
@@ -165,9 +233,9 @@ patterns = (
         ),
 )
 
-def convert_math(cont, imgdir, imgurl):
+def convert_tex_to_img(cont, imgdir, imgurl):
 
-    for ptn, repl, is_block in patterns:
+    for ptn, repl, is_block in mathjax_patterns:
 
         while True:
             m = re.search(ptn, cont, flags=re.DOTALL| re.UNICODE)
@@ -281,9 +349,9 @@ tblhtml_end = '''
 def html_to_image(tblhtml, imgdir):
     imgdir = os.path.abspath(imgdir)
     tmpdir = os.path.abspath("tmp")
-    proc.shell_script('rm *.png *.html', cwd=tmpdir)
+    k3proc.shell_script('rm *.png *.html', cwd=tmpdir)
 
-    tblmd5 = hashlib.md5(tblhtml).hexdigest()
+    tblmd5 = hashlib.md5(tobytes(tblhtml)).hexdigest()
     fn = "tbl_" + tblmd5 + ".png"
 
     if os.path.exists(os.path.join(imgdir, fn)):
@@ -294,7 +362,7 @@ def html_to_image(tblhtml, imgdir):
         f.write(html)
 
     dd("make html at:", jp(tmpdir, "tbl.html"))
-    proc.command_ex(
+    k3proc.command_ex(
             "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
             "--headless",
             "--screenshot",
@@ -306,7 +374,7 @@ def html_to_image(tblhtml, imgdir):
 
     # TODO extend to match page width
     dd("crop to visible area")
-    proc.command_ex(
+    k3proc.command_ex(
             "convert",
             "screenshot.png",
             "-trim",
@@ -315,7 +383,7 @@ def html_to_image(tblhtml, imgdir):
             cwd=tmpdir,
     )
 
-    proc.shell_script('rm *.png *.html', cwd=tmpdir)
+    k3proc.shell_script('rm *.png *.html', cwd=tmpdir)
     return fn
 
 def convert_ptn(cont, ptns):
@@ -366,7 +434,7 @@ def convert_xxx(cont, ptns):
 
 def tex_to_image(tex, imgdir, is_block):
 
-    texmd5 = hashlib.md5(tex).hexdigest()
+    texmd5 = hashlib.md5(tobytes(tex)).hexdigest()
     texescaped = re.sub('[^a-zA-Z0-9_\-=]+', '_', tex)
     fn = texescaped[:64] + '-' + texmd5 + '.png'
     fn = fn.lstrip('_')
@@ -417,9 +485,9 @@ def tex_to_image_pdflatex(tex, imgdir, fn, is_block):
     with open(texfn, 'w') as f:
         f.write(tex)
 
-    proc.command_ex('pdflatex', texfn)
-    proc.command_ex('pdfcrop', pdffn, croppedfn)
-    rc, pngdata, err = proc.command_ex(
+    k3proc.command_ex('pdflatex', texfn)
+    k3proc.command_ex('pdfcrop', pdffn, croppedfn)
+    rc, pngdata, err = k3proc.command_ex(
         'convert',
         '-density', '160',
         '-quality', '100',
@@ -433,7 +501,7 @@ def tex_to_image_pdflatex(tex, imgdir, fn, is_block):
 def tex_to_image_texvc(tex, imgdir, fn):
 
     # texvc: https://github.com/drmingdrmer/texvc
-    code, out, err = proc.command_ex('texvc',
+    code, out, err = k3proc.command_ex('texvc',
                     # tmpdir
                     ".",
                     imgdir,
@@ -462,10 +530,10 @@ def tex_to_image_texvc(tex, imgdir, fn):
     # %m - mathml code, without \0 characters
     outfn = out[1:33]
 
-    print "tex:", tex
-    print "out:", out
-    print "outfn:", outfn
-    print "fn:", fn
+    print("tex:", tex)
+    print("out:", out)
+    print("outfn:", outfn)
+    print("fn:", fn)
     os.rename(os.path.join(imgdir, outfn + '.png'),
               os.path.join(imgdir, fn)
     )
@@ -476,10 +544,10 @@ def tex_to_image_texvc(tex, imgdir, fn):
 if __name__ == "__main__":
 
     opts = {
-            'wechat': 'math       a-to-txt                        permlink',
-            'weibo':  'math table          pre code blockquote    permlink li-p h-margin',
-            'zhihu':  'math table          pre                 hr permlink',
-            'import': 'math table          pre                            ',
+            'wechat': '           math       a-to-txt                        permlink',
+            'weibo':  '           math table          pre code blockquote    permlink li-p h-margin',
+            'zhihu':  'zhihumath       table          pre                 hr permlink',
+            'import': '           math table          pre                            ',
     }
 
     # _site/tech/zipf/index.hml
@@ -491,7 +559,7 @@ if __name__ == "__main__":
     title = '/'.join(src.split('/')[1:-1])
     pubdir = 'publish'
 
-    for plat4m, opt in opts.items():
+    for plat4m, opt in list(opts.items()):
         outdir = os.path.join(pubdir, plat4m, title)
         imgurl = '/' + pubdir + '/' + plat4m + '/' + title + '/images'
 
