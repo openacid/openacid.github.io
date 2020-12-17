@@ -7,17 +7,17 @@ build:
 export: build
 	# Convert built html to easy-to-publish versions:
 	#   convert math and table to images
-	python2 py/conv.py _site/algo/slimarray
-	# python2 py/conv.py _site/algo/paxoskv
-	# python2 py/conv.py _site/algo/quorum
-	# python2 py/conv.py _site/algo/paxos
-	# python2 py/conv.py _site/tech/bla/programmer-should-know
-	# python2 py/conv.py _site/storage/ec-3
-	# python2 py/conv.py _site/storage/ec-2
-	# python2 py/conv.py _site/storage/ec-1
-	# python2 py/conv.py _site/culture/pr
-	# python2 py/conv.py _site/tech/cdn
-	# python2 py/conv.py _site/tech/zipf
+	# python3 py/conv.py _site/algo/slimarray
+	# python3 py/conv.py _site/algo/paxoskv
+	python3 py/conv.py _site/algo/quorum
+	# python3 py/conv.py _site/algo/paxos
+	# python3 py/conv.py _site/tech/bla/programmer-should-know
+	# python3 py/conv.py _site/storage/ec-3
+	# python3 py/conv.py _site/storage/ec-2
+	# python3 py/conv.py _site/storage/ec-1
+	# python3 py/conv.py _site/culture/pr
+	# python3 py/conv.py _site/tech/cdn
+	# python3 py/conv.py _site/tech/zipf
 
 	# put publish/ dir back to _site
 	cp -R publish _site/
