@@ -221,7 +221,7 @@ mathjax_patterns = (
 
         # inline math
         (r'<script type="math/tex">(.*?)</script>',
-         '<img src="{src}" style="height: 0.8em" _alt="{tex}"/>',
+         '<img src="{src}" style="zoom: 60%;" _alt="{tex}"/>',
          False,
         ),
 )
