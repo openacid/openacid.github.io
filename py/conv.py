@@ -210,18 +210,18 @@ def convert_tex_to_zhihulink(cont, imgdir, imgurl):
 mathjax_patterns = (
         # block math
         (r'<script type="math/tex; mode=display">% <!\[CDATA\[(.*?)%]]></script>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
+         '<img src="{src}" style="zoom: 60%; display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
          True,
         ),
 
         (r'<script type="math/tex; mode=display">(.*?)</script>',
-         '<img src="{src}" style="display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
+         '<img src="{src}" style="zoom: 60%; display: block; margin: 0 auto 1.3em auto" _alt="{tex}"/>',
          True,
         ),
 
         # inline math
         (r'<script type="math/tex">(.*?)</script>',
-         '<img src="{src}" style="height: 1.2em" _alt="{tex}"/>',
+         '<img src="{src}" style="height: 0.8em" _alt="{tex}"/>',
          False,
         ),
 )
@@ -424,113 +424,25 @@ def convert_xxx(cont, ptns):
 
     return cont
 
-
-def tex_to_image(tex, imgdir, is_block):
-
+def tex_fn(tex):
+    '''
+    Build a path base on base for tex image
+    '''
     texmd5 = hashlib.md5(tobytes(tex)).hexdigest()
     texescaped = re.sub('[^a-zA-Z0-9_\-=]+', '_', tex)
     fn = texescaped[:64] + '-' + texmd5 + '.png'
     fn = fn.lstrip('_')
+    return fn
+
+
+def tex_to_image(tex, imgdir, is_block):
+
+    fn = tex_fn(tex)
 
     if os.path.exists(os.path.join(imgdir, fn)):
         return fn
 
-    # texvc does not support '\\' as line-break.
-    # tex_to_image_texvc(tex, imgdir, fn)
-    tex_to_image_pdflatex(tex, imgdir, fn, is_block)
-
-    return fn
-
-def tex_to_image_pdflatex(tex, imgdir, fn, is_block):
-
-    dst = os.path.join(imgdir, fn)
-
-    # remove empty line those annoy pdflatex
-    tex = re.sub('\n *\n', '\n', tex)
-    tex = tex.strip()
-
-    if is_block:
-        # begin{equation} and $$ both starts a display-math block
-        if tex.startswith('\\begin{equation}'):
-            pass
-        else:
-            tex = '$$\n%s\n$$' % tex
-    else:
-        tex = '$' + tex + '$'
-
-    tex = ('\\documentclass{article}\n'
-           '\\pagestyle{empty}\n'
-           '\\usepackage{amsmath}\n'
-           '\\usepackage{amsfonts}\n'
-           '\\usepackage[mathletters]{ucs}\n'
-           '\\usepackage[utf8x]{inputenc}\n'
-           '\\newcommand{\\lt}{<}\n'
-           '\\newcommand{\\gt}{>}\n'
-           '\\begin{document}\n'
-           '%s\n'
-           '\end{document}') % (tex, )
-
-    basefn = 'xp-blog-tmp'
-    texfn = basefn + '.tex'
-    pdffn = basefn + '.pdf'
-    croppedfn = basefn + '-crop.pdf'
-
-    with open(texfn, 'w') as f:
-        f.write(tex)
-
-    k3proc.command_ex('pdflatex', texfn)
-    k3proc.command_ex('pdfcrop', pdffn, croppedfn)
-    rc, pngdata, err = k3proc.command_ex(
-        'convert',
-        '-density', '160',
-        '-quality', '100',
-        croppedfn, 'png:-', 
-            text=False
-    )
-
-    with open(dst, 'wb') as f:
-        f.write(pngdata)
-
-
-def tex_to_image_texvc(tex, imgdir, fn):
-
-    # texvc: https://github.com/drmingdrmer/texvc
-    code, out, err = k3proc.command_ex('texvc',
-                    # tmpdir
-                    ".",
-                    imgdir,
-                    tex,
-                    "iso-8859-1"
-    )
-
-    # first output char is code:
-    # texvc output format is like this:
-    #    +%5		ok, but not html or mathml
-    #    c%5%h	ok, conservative html, no mathml
-    #    m%5%h	ok, moderate html, no mathml
-    #    l%5%h	ok, liberal html, no mathml
-    #    C%5%h\0%m	ok, conservative html, with mathml
-    #    M%5%h\0%m	ok, moderate html, with mathml
-    #    L%5%h\0%m	ok, liberal html, with mathml
-    #    X%5%m	ok, no html, with mathml
-    #    S		syntax error
-    #    E		lexing error
-    #    F%s		unknown function %s
-    #    -		other error
-
-    # \0 - null character
-    # %5 - md5, 32 hex characters
-    # %h - html code, without \0 characters
-    # %m - mathml code, without \0 characters
-    outfn = out[1:33]
-
-    print("tex:", tex)
-    print("out:", out)
-    print("outfn:", outfn)
-    print("fn:", fn)
-    os.rename(os.path.join(imgdir, outfn + '.png'),
-              os.path.join(imgdir, fn)
-    )
+    k3down2.tex_to_png(tex, is_block, outputfn=jp(imgdir, fn))
 
     return fn
 
