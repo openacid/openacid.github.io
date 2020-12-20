@@ -449,12 +449,12 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 </ul>
 
 <p>一般我们提到quorum(或majority)时, 都是指一个节点集合Q, 本文中我们把一个系统中所有quorum的集合记为:
-<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-e00a2260c10c79813dd9a3e9622c0497.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ Q_1, Q_2... \}"/>,
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-e00a2260c10c79813dd9a3e9622c0497.png" style="height: 0.8em" _alt="\mathbb{Q} = \{ Q_1, Q_2... \}"/>,
 其中
-<img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 1.2em" _alt="Q_k = \{a_i, a_j...\}"/>
+<img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 0.8em" _alt="Q_k = \{a_i, a_j...\}"/>
 是一个节点(paxos中的Acceptor)的集合, 例如一个三节点系统{a, b, c}, 它的majority的quorum集合:</p>
 
-<img src="/publish/weibo/algo/quorum/images/begin_bmatrix_mathbb_Q_=_a_b_b_c_c_a_a_b_c_end_bmatrix_-dd2931895a0eaf9332057cfc1cce523d.png" style="display: block; margin: 0 auto 1.3em auto" _alt="
+<img src="/publish/weibo/algo/quorum/images/begin_bmatrix_mathbb_Q_=_a_b_b_c_c_a_a_b_c_end_bmatrix_-dd2931895a0eaf9332057cfc1cce523d.png" style="zoom: 60%; display: block; margin: 0 auto 1.3em auto" _alt="
 \begin{bmatrix}
 \mathbb{Q} = \{
 & \{a, b\}, \\
@@ -495,10 +495,10 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <br/><h2 id="包含特定元素的quorum">包含特定元素的quorum</h2>
 
 <p>从上面的例子, 可以直接去掉majority的概念, 就是一类特殊的quorum集合:
-<strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中每个quorum都必须包含某个特定元素</strong>:</p>
+<strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 中每个quorum都必须包含某个特定元素</strong>:</p>
 
 <p>如果集群是3个节点{a,b,c}, 定义每个quorum都必须包含a, 那么:
-<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_a_a_b_a_c_a_b_c_-0841771fa0d628b20965c30fcf07f64e.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{a\}, \{a,b\}, \{a,c\}, \{a,b,c\} \}"/>.</p>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_a_a_b_a_c_a_b_c_-0841771fa0d628b20965c30fcf07f64e.png" style="height: 0.8em" _alt="\mathbb{Q} = \{ \{a\}, \{a,b\}, \{a,c\}, \{a,b,c\} \}"/>.</p>
 
 <p>任意2个quorum都有交集{a}, 用这个quorum定义来运行paxos, 仍然是正确的. (可以试试跑一个之前
 <a href="https://blog.openacid.com/algo/paxos" title="可靠分布式系统-paxos的直观解释">paxos的直观解释</a> 中的例子里的paxos)</p>
@@ -506,7 +506,7 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 <br/><h2 id="45-加-25的quorum">4/5 加 2/5的quorum</h2>
 
 <p>在一个5节点集群{a,b,c,d,e} 中, quorum定义为:至少包含4个元素, 或是{a,b}
-那么<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 就是:</p>
+那么<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 就是:</p>
 <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/quorum/images/tbl_318708580515bdeb111510536f497521.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div></div>
 
 <p>任一4个元素的quorum都有交集, 任一4元素的quorum也和{a,b}有交集.
@@ -527,9 +527,9 @@ paxos也是通过2次多数派读写来实现的强一致.</p>
 
 <p>继续沿用hierarchical quorum 的定义, 但只选2行.
 因为一个2节点的系统{x, y}, quorum集合可以是
-<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_x_y_-421e1d785a7058c72944e943dab77295.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{x\}, \{x, y\} \}"/>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_x_y_-421e1d785a7058c72944e943dab77295.png" style="height: 0.8em" _alt="\mathbb{Q} = \{ \{x\}, \{x, y\} \}"/>
 (或
-<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_y_y_-492372d566ecbf8d465917cd2f333d38.png" style="height: 1.2em" _alt="\mathbb{Q} = \{ \{x, y\}, \{y\} \}"/>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_x_y_y_-492372d566ecbf8d465917cd2f333d38.png" style="height: 0.8em" _alt="\mathbb{Q} = \{ \{x, y\}, \{y\} \}"/>
 ),
 (这里x, y代表一行).</p>
 
@@ -590,13 +590,13 @@ quorum的选主在raft中叫做<a href="https://github.com/peterbourgon/raft/blo
   </ul>
 
 
-<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_=_P_Q_i_Q_i_mathbb_Q_-f0c95729bfae43418fdc035733a888e3.png" style="height: 1.2em" _alt="P( \mathbb{Q} ) = ΣP(Q_i), Q_i ∈ \mathbb{Q}"/>.
+<p>因此整个系统的可用性可以定义为: <strong>每个quorum出现的概率之和: <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_=_P_Q_i_Q_i_mathbb_Q_-f0c95729bfae43418fdc035733a888e3.png" style="height: 0.8em" _alt="P( \mathbb{Q} ) = ΣP(Q_i), Q_i ∈ \mathbb{Q}"/>.
 quorum出现的概率是: P(Qᵢ) = (1-p)ˣpⁿ⁻ˣ,
 其中x是一个quorum包含的节点个数: x = |Qᵢ|</strong>.</p>
 
 
   <p>🌰 对一个三节点的系统 {a, b, c}
-majority 的quorum集合 <img src="/publish/weibo/algo/quorum/images/mathbb_M_=_a_b_b_c_c_a_a_b_c_-23cfdbb609c8da2d930c756147033ec6.png" style="height: 1.2em" _alt="\mathbb{M} = \{ \{a, b\}, \{b, c\}, \{c, a\}, \{a, b, c\} \}"/>,
+majority 的quorum集合 <img src="/publish/weibo/algo/quorum/images/mathbb_M_=_a_b_b_c_c_a_a_b_c_-23cfdbb609c8da2d930c756147033ec6.png" style="height: 0.8em" _alt="\mathbb{M} = \{ \{a, b\}, \{b, c\}, \{c, a\}, \{a, b, c\} \}"/>,
 那么3个节点可能出现的所有状态, 以及对应的整个系统是否可用如就如下展示:</p>
   <div class="highlighter-rouge"><div class="highlight"><img src="/publish/weibo/algo/quorum/images/tbl_f3117fe6a30579af47468130e98406f4.png" style="display: block; margin: 0 auto 1.3em auto" _alt="table"/></div>  </div>
 
@@ -614,37 +614,37 @@ C(3, 2)(1-p)²p¹ + C(3, 3)(1-p)³p⁰ ~= 1-4p² ~= 0.9996, 大约3个9</p>
 <p>然后我们来看看为什么非majority的quorum 会降低系统的可用性:</p>
 
 <ul>
-  假设majority quorum的集合为 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/>, 也就是所有大小过半的节点集合;
-  对某一个quorum集合<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-0300b7ecf345bff450cb0e64c41512ee.png" style="height: 1.2em" _alt="\mathbb{Q} = \{Q_1, Q_2...\}"/>,
-其中 <img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 1.2em" _alt="Q_k = \{a_i, a_j...\}"/> 是一个节点集合,
-Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: <img src="/publish/weibo/algo/quorum/images/Q_i_Q_j_emptyset-eb293bdee267b02346229797a482b428.png" style="height: 1.2em" _alt="Q_i ∩ Q_j ≠ \emptyset"/>;
+  假设majority quorum的集合为 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 0.8em" _alt="\mathbb{M}"/>, 也就是所有大小过半的节点集合;
+  对某一个quorum集合<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_Q_1_Q_2_-0300b7ecf345bff450cb0e64c41512ee.png" style="height: 0.8em" _alt="\mathbb{Q} = \{Q_1, Q_2...\}"/>,
+其中 <img src="/publish/weibo/algo/quorum/images/Q_k_=_a_i_a_j_-79869aee4578404dec9182641864e9e9.png" style="height: 0.8em" _alt="Q_k = \{a_i, a_j...\}"/> 是一个节点集合,
+Qₓ满足对quorum的定义: 任意2个Qᵢ, Qⱼ交集都不为空: <img src="/publish/weibo/algo/quorum/images/Q_i_Q_j_emptyset-eb293bdee267b02346229797a482b428.png" style="height: 0.8em" _alt="Q_i ∩ Q_j ≠ \emptyset"/>;
   单机停机几率 p = 0.01;
 </ul>
 
-<p>我们可以对<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 做一个变换 <img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_-c0360728970cb8a651d2b8213eb7e794.png" style="height: 1.2em" _alt="f(\mathbb{Q})"/>:</p>
+<p>我们可以对<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 做一个变换 <img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_-c0360728970cb8a651d2b8213eb7e794.png" style="height: 0.8em" _alt="f(\mathbb{Q})"/>:</p>
 
-<p>从 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中选择最小的一个Qᵢ: Qᵢ满足∀Qⱼ: |Qᵢ| ≤ |Qⱼ| (如果有多个最小的, 选任意一个), 从<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
+<p>从 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 中选择最小的一个Qᵢ: Qᵢ满足∀Qⱼ: |Qᵢ| ≤ |Qⱼ| (如果有多个最小的, 选任意一个), 从<img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 中去掉Qᵢ, 再把Qᵢ的补集加入:</p>
 
-<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_mathbb_Q_backslash_Q_i_overline_Q_i_-6bedd36c358f20421ac0da8f18960890.png" style="display: block; margin: 0 auto 1.3em auto" _alt="\mathbb{Q}' = {\mathbb{Q}} \backslash \{ Q_i\} ∪ \{\overline{Q_i}\}"/>
-
-
-  <p><strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-143566156ff233bc361dca7746848c36.png" style="height: 1.2em" _alt="\mathbb{Q}'"/>也还是一个合法quorum集合</strong>:
-因为对任意一个Qⱼ, 如果<img src="/publish/weibo/algo/quorum/images/Q_j_Q_i_-09252ae53dad9594116d5743bd86d558.png" style="height: 1.2em" _alt="|Q_j| ≥ |Q_i|"/>  且 <img src="/publish/weibo/algo/quorum/images/Q_j_Q_i-f01f9ce8e1842fe5b3c6f355f7e417c0.png" style="height: 1.2em" _alt="Q_j ≠ Q_i"/>, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
-所以 <img src="/publish/weibo/algo/quorum/images/overline_Q_i_-dc953923411319e68f647380206b40ee.png" style="height: 1.2em" _alt="\overline{Q_i}"/> 和 <img src="/publish/weibo/algo/quorum/images/Q_j-beb195239568309b3e3a0ce19bb5b987.png" style="height: 1.2em" _alt="Q_j"/> 一定有交集.</p>
+<img src="/publish/weibo/algo/quorum/images/mathbb_Q_=_mathbb_Q_backslash_Q_i_overline_Q_i_-6bedd36c358f20421ac0da8f18960890.png" style="zoom: 60%; display: block; margin: 0 auto 1.3em auto" _alt="\mathbb{Q}' = {\mathbb{Q}} \backslash \{ Q_i\} ∪ \{\overline{Q_i}\}"/>
 
 
-<p>重复这个步骤直到 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 中所有quorum的大小都大于半数. 最后 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 就变成了一个<img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的子集:
-<img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_mathbb_M_-e94281416192cc68e816ac47569d1bab.png" style="height: 1.2em" _alt="f(\mathbb{Q}) ⊆ \mathbb{M}"/></p>
+  <p><strong><img src="/publish/weibo/algo/quorum/images/mathbb_Q_-143566156ff233bc361dca7746848c36.png" style="height: 0.8em" _alt="\mathbb{Q}'"/>也还是一个合法quorum集合</strong>:
+因为对任意一个Qⱼ, 如果<img src="/publish/weibo/algo/quorum/images/Q_j_Q_i_-09252ae53dad9594116d5743bd86d558.png" style="height: 0.8em" _alt="|Q_j| ≥ |Q_i|"/>  且 <img src="/publish/weibo/algo/quorum/images/Q_j_Q_i-f01f9ce8e1842fe5b3c6f355f7e417c0.png" style="height: 0.8em" _alt="Q_j ≠ Q_i"/>, 那么Qⱼ一定包含一个不在Qᵢ中的节点,
+所以 <img src="/publish/weibo/algo/quorum/images/overline_Q_i_-dc953923411319e68f647380206b40ee.png" style="height: 0.8em" _alt="\overline{Q_i}"/> 和 <img src="/publish/weibo/algo/quorum/images/Q_j-beb195239568309b3e3a0ce19bb5b987.png" style="height: 0.8em" _alt="Q_j"/> 一定有交集.</p>
 
-<p>这样, <strong>任何一个 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 1.2em" _alt="\mathbb{Q}"/> 都可以跟 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的一个子集建立一个一一映射.
-而 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的子集的可用性一定不大于 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 1.2em" _alt="\mathbb{M}"/> 的可用性</strong>:
-<img src="/publish/weibo/algo/quorum/images/P_subset_mathbb_M_P_mathbb_M_-ef721cbecb39ae76f7c9908faa93262f.png" style="height: 1.2em" _alt="P(subset(\mathbb{M})) ≤ P(\mathbb{M})"/>.</p>
+
+<p>重复这个步骤直到 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 中所有quorum的大小都大于半数. 最后 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 就变成了一个<img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 0.8em" _alt="\mathbb{M}"/> 的子集:
+<img src="/publish/weibo/algo/quorum/images/f_mathbb_Q_mathbb_M_-e94281416192cc68e816ac47569d1bab.png" style="height: 0.8em" _alt="f(\mathbb{Q}) ⊆ \mathbb{M}"/></p>
+
+<p>这样, <strong>任何一个 <img src="/publish/weibo/algo/quorum/images/mathbb_Q_-5eac308e29708e918ed13a88a4249b74.png" style="height: 0.8em" _alt="\mathbb{Q}"/> 都可以跟 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 0.8em" _alt="\mathbb{M}"/> 的一个子集建立一个一一映射.
+而 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 0.8em" _alt="\mathbb{M}"/> 的子集的可用性一定不大于 <img src="/publish/weibo/algo/quorum/images/mathbb_M_-a5df6eb8e14d1fd23a6946096d0e8ad4.png" style="height: 0.8em" _alt="\mathbb{M}"/> 的可用性</strong>:
+<img src="/publish/weibo/algo/quorum/images/P_subset_mathbb_M_P_mathbb_M_-ef721cbecb39ae76f7c9908faa93262f.png" style="height: 0.8em" _alt="P(subset(\mathbb{M})) ≤ P(\mathbb{M})"/>.</p>
 
 <p>而且, <strong>对一个不大于半数的Qᵢ(x = |Qᵢ| ≤ ⌊n⌋/2), 它的补集在随机停机过程中出现的几率更大</strong>:</p>
 
-<img src="/publish/weibo/algo/quorum/images/1-p_xp_n-x_1-p_n-x_p_x_P_Q_i_P_overline_Q_i_P_mathbb_Q_P_f_Q_-017b7aa618c35a0595bfbcd1018dc5ff.png" style="display: block; margin: 0 auto 1.3em auto" _alt="(1-p)^xp^{n-x} ≤ (1-p)^{n-x}p^x ⇒ P(Q_i) ≤ P(\overline{Q_i})  ⇒ P(\mathbb{Q}) ≤ P(f(Q))"/>
+<img src="/publish/weibo/algo/quorum/images/1-p_xp_n-x_1-p_n-x_p_x_P_Q_i_P_overline_Q_i_P_mathbb_Q_P_f_Q_-017b7aa618c35a0595bfbcd1018dc5ff.png" style="zoom: 60%; display: block; margin: 0 auto 1.3em auto" _alt="(1-p)^xp^{n-x} ≤ (1-p)^{n-x}p^x ⇒ P(Q_i) ≤ P(\overline{Q_i})  ⇒ P(\mathbb{Q}) ≤ P(f(Q))"/>
 
-<p>∴ <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_P_f_mathbb_Q_P_mathbb_M_-172504fa84b0e9403f6402c683085813.png" style="height: 1.2em" _alt="P(\mathbb{Q}) ≤ P(f(\mathbb{Q})) ≤ P(\mathbb{M})"/>, 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
+<p>∴ <img src="/publish/weibo/algo/quorum/images/P_mathbb_Q_P_f_mathbb_Q_P_mathbb_M_-172504fa84b0e9403f6402c683085813.png" style="height: 0.8em" _alt="P(\mathbb{Q}) ≤ P(f(\mathbb{Q})) ≤ P(\mathbb{M})"/>, 即 majority 的 quorum 可靠性最高. 其他任何一种quorum的选择, 即使它允许更多的节点停机, 也只能提供较低的可用性.</p>
 
 
   <p>🌰 例如我们算下, 3x3 的 hierarchical quoru m的可用性:</p>
