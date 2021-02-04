@@ -8,5 +8,4 @@ if [ "$fn." = "." ]; then
 fi
 
 
-# md2zhihu -r git@gitee.com:drdrxp/bed.git@openacid $fn -p wechat --keep-meta --code-width 600 -o $fn-wechat.md
-md2zhihu -r git@gitee.com:drdrxp/bed.git@openacid $fn -p weibo --keep-meta --code-width 600 -o $fn-weibo.md
+md2zhihu -r git@gitee.com:drdrxp/bed.git@openacid $fn -p wechat --keep-meta --code-width 600 -o $fn-wechat.md
