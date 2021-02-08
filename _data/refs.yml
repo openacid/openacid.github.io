@@ -1,0 +1,24 @@
+universal:
+
+  # wiki
+  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie trie
+  - "wiki-trie": https://en.wikipedia.org/wiki/Trie trie
+  - "wiki-succinct": https://en.wikipedia.org/wiki/Succinct_data_structure
+
+  # ref and doc
+  - "ref-cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
+
+  # repo
+  - "repo-slim": https://github.com/openacid/slim slim
+  - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
+
+  # data structure impl
+  - "impl-google-btree": https://github.com/google/btree btree
+
+  # my articles
+  - "post-zipf": https://blog.openacid.com/tech/zipf/ zipf
+
+
+zhihu:
+  # my articles
+  - "post-zipf": https://zhuanlan.zhihu.com/p/94525243 zipf
