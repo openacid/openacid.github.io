@@ -8,4 +8,13 @@ if [ "$fn." = "." ]; then
 fi
 
 
-md2zhihu -r git@gitee.com:drdrxp/bed.git@openacid $fn -p wechat --keep-meta --code-width 600 -o $fn-wechat.md
+
+for platform in wechat simple; do
+    md2zhihu \
+        -r git@gitee.com:drdrxp/bed.git@openacid \
+        -p $platform \
+        --keep-meta \
+        --code-width 600 \
+        $fn \
+        -o ${fn%.md}-$platform.md
+done
