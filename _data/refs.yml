@@ -10,20 +10,28 @@ universal:
   - "ref-classic-paxos": http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple "classic paxos"
 
   # wiki
-  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie "trie"
-  - "wiki-trie": https://en.wikipedia.org/wiki/Trie "trie"
-  - "wiki-succinct": https://en.wikipedia.org/wiki/Succinct_data_structure
+  - "wiki-2pc":  https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit"
+  - "wiki-dict-order":  https://en.wikipedia.org/wiki/Lexicographic_order "Dictionary order"
   - "wiki-partial-order": https://en.wikipedia.org/wiki/Partially_ordered_set "Partial Order"
+  - "wiki-succinct": https://en.wikipedia.org/wiki/Succinct_data_structure "Succinct data structure"
+  - "wiki-trie": https://en.wikipedia.org/wiki/Trie "trie"
+
   - "wiki-偏序关系":  https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
+  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie "trie"
+  - "wiki-字典序":  https://zh.wikipedia.org/wiki/字典序 "字典序"
 
   # ref and doc
   - "ref-cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
 
   # repo
+  - "repo-abstract-paxos": https://github.com/openacid/abstract-paxos "abstract-paxos"
   - "repo-slim": https://github.com/openacid/slim "slim"
   - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
   - "repo-mmp3": https://github.com/openacid/paxoskv/tree/mmp3 "multi-master-paxos-3"
   - "repo-paxoskv": https://github.com/openacid/paxoskv/tree/naive "paxoskv"
+  - "repo-openraft": https://github.com/datafuselabs/openraft "openraft"
+  - "repo-leveldb": https://github.com/google/leveldb "leveldb"
+  - "repo-consensus-bug-paxos": https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
 
   # data structure impl
   - "impl-google-btree": https://github.com/google/btree "btree"

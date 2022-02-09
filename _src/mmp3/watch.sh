@@ -13,8 +13,8 @@ fswatch *.md \
         --platform   zhihu \
         --refs       "$base/_data/refs.yml" \
         --jekyll     \
-        --rewrite    "^../post-res/" "/post-res/" \
         --output-dir "$base/post-res" \
         --md-output  "$base/_posts/$a" \
+        --rewrite    "^../post-res/" "/post-res/" \
         $a
 done
