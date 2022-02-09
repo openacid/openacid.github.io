@@ -1,0 +1,98 @@
+{
+  "main": {
+    "id": "caa7aa3966179fcf",
+    "type": "split",
+    "children": [
+      {
+        "id": "b4fbfdc57b8cb405",
+        "type": "leaf",
+        "state": {
+          "type": "empty",
+          "state": {}
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4f23f9b8b733d148",
+    "type": "split",
+    "children": [
+      {
+        "id": "f1060891cf57488e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "06b9168da6b3fb44",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "989d9ec44dfb26b9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 199
+  },
+  "right": {
+    "id": "02ed0ecc8c13f77c",
+    "type": "split",
+    "children": [
+      {
+        "id": "6fbc6edd731b2726",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "84f5d4156b7e1689",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "b4fbfdc57b8cb405",
+  "lastOpenFiles": [
+    "src/all-in-one.md",
+    "src/phase-commit.md",
+    "src/commit.md",
+    "Pasted image 20220324151745.png",
+    "src/01-大图.md",
+    "src/index.md",
+    "src/成员变更.md",
+    "src/snapshot.md",
+    "src/partial-replication.md",
+    "src/协议描述.md"
+  ]
+}

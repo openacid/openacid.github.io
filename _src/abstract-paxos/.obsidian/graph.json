@@ -1,0 +1,44 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "tag:concept",
+      "color": {
+        "a": 1,
+        "rgb": 6058198
+      }
+    },
+    {
+      "query": "tag:#proof",
+      "color": {
+        "a": 1,
+        "rgb": 6084208
+      }
+    },
+    {
+      "query": "tag:#protocol",
+      "color": {
+        "a": 1,
+        "rgb": 13465148
+      }
+    }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": -0.1,
+  "nodeSizeMultiplier": 1.40876068376068,
+  "lineSizeMultiplier": 2.83923611111111,
+  "collapse-forces": false,
+  "centerStrength": 0,
+  "repelStrength": 2.05758426966292,
+  "linkStrength": 0.0882198033707865,
+  "linkDistance": 264,
+  "scale": 2.174429036685268,
+  "close": false
+}

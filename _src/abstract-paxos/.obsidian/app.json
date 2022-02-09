@@ -1,0 +1,15 @@
+{
+  "legacyEditor": false,
+  "livePreview": false,
+  "alwaysUpdateLinks": true,
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  },
+  "useMarkdownLinks": true,
+  "useTab": false,
+  "vimMode": false,
+  "defaultViewMode": "source"
+}
