@@ -12,18 +12,18 @@ tags:
 
 refs:
     - "report": https://github.com/openacid/succinct/blob/v0.1.0/report/main.go "report"
-    - "前缀树": https://en.wikipedia.org/wiki/Trie trie
-    - "trie": https://en.wikipedia.org/wiki/Trie trie
+    - "前缀树": https://en.wikipedia.org/wiki/Trie "trie"
+    - "trie": https://en.wikipedia.org/wiki/Trie "trie"
     - "succinct": https://en.wikipedia.org/wiki/Succinct_data_structure
 
     - "cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
 
-    - "post-zipf": https://blog.openacid.com/tech/zipf/ zipf
+    - "post-zipf": https://blog.openacid.com/tech/zipf/ "zipf"
 
-    - "repo-slim": https://github.com/openacid/slim slim
+    - "repo-slim": https://github.com/openacid/slim "slim"
     - "succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
 
-    - "google-btree": https://github.com/google/btree btree
+    - "google-btree": https://github.com/google/btree "btree"
 
 platform_refs:
     wechat:
