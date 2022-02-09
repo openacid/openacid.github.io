@@ -24,14 +24,14 @@ description              : "分布式研究小院."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 # url                      : https://blog.openacid.com
 baseurl                  : # the subpath of your site, e.g. "/blog"
-repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+repository               : "openacid/openacid.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : "/assets/images/logo/icon-lemon-margin.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 50
 comments:
-  provider               : "disqus" # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
+  provider               : "giscus" # false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
     shortname            : "openacid"
   discourse:
@@ -44,13 +44,19 @@ comments:
   utterances:
     theme                : # "github-light" (default), "github-dark"
     issue_term           : # "pathname" (default)
+        # data-repo="openacid/openacid.github.io"
+        # data-category-id="DIC_kwDOCfwDBc4CBFUx"
+        # data-mapping="title"
+        # data-emit-metadata="1"
+        # data-input-position="top"
+        # data-lang="en"
   giscus:
-    repo_id              : # Shown during giscus setup at https://giscus.app
-    category_name        : # Full text name of the category
-    category_id          : # Shown during giscus setup at https://giscus.app
-    discussion_term      : # "pathname" (default), "url", "title", "og:title"
-    reactions_enabled    : # '1' for enabled (default), '0' for disabled
-    theme                : # "light" (default), "dark", "dark_dimmed", "transparent_dark", "preferred_color_scheme"
+    repo_id              : "MDEwOlJlcG9zaXRvcnkxNjc1MTA3ODk="
+    category_name        : "General"
+    category_id          : "DIC_kwDOCfwDBc4CBFUx"
+    discussion_term      : "title"
+    reactions_enabled    : '1'
+    theme                : 'light'
   staticman:
     branch               : # "master"
     endpoint             : # "https://{your Staticman v3 API}/v3/entry/github/"
