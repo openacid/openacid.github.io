@@ -28,7 +28,7 @@ refs:
 platform_refs:
     wechat:
     zhihu:
-        - "post-zipf": https://zhuanlan.zhihu.com/p/94525243 zipf
+        - "post-zipf": https://zhuanlan.zhihu.com/p/94525243 "zipf"
 
 article:
     image: /post-res/succinctset/succinctset-wechat-banner-small.jpg

@@ -10,8 +10,8 @@ universal:
   - "ref-classic-paxos": http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple "classic paxos"
 
   # wiki
-  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie trie
-  - "wiki-trie": https://en.wikipedia.org/wiki/Trie trie
+  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie "trie"
+  - "wiki-trie": https://en.wikipedia.org/wiki/Trie "trie"
   - "wiki-succinct": https://en.wikipedia.org/wiki/Succinct_data_structure
   - "wiki-partial-order": https://en.wikipedia.org/wiki/Partially_ordered_set "Partial Order"
   - "wiki-偏序关系":  https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
@@ -20,13 +20,13 @@ universal:
   - "ref-cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
 
   # repo
-  - "repo-slim": https://github.com/openacid/slim slim
+  - "repo-slim": https://github.com/openacid/slim "slim"
   - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
   - "repo-mmp3": https://github.com/openacid/paxoskv/tree/mmp3 "multi-master-paxos-3"
   - "repo-paxoskv": https://github.com/openacid/paxoskv/tree/naive "paxoskv"
 
   # data structure impl
-  - "impl-google-btree": https://github.com/google/btree btree
+  - "impl-google-btree": https://github.com/google/btree "btree"
 
   # my articles
   - "post-zipf": https://blog.openacid.com/tech/zipf/  "互联网中对象访问频率的91分布"
