@@ -10,6 +10,8 @@ echo "git root: ($base)"
 a="${a##*/}"
 echo "article: $a"
 
+# TODO: add and use a standard platform specific for jekyll
+#
 md2zhihu \
     --platform   zhihu \
     --refs       "$base/_data/refs.yml" \
