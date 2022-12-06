@@ -17,6 +17,7 @@ universal:
   - "wiki-trie": https://en.wikipedia.org/wiki/Trie "trie"
 
   - "wiki-偏序关系":  https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
+  - "wiki-全序关系":  https://zh.wikipedia.org/wiki/全序关系 "全序关系"
   - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie "trie"
   - "wiki-字典序":  https://zh.wikipedia.org/wiki/字典序 "字典序"
 
