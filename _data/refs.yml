@@ -27,7 +27,7 @@ universal:
   - "repo-abstract-paxos": https://github.com/openacid/abstract-paxos "abstract-paxos"
   - "repo-slim": https://github.com/openacid/slim "slim"
   - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
-  - "repo-mmp3": https://github.com/openacid/paxoskv/tree/mmp3 "multi-master-paxos-3"
+  - "repo-mmp3": https://github.com/openacid/mmp3 "multi-master-paxos-3"
   - "repo-paxoskv": https://github.com/openacid/paxoskv/tree/naive "paxoskv"
   - "repo-openraft": https://github.com/datafuselabs/openraft "openraft"
   - "repo-leveldb": https://github.com/google/leveldb "leveldb"
