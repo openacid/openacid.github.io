@@ -14,7 +14,7 @@ tags:
 refs:
     - x: y
 
-article:
+disabled_article:
     image: /post-res/openraft-read/openraft-read.jpg
 
 mathjax: true
@@ -25,6 +25,8 @@ excerpt: "Openraft 中对 linearizable read 流程的优化"
 ---
 
 # Openraft 对 ReadIndex 的优化
+
+![](/post-res/openraft-read/2306f8dcbf959b10-openraft-banner-2x1.jpg)
 
 在标准 Raft 协议中, ReadIndex 操作用于确保线性一致性读取(linearizable read).
 这个操作要求 Leader 在处理读请求前, 确认自己的 leadership 是仍然合法的, 且任何已被读到的 log (不论是在当前 node 还是在其他 node 上读到的)仍能被读到.
