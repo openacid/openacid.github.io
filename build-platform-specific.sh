@@ -25,7 +25,7 @@
 #
 # The assets do not need to be kept after publishing on other platforms.
 
-fn=_src/abstract-paxos/2022-03-27-abstract-paxos.md
+fn=_src/openraft-read/2023-12-17-openraft-read.md
 name=${fn##*/}
 
 # Build zhihu specific md
