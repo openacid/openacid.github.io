@@ -50,7 +50,7 @@ excerpt: "Openraft 中对 linearizable read 流程的优化"
 
 ## 线性一致性读的简单证明
 
-![](raft-read.excalidraw.png)
+![](./raft-read.excalidraw.png)
 
 当当前 node(Leader) 接收到一个 read 请求 `read_1` 时, 假设墙上时钟时间是 `time_1`, Leader 的 Term 是`Term_1`;
 

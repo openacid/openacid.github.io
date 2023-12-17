@@ -80,9 +80,17 @@ END
 # https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev/2023-12-17-openraft-read.html
 url_base="https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev"
 
+
+
 fn=_src/openraft-read/2023-12-17-openraft-read.md
 name=${fn##*/}
 name=${name%.md}
+title=${name#20??-??-??-}
+
+echo "fn: $fn"
+echo "name: $name"
+echo "title: $title"
+
 
 # Build local markdown
 mkdir -p md2-local
@@ -106,7 +114,7 @@ md2zhihu \
     --output-dir       ./md2-local \
     --asset-output-dir ./md2-local/ \
     --md-output        ./md2-local/$name-remote.md \
-    --rewrite          "^" "$url_base/" \
+    --rewrite          "^$title/" "$url_base/$title/" \
     $fn
 
 cp assets/images/qrcode-hori.jpg ./md2-local/
