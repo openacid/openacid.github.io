@@ -61,7 +61,7 @@ excerpt: "Openraft 中对 linearizable read 流程的优化"
 也就是说 `(Term_0, index_0)` 这条 log 是 `read_0` 看到的最后一条 log.
 那么其中的 `Term_0` 就有3种情况:
 
-- **case-gt**: `Term_0 > Term_1`: 
+- **case-gt**: `Term_0 > Term_1`:
 
   为避免这种不可处理的情况发生, Leader 在时间 `t` 向一个 quorum 发 heartbeat 请求, 以确认在时间范围 `(0, t)` 内都没有更高的 Term;
 
@@ -76,9 +76,9 @@ excerpt: "Openraft 中对 linearizable read 流程的优化"
 
   在这种情况下要保证 linearizable read, 就要求 `read_1` 读时的 StateMachine 至少要包含到 `NoopIndex` 的 log.
 
-- **case-eq**: `Term_0 == Term_1`: 
+- **case-eq**: `Term_0 == Term_1`:
 
-  对这种情况, 读操作 `read_0` 一定是在当前 node 执行的读操作; 
+  对这种情况, 读操作 `read_0` 一定是在当前 node 执行的读操作;
 
   我们又知道由于 Raft 协议规定只有已经 commit 的 log 才能被读取, 所以 `read_0` 读到的数据一定是当前 CommitIndex 之前的, 即 `index_0 <= CommitIndex`;
 

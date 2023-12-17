@@ -1,32 +1,20 @@
 #!/bin/sh
 
-# fn="$(ls _posts/*$1* | head -n1)"
-
-# if [ "$fn." = "." ]; then
-#     echo "Usage: $0 <fn_pattern>"
-#     exit 1
-# fi
-
-
-
-# for platform in wechat simple; do
-#     md2zhihu \
-#         -r git@gitee.com:drdrxp/bed.git@openacid \
-#         -p $platform \
-#         --keep-meta \
-#         --code-width 600 \
-#         $fn \
-#         -o ${fn%.md}-$platform.md
-
-# done
-
-
 # === Build for copying to other platform only ===
 #
-# The assets do not need to be kept after publishing on other platforms.
+# It looks like gitee no longer support external access with refer
+# --repo             git@gitee.com:drdrxp/bed.git@openacid-$platform-import-assets \
+
+set -o errexit
+
+# for example:
+# https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev/2023-12-17-openraft-read.html
+url_base="https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev"
+
+
 
 # Call xp-md2html to convert md to html, using github-markdown.css
-# xp-md2html is my local rust repo
+# xp-md2html is a personal repo
 md2html()
 {
     local src_path="$1"
@@ -36,7 +24,6 @@ md2html()
 
     {
         cat <<-END
-
 <!doctype html>
 <html>
 <head>
@@ -63,7 +50,6 @@ md2html()
 <article class="markdown-body">
 END
 
-        # skip '---'
         cat "$src_path" | xp-md2html
 
         cat <<-END
@@ -76,94 +62,63 @@ END
     } > "$output_path"
 }
 
-# for example:
-# https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev/2023-12-17-openraft-read.html
-url_base="https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev"
 
+build()
+{
+    local platform="$1"
+    local fn="$2"
 
+    local name_suffix=${fn##*/}
+    local name=${name_suffix%.md}
+    # remove date
+    local title=${name#20??-??-??-}
 
-fn=_src/openraft-read/2023-12-17-openraft-read.md
-name=${fn##*/}
-name=${name%.md}
-title=${name#20??-??-??-}
+    echo ""
+    echo "fn: $fn"
+    echo "name: $name"
+    echo "title: $title"
+    echo ""
 
-echo "fn: $fn"
-echo "name: $name"
-echo "title: $title"
+    # Build local markdown
+    mkdir -p md2-local
 
+    # reference local resource
+    md2zhihu \
+        --platform         $platform \
+        --code-width       600 \
+        --refs             _data/refs.yml \
+        --output-dir       ./md2-local \
+        --asset-output-dir ./md2-local/ \
+        --md-output        ./md2-local/$name-$platform.md \
+        $fn
 
-# Build local markdown
-mkdir -p md2-local
+    # reference remote resource
+    md2zhihu \
+        --platform         $platform \
+        --code-width       600 \
+        --refs             _data/refs.yml \
+        --output-dir       ./md2-local \
+        --asset-output-dir ./md2-local/ \
+        --md-output        ./md2-local/$name-$platform-remote.md \
+        --rewrite          "^$title/" "$url_base/$title/" \
+        $fn
 
-# reference local resource
-platform=wechat
-md2zhihu \
-    --platform         $platform \
-    --code-width       600 \
-    --refs             _data/refs.yml \
-    --output-dir       ./md2-local \
-    --asset-output-dir ./md2-local/ \
-    --md-output        ./md2-local/$name.md \
-    $fn
+    cp assets/images/qrcode-hori.jpg ./md2-local/
+    cp assets/css/github-markdown.css ./md2-local/
 
-# reference remote resource
-md2zhihu \
-    --platform         $platform \
-    --code-width       600 \
-    --refs             _data/refs.yml \
-    --output-dir       ./md2-local \
-    --asset-output-dir ./md2-local/ \
-    --md-output        ./md2-local/$name-remote.md \
-    --rewrite          "^$title/" "$url_base/$title/" \
-    $fn
+    # Build html
+    md2html "./md2-local/$name-$platform.md"        "./md2-local/$name-$platform.html"
+    md2html "./md2-local/$name-$platform-remote.md" "./md2-local/$name-$platform-remote.html"
 
-cp assets/images/qrcode-hori.jpg ./md2-local/
-cp assets/css/github-markdown.css ./md2-local/
+    # Upload
+    aws s3 sync ./md2-local/ s3://bed/
 
-# Build html
-md2html "./md2-local/$name.md" "./md2-local/$name.html"
-md2html "./md2-local/$name-remote.md" "./md2-local/$name-remote.html"
+    echo "Built online md:"
+    echo ""
+    echo "    $url_base/$name-$platform.html"
+    echo "    $url_base/$name-$platform-remote.html"
+    echo ""
+}
 
-# Upload
-aws s3 sync ./md2-local/ s3://bed/
-
-echo ""
-echo "$url_base/$name.html"
-echo "$url_base/$name-remote.html"
-
-exit 0
-
-# Build zhihu specific md
-#
-# Usage: import md to zhihu
-
-platform=zhihu
-md2zhihu \
-    --platform         $platform \
-    --code-width       600 \
-    --refs             _data/refs.yml \
-    --output-dir       ./md2-$platform \
-    --asset-output-dir ./md2-$platform/ \
-    --md-output        ./md2-$platform/ \
-    --repo             git@gitee.com:drdrxp/bed.git@openacid-$platform-import-assets \
-    $fn
-
-
-# Build wechat specific html.
-# Render it to the last article.
-# 
-# Usage: push and let github build it and copy the html on a browser.
-
-platform=wechat
-md2zhihu \
-    --platform         $platform \
-    --code-width       600 \
-    --refs             _data/refs.yml \
-    --keep-meta \
-    --output-dir       ./md2-$platform \
-    --asset-output-dir ./md2-$platform/ \
-    --md-output        ./_posts/2000-01-01-wechat-import.md \
-    --repo             git@gitee.com:drdrxp/bed.git@openacid-$platform-import-assets \
-    $fn
-
-
+build "wechat" _src/openraft-read/2023-12-17-openraft-read.md
+build "wechat" _src/openraft-read/raft-read-proof.md
