@@ -23,8 +23,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率,
-无需解压就可以直接使用"
+excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用"
 
 ---
 

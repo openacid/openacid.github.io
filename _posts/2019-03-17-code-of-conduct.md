@@ -10,6 +10,7 @@ tags:
 toc: true
 toc_label: 本文目录
 toc_sticky: true
+excerpt: "交流原则强调尊重和包容, 反馈机制倡导建设性沟通"
 ---
 
 ## 社交规则
