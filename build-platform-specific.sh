@@ -121,4 +121,5 @@ build()
 }
 
 # build "wechat" _src/openraft-read/2023-12-17-openraft-read.md
-build "wechat" _src/calvin/2025-03-29-calvin.md
+# build "wechat" _src/calvin/2025-03-29-calvin.md
+build "zhihu" _src/calvin/2025-03-29-calvin.md
