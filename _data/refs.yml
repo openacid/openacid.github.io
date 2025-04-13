@@ -45,6 +45,8 @@ universal:
   - "post-mmp3": https://blog.openacid.com/algo/mmp3/ "Multi-Master-Paxos 3"
   - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
 
+  - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
+
 
 zhihu:
   # my articles
@@ -55,4 +57,5 @@ zhihu:
   - "post-raft-bug": https://zhuanlan.zhihu.com/p/342319702 "TiDB 在 Raft 成员变更上踩的坑"
 
 wechat:
+  - "post-paxos": https://mp.weixin.qq.com/s/3OZgqEWQcEf6V9v6eoSUUA "可靠分布式系统-paxos的直观解释"
   - "post-paxoskv": https://mp.weixin.qq.com/s/_Iu6ITtXx4MVnKam3Q2ZTA "200行代码实现基于paxos的kv存储"
