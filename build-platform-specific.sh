@@ -123,5 +123,5 @@ build()
 # build "wechat" _src/openraft-read/2023-12-17-openraft-read.md
 # build "wechat" _src/calvin/2025-03-29-calvin.md
 # build "zhihu" _src/calvin/2025-03-29-calvin.md
-build "wechat" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
-# build "zhihu" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
+# build "wechat" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
+build "zhihu" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
