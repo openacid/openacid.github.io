@@ -124,4 +124,9 @@ build()
 # build "wechat" _src/calvin/2025-03-29-calvin.md
 # build "zhihu" _src/calvin/2025-03-29-calvin.md
 # build "wechat" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
-build "zhihu" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
+# build "zhihu" _src/paxos-same-ballot/2025-04-13-paxos-same-ballot.md
+
+# build "wechat" _src/single-log-joint/2025-04-19-single-log-joint.md
+# build "zhihu" _src/single-log-joint/2025-04-19-single-log-joint.md
+
+build "wechat" _src/single-log-joint-png/2025-04-19-single-log-joint.md
