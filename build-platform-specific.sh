@@ -130,4 +130,6 @@ build()
 # build "zhihu" _src/single-log-joint/2025-04-19-single-log-joint.md
 
 # build "wechat" _src/single-log-joint-png/2025-04-19-single-log-joint.md
-build "zhihu" _src/single-log-joint-png/2025-04-19-single-log-joint.md
+# build "zhihu" _src/single-log-joint-png/2025-04-19-single-log-joint.md
+
+build "wechat" _src/crc/2025-08-27-crc.md
