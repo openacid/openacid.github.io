@@ -1,13 +1,13 @@
 
 xp:
-    name     : 张炎泼(xp)
-    bio      : "正在学画画, 主业是码农"
+    name     : Zhang Yanpo (drdr.xp)
+    bio      : "I write codes, by hands"
     avatar   : "/assets/images/author/xp.jpg"
     weibo    : drdrxp
     github   : drmingdrmer
     location : 
     links    :
-        - label: "个人博客"
+        - label: "personal blog"
           icon : "fas fa-fw fa-link"
           url  : "https://drmingdrmer.github.io/"
 
