@@ -191,8 +191,13 @@ When IO lets term roll back, you're letting time itself rewind. But here's the p
 
 ## Related Resources
 
-- [OpenRaft docs: io-ordering](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
-- [tikv/tikv](https://github.com/tikv/tikv)
-- [hashicorp/raft](https://github.com/hashicorp/raft)
-- [sofastack/sofa-jraft](https://github.com/sofastack/sofa-jraft)
+- [OpenRaft docs: io-ordering][]
+- [tikv/tikv][]
+- [hashicorp/raft][]
+- [sofastack/sofa-jraft][]
 
+
+[OpenRaft docs: io-ordering]: https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
+[tikv/tikv]: https://github.com/tikv/tikv
+[hashicorp/raft]: https://github.com/hashicorp/raft
+[sofastack/sofa-jraft]: https://github.com/sofastack/sofa-jraft
