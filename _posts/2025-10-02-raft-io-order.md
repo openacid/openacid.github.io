@@ -8,43 +8,41 @@ tags:
     - distributed
     - 分布式
     - raft
+    - en
 
-
-refs:
-    - x: y
 
 disabled_article:
     image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
-toc_label: 本文目录
+toc_label: Table of Contents
 toc_sticky: true
-excerpt: "Raft 先写日志后写 term 会导致已提交数据丢失。本文分析问题本质，总结 TiKV、HashiCorp Raft、SOFAJRaft 的三种安全解决方案"
+excerpt: "Writing logs before persisting term in Raft can silently destroy committed data. Here's why production systems like TiKV and HashiCorp Raft carefully control IO order—and three battle-tested solutions."
 ---
 
 ![](/post-res/raft-io-order/1af51b7ddbd3efd5-raft-io-order-banner.webp)
 
-## 问题：IO 顺序错误导致数据丢失
+## IO Reordering Breaks Committed Data
 
-Raft 在处理appendEntries请求的持久化时，如果**先写日志，再写 term**，会导致**已提交的数据丢失**。
+In Raft, if you **write log entries before the term** when persisting AppendEntries, you risk **losing committed data**.
 
-本文分析问题如何发生、主流实现如何解决、以及如何在你的系统中避免这个问题。
+This article explores how this happens, how production systems handle it, and how to prevent it.
 
-### 背景：Raft 的持久化要求
+### Background
 
-在 Raft 中，当 follower 收到 leader 的 AppendEntries RPC 时，需要持久化两类关键数据：元数据（HardState，包括 term、vote）和日志条目（Entries，业务数据）。只有持久化成功后，follower 才能安全地响应 leader。**问题的关键在于：这两类数据的持久化顺序很重要**。
+When a follower receives an `AppendEntries` RPC in Raft, it must persist two critical pieces: metadata (`HardState`, containing term and vote) and log entries (the actual application data). Only after both are safely on disk can the follower respond to the leader. **Here's the catch: persistence order matters tremendously**.
 
-### 时间线场景
+### How Data Loss Happens
 
-让我们通过一个具体的时间线来理解这个问题：
+Let's walk through a concrete timeline to see how this plays out:
 
 ```text
-标记说明：
-Ni:   节点 i
-Vi:   RequestVote，term=i
-Li:   建立 Leader，term=i
-Ei-j: 日志条目，term=i，index=j
+Legend:
+Ni:   Node i
+Vi:   RequestVote, term=i
+Li:   Establish Leader, term=i
+Ei-j: Log entry, term=i, index=j
 
 N5 |          V5  L5       E5-1
 N4 |          V5           E5-1
@@ -55,149 +53,157 @@ N1 |  V1  L1                     E1-1
       t1  t2  t3  t4       t5    t6
 ```
 
--   t1: N1 发起选举（term=1），获得 N1、N2、N3 的投票
--   t2: N1 成为 leader L1
--   t3: N5 发起选举（term=5），获得 N5、N4、N2 的投票
--   t4: N5 成为 leader L5
--   t5: L5 复制第一个日志条目 E5-1 到 N4 和 N3。关键点：`N3 的存储 term（1）< AppendEntries RPC 的 term（5）`，N3 必须执行两个顺序 IO 操作：持久化 term=5，然后持久化 E5-1
--   t6: L1 尝试复制 E1-1（term=1, index=1）
+-   t1: N1 starts an election (term=1), receives votes from N1, N2, N3
+-   t2: N1 becomes leader L1
+-   t3: N5 starts an election (term=5), receives votes from N5, N4, N2
+-   t4: N5 becomes leader L5
+-   t5: L5 replicates its first log entry E5-1 to N4 and N3. Key point: N3's **stored** term (1) is stale compared to the RPC's term (5), so N3 must perform two sequential IO operations: persist term=5, then persist E5-1
+-   t6: L1 attempts to replicate E1-1 (term=1, index=1)
 
-在上面的流程中, t5时刻 N3 的行为是关键:
+The critical moment is t5, where N3's behavior determines everything:
 
-**如果 IO 操作不能重排序**（正确）：
+**If IO operations is not reordered** (correct):
 
-N3 按顺序执行：**先**持久化 term=5，**后**持久化 E5-1。这确保：如果 E5-1 被持久化，term=5 也必然已持久化。
+N3 executes sequentially: **first** persist term=5, **then** persist E5-1. This guarantees that whenever E5-1 is on disk, term=5 is already there too.
 
-**如果 IO 操作可以重排序**（错误）：
+**If IO operations can be reordered** (wrong):
 
-可能的执行顺序是：持久化 E5-1，然后持久化 term=5。
+IO operations might complete out of order: E5-1 hits disk first, then term=5.
 
-如果服务器在写入 E5-1 之后、持久化 term=5 之前崩溃，此时 N3 的存储 term 仍然是 1，但 E5-1 已存在于日志中。当 N3 收到 L1 的复制请求 E1-1（term=1, index=1）时，N3 会接受请求（因为 term 1 = 1），E1-1 覆盖 E5-1。这就是问题所在：E5-1 已经被复制到 3 个节点（N5、N4、N3），L5 认为它已提交，但它被旧 leader 的日志覆盖了——**已提交的数据丢失**。
+Here's where disaster strikes: if the server crashes after writing E5-1 but before persisting term=5, N3's stored term stays at 1 while E5-1 sits in the log.
 
-这个问题的根源在于一个关键不变式被打破：
+When N3 recovers and receives L1's replication request for E1-1 (term=1, index=1), it accepts it—the terms match! E1-1 overwrites E5-1.
 
-> **如果日志条目 E（term=T）存在于磁盘 → 磁盘上的 term 必须≥T**
+The damage is done: E5-1 was already replicated to 3 nodes (N5, N4, N3) and considered committed by L5, but now it's gone, replaced by stale data. **Committed data has vanished**.
+
+At its core, this problem breaks a critical invariant:
+
+> **If a log entry E (term=T) exists on disk → the stored term must be ≥T**
 
 
-正确的 IO 顺序维护这个不变式，确保一旦日志条目被写入，对应的 term 也必然是持久的。
+Proper IO ordering preserves this invariant, guaranteeing that whenever a log entry hits disk, its term is already there.
 
-## Raft 论文的隐含假设
+## What Raft's Paper Doesn't Say
 
-Raft 论文说："Before responding to RPCs, a server must update its persistent state."
+The Raft paper states: "Before responding to RPCs, a server must update its persistent state."
 
-论文假设持久化是原子的，没有明确说明 term 和 log 的顺序要求。
+The paper assumes persistence is atomic without explicitly spelling out the ordering requirements between term and log.
 
-一个常见的设计陷阱是: 当 follower 收到 AppendEntries RPC 时，需要持久化两类数据：元数据（term、vote 等，存储在 MetaStore）和日志（log entries，存储在 LogStore）。
+**The trap most implementations fall into:** when a follower receives an AppendEntries RPC, it needs to persist two types of data—metadata (term, vote, etc., in MetaStore) and log entries (in LogStore).
 
-为了性能和关注点分离，很多实现会将元数据和日志分开存储，并行提交 IO 请求：
+For performance and clean separation of concerns, many implementations store these separately and submit IO requests in parallel:
 
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) -> Response {
-    self.meta_store.save_term_async(req.term);  // 异步提交
-    self.log_store.append_async(req.entries);   // 异步提交
+    self.meta_store.save_term_async(req.term);  // Async submit
+    self.log_store.append_async(req.entries);   // Async submit
 
-    self.log_store.sync();  // 只等待日志持久化！
-    return Response::success();  // 忽略 term 是否已持久化
+    self.log_store.sync();  // Only wait for log persistence!
+    return Response::success();  // Ignore whether term is persisted
 }
 ```
 
-陷阱的本质是：实现者关注日志的持久化（业务数据），却忽略 term 的持久化（"元数据"）。结果是 entries 在磁盘上，term 还在内存或队列中，崩溃后不变式被打破。
+The trap is subtle: developers focus on persisting logs (the "real" application data) while treating term as mere "metadata" that can wait. The result? Logs hit disk while term **is still in memory**—or worse, in a write queue. When the server crashes, the invariant shatters.
 
-## 真实案例：开源实现的调查
+## Production Implementations
 
-我调查了 4 个主流 Raft 实现，发现了不同的解决方案：
+I examined 4 production Raft implementations to see how they tackle this:
 
 <table>
 <tr class="header">
-<th>实现</th>
-<th>结果</th>
-<th>如何避免问题</th>
+<th>Implementation</th>
+<th>Result</th>
+<th>How It Avoids the Problem</th>
 </tr>
 <tr class="odd">
 <td><strong>TiKV</strong></td>
-<td>✅ 安全</td>
-<td>原子批处理：term 和 log 在同一 LogBatch</td>
+<td>✅ Safe</td>
+<td>Atomic batching: term and log in the same LogBatch</td>
 </tr>
 <tr class="even">
 <td><strong>HashiCorp Raft</strong></td>
-<td>✅ 安全</td>
-<td>有序写入：先写 term（panic on fail），再写 log</td>
+<td>✅ Safe</td>
+<td>Ordered writes: write term first (panic on fail), then log</td>
 </tr>
 <tr class="odd">
 <td><strong>SOFAJRaft</strong></td>
-<td>✅ 安全</td>
-<td>混合顺序：term 同步，log 异步</td>
+<td>✅ Safe</td>
+<td>Hybrid order: term sync, log async</td>
 </tr>
 <tr class="even">
-<td><strong>tikv/raft-rs 库</strong></td>
-<td>⚠️ 取决于应用</td>
-<td>库本身安全，但无顺序强制</td>
+<td><strong>tikv/raft-rs library</strong></td>
+<td>⚠️ Depends on application</td>
+<td>Library itself is safe, but no ordering enforcement</td>
 </tr>
 </table>
 
-详细的代码实现见下一章节的三种设计模式。
+## Three Safe Solutions
 
-## 三种安全的解决方案
+From successful production implementations, three safe patterns emerge:
 
-通过分析成功的实现，总结出三种安全的设计模式：
+### Atomic Batching (TiKV)
 
-### 原子批处理（TiKV）
+TiKV bundles term and log entries into a single atomic batch. The code adds both to a batch, then calls `write_batch(sync=true)` to commit everything at once with checksum verification.
 
-TiKV 把 term 和 log 写入同一个原子批次，一次性提交。代码中可以看到，先把 term 和 entries 都添加到 batch，然后调用`write_batch(sync=true)`一次性写入，并通过 checksum 验证。这样做的好处是要么都可见，要么都不可见，批次内的顺序不重要，推理最简单。代价是需要存储引擎支持原子批处理，但只需要一次 fsync。这个方案适合自定义存储引擎，或者追求最简单安全推理的场景。
+The beauty: **all-or-nothing**. Order within the batch doesn't matter, making correctness reasoning trivial.
+
+The trade-off? You need atomic batch support, but **you only pay one fsync**. Perfect for custom storage engines or when you want the simplest possible safety guarantees.
 
 ```rust
 batch.put_term(new_term);
 batch.put_entries(entries);
-storage.write_batch(batch, sync=true);  // 原子写入 + checksum 验证
+storage.write_batch(batch, sync=true); // Atomic write + checksum verification
 ```
 
-### 有序分离写入（HashiCorp Raft）
+### Sequential Writes (HashiCorp Raft)
 
-HashiCorp Raft 采用了更直接的方式：先写 term，再写 log，两次都是同步的。在`raft.go:1414,1922`可以看到，`setCurrentTerm`包含 fsync 并且失败会 panic，之后才调用`StoreLogs`写日志。这样做的原理是，一旦 term 持久化，更高的 term 就会阻止旧 leader 的请求。这个方案的好处是实现简单，适用任何存储后端，并且采用 fail-fast 设计。缺点是需要两次 fsync，延迟会稍高。适合使用标准存储（如文件、BoltDB）的通用场景。
+HashiCorp Raft keeps it simple: write term first, then log—both synchronously.
+
+Looking at `raft.go:1414,1922`, `setCurrentTerm` includes an fsync that panics on failure before `StoreLogs` even runs. Once term is on disk, the higher term acts as a shield against stale leader requests.
+
+The upside? Dead simple to implement, works with any storage backend, and embraces fail-fast philosophy. The price? Two fsyncs mean slightly higher latency. Great for general use with standard storage like files or BoltDB.
 
 ```go
 // raft.go:1414,1922
-r.setCurrentTerm(a.Term)  // 包含 fsync，失败则 panic
-r.logs.StoreLogs(entries) // 包含 fsync
+r.setCurrentTerm(a.Term)  // Includes fsync, panics on failure
+r.logs.StoreLogs(entries) // Includes fsync
 ```
 
-### 混合顺序（SOFAJRaft）
+### Hybrid Approach (SOFAJRaft)
 
-SOFAJRaft 用了一个巧妙的组合：term 同步写入，log 异步批处理。从`NodeImpl.java:1331,2079`的代码可以看到，`setTermAndVotedFor`是同步调用，会阻塞直到 fsync 完成，而`appendEntries`只是把日志放入队列就立即返回，后台线程批量写入。关键在于 term 的 fsync 完成后，才会把 log 入队，这保证了 term 一定先持久化。这个方案性能最优，因为 term 变更很少（只在 leader 切换时），可以接受同步开销，而 log 写入频繁（每次客户端写入），异步批处理大幅提升吞吐量。缺点是实现复杂，需要可靠的异步管道（SOFAJRaft 用了 LMAX Disruptor）。适合高吞吐量系统（>1000 writes/sec）。
+SOFAJRaft splits the difference: synchronous term writes, asynchronous log batching.
+
+In `NodeImpl.java:1331,2079`, `setTermAndVotedFor` blocks until fsync completes, while `appendEntries` just enqueues the log and returns instantly—background threads handle the batch writes.
+
+The key: logs **queue only after** term's fsync completes, guaranteeing term persists first. This delivers peak performance because term changes are rare (only during leader switches), making sync acceptable, while log writes are constant (every client request), where async batching shines.
+
+The catch? Complex implementation needing a bulletproof async pipeline (SOFAJRaft uses LMAX Disruptor). Ideal when you're **pushing >10K writes/sec**.
 
 ```java
 // NodeImpl.java:1331,2079
-this.metaStorage.setTermAndVotedFor(req.term, null);  // 同步 fsync，阻塞
-this.logManager.appendEntries(entries, closure);      // 异步入队，立即返回
+this.metaStorage.setTermAndVotedFor(req.term, null); // Sync fsync, blocks
+this.logManager.appendEntries(entries, closure);     // Async enqueue, returns immediately
 ```
 
-## 异步 IO 调度
+## Async IO Scheduling
 
-前面介绍的三种方案都在 **代码层面** 显式控制 IO 顺序：要么串行执行（等前一个完成再提交下一个），要么原子批处理。这些方案安全可靠，但限制了 IO 并发度。
+All three approaches **guarantee safety by sacrificing IO concurrency**: either serial execution (wait for one to finish before starting the next) or atomic batching.
 
-为了追求更高性能，[OpenRaft](https://github.com/databendlabs/openraft) 正在设计一个异步 IO 调度系统：Raft core 把所有 IO 请求提交给执行队列，由队列调度 IO 并通过 callback 通知完成。这能最大化 IO 并发和吞吐量，但引出了核心问题：**哪些 IO 请求可以重排，哪些不可以？**
+For higher performance, [OpenRaft](https://github.com/databendlabs/openraft) is exploring an async IO scheduler: the Raft core fires all IO requests into an execution queue, which schedules them and signals completion via callbacks. This maximizes IO parallelism and throughput but surfaces a fundamental question: **which IOs can be reordered safely, and which absolutely cannot?**
 
-## 总结
+## Summary
 
-### 核心规则
+**Term must be persisted before (or at the same time as) log**
 
-**Term 必须在 log 之前（或同时）持久化**
+Invariant: `If log(term=T) is on disk → term≥T must also be on disk`
 
-不变式：`如果 log(term=T)在磁盘 → term≥T 也在磁盘`
+I like thinking about distributed consensus through time and history. Consensus algorithms create a virtual timeline, and the Raft log is simply the sequence of events on that timeline. In this view: term is time itself, and log entries are the events happening in that time.
 
-### 时空视角：问题的本质
+When IO lets term roll back, you're letting time itself rewind. But here's the paradox: rewinding time doesn't erase what happened—the system can rewrite history at an earlier point, letting new events overwrite the old. That's data loss at its core.
 
-我喜欢用时间和历史的方式来解释分布式一致性算法。一致性算法实际上虚拟了一个时间线，Raft log 就是这个虚拟时间上发生的事件。
+**Choose your approach:** Atomic batching for simplicity, ordered writes for compatibility, hybrid for maximum throughput.
 
-从这个角度看：term 代表时间，log entries 是时间上发生的事件。
-
-如果 IO 允许 term 回退，就相当于允许时间回退。但时间回退不代表已发生事件的回退——系统可以在之前的时间点重新改写历史，用新的事件覆盖已经发生的历史。这就是数据丢失的本质。
-
-### 三种安全方案
-
-原子批处理（TiKV）：term 和 log 同一批次，一次写入。有序分离（HashiCorp）：先写 term（panic on fail），再写 log。混合顺序（SOFAJRaft）：term 同步，log 异步批处理。
-
-## 相关资源
+## Related Resources
 
 -   [OpenRaft docs: io-ordering](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 -   [tikv/tikv](https://github.com/tikv/tikv)
