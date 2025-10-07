@@ -25,7 +25,7 @@ toc_sticky: true
 excerpt: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
 ---
 
-![](/post-res/single-log-joint/c915c4fcc98591ed-single-log-joint-banner.webp)
+![](/post-res/single-log-joint-cn/c915c4fcc98591ed-single-log-joint-banner.webp)
 
 # 前言
 
@@ -54,7 +54,7 @@ Quorum(例如 `{x,y}`)没有交集, 就可能在同一任期(Term)内选出两�
 
 为了安全地进行 config change, Raft 论文提出了一种名为 **Joint Consensus(联合共识)** 的两阶段方法：
 
-![图 1：Joint Consensus 两阶段流程](/post-res/single-log-joint/a7acea752fd84833-raft-joint.x.svg)
+![图 1：Joint Consensus 两阶段流程](/post-res/single-log-joint-cn/a7acea752fd84833-raft-joint.x.svg)
 
 1.  **第一阶段：进入 Joint state (`C_old_new`)**:
 
@@ -101,7 +101,7 @@ Single log entry 的 config change 的想法在社区被先后提出过很多次
     这时 `effective-config` 也为 `C_old`. Raft 要求前一个 config log
     entry 必须提交后才能 propose 新的 config change, 这一点保持不变.
 
-    ![图 2：单条日志变更 - 初始状态](/post-res/single-log-joint/667db9f105260fea-single-1-start.x.svg)
+    ![图 2：单条日志变更 - 初始状态](/post-res/single-log-joint-cn/667db9f105260fea-single-1-start.x.svg)
 
 -   **发起变更**: 当需要将 config 更改为 `{x,y,z}` (记为 `C_new`) 时, Leader
     提议 (propose) 一个新的 config log entry `entry-i`(log index 为 `i`), 该条目内包含 config
@@ -114,7 +114,7 @@ Single log entry 的 config change 的想法在社区被先后提出过很多次
     -   这意味着从 `entry-i` 这条日志开始(包括 `entry-i` 自身), 后续的所有 log entry
         都必须被复制到 `C_old_new` 所定义的 quorum 上(例如 `[{a,b}, {x,y}]`), 才能被认为是 committed.
 
-    ![图 3：单条日志变更 - 进入 Joint state](/post-res/single-log-joint/64bd23d7d6bd8fd7-single-2-joint.x.svg)
+    ![图 3：单条日志变更 - 进入 Joint state](/post-res/single-log-joint-cn/64bd23d7d6bd8fd7-single-2-joint.x.svg)
 
 -   **允许写入**: 在此期间, 集群仍然可以处理其他的 log entry(例如客户端请求),
     但这些条目的提交同样需要满足 `C_old_new` 的 Joint Consensus 规则.
@@ -144,7 +144,7 @@ Single log entry 的 config change 的想法在社区被先后提出过很多次
 
 -   如果 Candidate `u` 的日志中包含 `entry-i`, 则它的 `effective-config` 一定包含 `{x,y,z}`.
 
-    旧 Leader `t` 的 `effective-config` 可能是 `C_old_new`: `[{a,b,c}, {x,y,z}]`(config change 进行中), 或 `C_new`: `{x,y,z}`(config change 完成), 不论那种情况, 它都包含 `{x,y,z}`. 而因为 Candidate `u` 必须需要获得 `C_new`: `{x,y,z}` 的 Quorum 的选票. 那么 `u` 和 `t` 无法同时成为 Leader;
+    旧 Leader `t` 的 `effective-config` 可能是 `C_old_new`: `[{a,b,c}, {x,y,z}]`(config change 进行中), 或 `C_new`: `{x,y,z}`(config change 完成), 不论哪种情况, 它都包含 `{x,y,z}`. 而因为 Candidate `u` 必须需要获得 `C_new`: `{x,y,z}` 的 Quorum 的选票. 那么 `u` 和 `t` 无法同时成为 Leader;
 
 -   如果 Candidate `u` 的日志中不包含 `entry-i`, 则它的 `effective-config` 一定包含 `C_old`: `{a,b,c}`.
     这时要分两种情况讨论 Leader `t` 的 `effective-config`:
@@ -178,7 +178,7 @@ Single log entry 的 config change 的想法在社区被先后提出过很多次
 假设 Leadership 已经 transfer 到 `C_new`: `{x,y,z}`中的一个节点, 例如 `x`,
 但`C_old`中的节点仍会发起选举, 并且可以抢走`x`的 Leadership.
 
-![图 4：补丁-1 持久层问题示例](/post-res/single-log-joint/3e6fb36ca8cf87de-single-3-elect.x.svg)
+![图 4：补丁-1 持久层问题示例](/post-res/single-log-joint-cn/3e6fb36ca8cf87de-single-3-elect.x.svg)
 
 **补丁-1**: 可以在进入 Uniform config 后, 在 `C_new` 的日志中添加一个 Noop log entry, 用来屏蔽
 `C_old` 中的节点发起的选举.
@@ -204,7 +204,7 @@ Joint state 还是 Uniform config 阶段:
 
 这是 single log entry 做 config change 的第2个问题: **新启动的 Node 无法确定当前集群是处于 Joint state 还是 Uniform config 阶段**.
 
-![图 5：补丁-2 新 Node 重启状态示例](/post-res/single-log-joint/004bf3df9c4de529-restart.x.svg)
+![图 5：补丁-2 新 Node 重启状态示例](/post-res/single-log-joint-cn/004bf3df9c4de529-restart.x.svg)
 
 例如上图中, 即使 `entry-3` 已经提交, 但新启动的 Node b,c,x,y 无法确定当前集群是处于 Joint state 还是 Uniform config 阶段(另外 2 个 Node a, z, 它们没收到 Joint config entry, 仍然停留在旧 config `{a,b,c}`).
 
@@ -227,7 +227,7 @@ entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effectiv
 
 **例子**:
 
-![图 6：重启后回退到C-old-new](/post-res/single-log-joint/0507172bcfea4f35-restart-after-uniform.x.svg)
+![图 6：重启后回退到C-old-new](/post-res/single-log-joint-cn/0507172bcfea4f35-restart-after-uniform.x.svg)
 
 1.  集群 config 从 `C_old` (`{a,b,c}`) 变更到 `C_new` (`{x,y,z}`).
 
@@ -277,13 +277,13 @@ entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effectiv
 例如下图中, 当 entry-3 在 `C_old_new` 下被提交后,
 添加一个 Barrier `entry-4`, 表示 `entry-3` 已经完成 commit:
 
-![图 7：补丁-3 引入 Barrier 条目流程](/post-res/single-log-joint/a1b3d0adfde6319d-barrier.x.svg)
+![图 7：补丁-3 引入 Barrier 条目流程](/post-res/single-log-joint-cn/a1b3d0adfde6319d-barrier.x.svg)
 
 这样在所有节点再次重启后, 也不会出现状态回退, Node x, y 看到 Barrier entry 后, 直接使用 `C_new` `{x,y,z}` 进行选举,
 它们已经进入 `C_new` 的状态不会回退
 这时即使 Node b, c 下线, Node x 或 y , 也能顺利当选 Leader:
 
-![图 8：Barrier 条目重启后示意](/post-res/single-log-joint/431e950cac307092-barrier-restart.x.svg)
+![图 8：Barrier 条目重启后示意](/post-res/single-log-joint-cn/431e950cac307092-barrier-restart.x.svg)
 
 > **Plan-B**: 如果不用 log entry 做屏障, 另一个选择是 **记录 commit-index**,
 > 这个方案最初由 [马健将](https://weibo.com/u/1516609505) 提出.
