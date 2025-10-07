@@ -27,7 +27,7 @@ excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn
 
 ## Preface
 
-I need to come clean about something. In my [previous article on IO ordering in Raft](./2025-10-02-raft-io-order-cn.md), I tried to demonstrate the dangers of "writing log entries before term" using a committed data loss scenario. The problem? That example was fundamentally flawed—it didn't actually capture the real issue with IO reordering at all.
+I need to come clean about something. In my [previous article on IO ordering in Raft](https://blog.openacid.com/algo/raft-io-order/), I tried to demonstrate the dangers of "writing log entries before term" using a committed data loss scenario. The problem? That example was fundamentally flawed—it didn't actually capture the real issue with IO reordering at all.
 
 So let's fix that. This article walks through what I got wrong and, more importantly, presents a correct understanding of when and why IO reordering becomes dangerous in Raft implementations.
 
@@ -297,7 +297,7 @@ The IO ordering bug in Raft implementations stems from a subtle gap between the 
 > If a log entry with term=T is on disk, then hard_term ≥ T must also be on disk.
 
 
-Violating this invariant—having entries from term T on disk while hard_term < T—breaks Raft's safety guarantees and can cause committed data loss.
+Violating this invariant—having entries from term T on disk while `hard_term < T`—breaks Raft's safety guarantees and can cause committed data loss.
 
 **Two ways to maintain the invariant**:
 
@@ -316,7 +316,7 @@ Most production systems choose option 1—it's simpler to reason about and avoid
 
 ## Related Resources
 
--   [The Hidden Danger in Raft: Why IO Ordering Matters](./2025-10-02-raft-io-order.md)
+-   [The Hidden Danger in Raft: Why IO Ordering Matters](https://blog.openacid.com/algo/raft-io-order/)
 -   [OpenRaft docs: io-ordering](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 -   [tikv/tikv](https://github.com/tikv/tikv)
 -   [hashicorp/raft](https://github.com/hashicorp/raft)
@@ -328,9 +328,9 @@ Reference:
 
 - OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 
-- The Hidden Danger in Raft: Why IO Ordering Matters : [./2025-10-02-raft-io-order.md](./2025-10-02-raft-io-order.md)
-
 - hashicorp/raft : [https://github.com/hashicorp/raft](https://github.com/hashicorp/raft)
+
+- The Hidden Danger in Raft Why IO Ordering Matters : [https://blog.openacid.com/algo/raft-io-order/](https://blog.openacid.com/algo/raft-io-order/)
 
 - sofastack/sofa-jraft : [https://github.com/sofastack/sofa-jraft](https://github.com/sofastack/sofa-jraft)
 
@@ -338,7 +338,7 @@ Reference:
 
 
 [OpenRaft docs: io-ordering]:  https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
-[The Hidden Danger in Raft: Why IO Ordering Matters]:  ./2025-10-02-raft-io-order.md
 [hashicorp/raft]:  https://github.com/hashicorp/raft
+[post-raft-io-order]: https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
 [sofastack/sofa-jraft]:  https://github.com/sofastack/sofa-jraft
 [tikv/tikv]:  https://github.com/tikv/tikv

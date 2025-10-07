@@ -30,7 +30,7 @@ excerpt: "修正之前文章对 Raft IO 顺序问题的理解。问题不在 Raf
 
 ## 前言
 
-在之前的[Raft 中的 IO 执行顺序](./2025-10-02-raft-io-order-cn.md)中，我用一个已提交数据丢失的例子来解释"先写日志后写 term"可能造成的问题。但那个例子并不能正确反映 IO-reorder 的真正问题。本文将修正这个理解，并给出一个更严谨的例子。
+在之前的[Raft 中的 IO 执行顺序][post-raft-io-order-cn]中，我用一个已提交数据丢失的例子来解释"先写日志后写 term"可能造成的问题。但那个例子并不能正确反映 IO-reorder 的真正问题。本文将修正这个理解，并给出一个更严谨的例子。
 
 
 ## 回顾之前的错误
@@ -256,14 +256,13 @@ Raft 论文的抽象模型（只有 HardState）和实际实现（SoftState + Ha
 
 ## 相关资源
 
-- [之前的文章：Raft 中的 IO 执行顺序][]
+- [之前的文章：Raft 中的 IO 执行顺序][post-raft-io-order-cn]
 - [OpenRaft docs: io-ordering][]
 - [tikv/tikv][]
 - [hashicorp/raft][]
 - [sofastack/sofa-jraft][]
 
 
-[之前的文章：Raft 中的 IO 执行顺序]: ./2025-10-02-raft-io-order-cn.md
 [OpenRaft docs: io-ordering]: https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
 [tikv/tikv]: https://github.com/tikv/tikv
 [hashicorp/raft]: https://github.com/hashicorp/raft

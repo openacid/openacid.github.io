@@ -44,6 +44,8 @@ universal:
   - "post-raft-bug": https://blog.openacid.com/algo/raft-bug/ "TiDB 在 Raft 成员变更上踩的坑"
   - "post-mmp3": https://blog.openacid.com/algo/mmp3/ "Multi-Master-Paxos 3"
   - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
+  - "post-raft-io-order": https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
+  - "post-raft-io-order-cn": https://blog.openacid.com/algo/raft-io-order-cn/ "Raft 中的 IO 执行顺序"
 
   - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
 
