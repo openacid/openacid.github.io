@@ -256,8 +256,15 @@ Raft 论文的抽象模型（只有 HardState）和实际实现（SoftState + Ha
 
 ## 相关资源
 
-- [之前的文章：Raft 中的 IO 执行顺序](./2025-10-02-raft-io-order-cn.md)
-- [OpenRaft docs: io-ordering](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
-- [tikv/tikv](https://github.com/tikv/tikv)
-- [hashicorp/raft](https://github.com/hashicorp/raft)
-- [sofastack/sofa-jraft](https://github.com/sofastack/sofa-jraft)
+- [之前的文章：Raft 中的 IO 执行顺序][]
+- [OpenRaft docs: io-ordering][]
+- [tikv/tikv][]
+- [hashicorp/raft][]
+- [sofastack/sofa-jraft][]
+
+
+[之前的文章：Raft 中的 IO 执行顺序]: ./2025-10-02-raft-io-order-cn.md
+[OpenRaft docs: io-ordering]: https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
+[tikv/tikv]: https://github.com/tikv/tikv
+[hashicorp/raft]: https://github.com/hashicorp/raft
+[sofastack/sofa-jraft]: https://github.com/sofastack/sofa-jraft
