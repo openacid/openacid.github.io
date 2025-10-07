@@ -134,4 +134,5 @@ build()
 
 # build "wechat" _src/crc/2025-08-27-crc.md
 # build "wechat" _src/raft-io-order/2025-10-02-raft-io-order-cn.md
-build "zhihu" _src/raft-io-order/2025-10-02-raft-io-order-cn.md
+
+build "zhihu" _src/raft-io-order/2025-10-04-raft-io-order-fix-cn.md
