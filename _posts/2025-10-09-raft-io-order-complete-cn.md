@@ -1,5 +1,5 @@
 ---
-title:      "Raft 中的 IO 执行顺序(修正版: 内存状态与持久化状态)"
+title:      "Raft 中的 IO 执行顺序：内存状态与持久化状态的陷阱"
 authors:
     - xp
 categories:
@@ -21,58 +21,28 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "修正之前文章对 Raft IO 顺序问题的理解。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
+excerpt: "深入分析 Raft 实现中 IO 重排序导致数据丢失的问题。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
 ---
 
-![](/post-res/raft-io-order-fix-cn/62b7bb390d222f2e-raft-io-order-fix-banner.webp)
+![](/post-res/raft-io-order-complete-cn/62b7bb390d222f2e-raft-io-order-fix-banner.webp)
 
 ## 前言
 
-在之前的[Raft 中的 IO 执行顺序](https://blog.openacid.com/algo/raft-io-order-cn/)中，我用一个已提交数据丢失的例子来解释"先写日志后写 term"可能造成的问题。但那个例子并不能正确反映 IO-reorder 的真正问题。本文将修正这个理解，并给出一个更严谨的例子。
+在 Raft 实现中，处理 appendEntries 请求时需要持久化两类数据：term 和 log entries。Raft 论文要求"在响应 RPC 之前必须更新持久化状态"，但并未明确说明这两类数据的持久化顺序。这个看似无关紧要的细节，却可能导致已提交数据的丢失。
 
-## 回顾之前的错误
+问题的根源在于：Raft 论文描述的是一个简单的抽象模型（只有磁盘状态），而实际实现为了性能会分离内存状态和持久化状态。这种状态分离引入了论文中未定义的行为，当 IO 操作允许重排序时，就可能破坏 Raft 的安全性保证。
 
-之前的文章用了这个时间线：
-
-```text
-Legend:
-Ni:   Node i
-Vi:   RequestVote, term=i
-Li:   Establish Leader, term=i
-Ei-j: Log entry, term=i, index=j
-
-N5 |          V5  L5       E5-1
-N4 |          V5           E5-1
-N3 |  V1                V5,E5-1  E1-1
-N2 |  V1      V5                 E1-1
-N1 |  V1  L1                     E1-1
-------+---+---+---+--------+-----+---------> time
-      t1  t2  t3  t4       t5    t6
-```
-
-时间线解释：
-
--   t1-t2: N1 成为 leader（term=1）
--   t3-t4: N5 成为 leader（term=5）
--   t5: L5 复制 E5-1 到 N3，N3 需要持久化 term=5 和 E5-1
--   t6: L1 尝试复制 E1-1 到 N3
-
-我当时的推理：如果 N3 先写了 E5-1，后写 term=5，崩溃重启后可能出现 `term=1, entries=[E5-1]` 的状态，导致在 t6 接受 L1 的请求，覆盖已提交的数据。
-
-**前文错误在于**：Raft 要求 save-term 和 save-entries 的 IO 都必须完成才能返回成功，所以 Leader 不会误认为数据已提交。Raft 的设计本身没有问题。
-
-这个例子不能反映出 IO-reorder 的问题. 要揭露 IO-reorder 的问题,
-我们需要考虑 Raft 实现中内存状态和持久化状态的分离.
+本文将深入分析这个问题是如何产生的，以及主流实现（TiKV、HashiCorp Raft、SOFAJRaft）如何避免这个陷阱。
 
 ## 内存状态与持久化状态的陷阱
 
-IO-reorder 之所以成为问题，是因为实际实现中为了性能，会分离内存状态(`current_term`)和磁盘状态(`persisted_term`)。处理 appendEntries 时，先更新内存状态，然后异步下发 IO：
+在实际的 Raft 实现中，为了提升性能，通常会分离内存状态(`current_term`)和磁盘状态(`persisted_term`)。处理 appendEntries 请求的典型流程是：
 
--   收到 appendEntries，如果 `req.term > current_term`，立即更新 `current_term`
--   异步提交 save-term IO
--   IO 完成后更新 `persisted_term`（有些实现中可能没有显式的 `persisted_term`）
+1.  收到 appendEntries，如果 `req.term > current_term`，立即更新 `current_term`
+1.  异步提交 save-term IO
+1.  IO 完成后更新 `persisted_term`（有些实现中可能没有显式的 `persisted_term`）
 
-这种状态分离引入了 Raft 论文中没有定义的行为（Raft 只关注磁盘状态）：
+这种状态分离引入了 Raft 论文中没有定义的行为（Raft 论文只关注磁盘状态）：
 
 ```rust
 struct RaftState {
@@ -84,11 +54,11 @@ struct RaftState {
 }
 ```
 
-上面描述的流程是常见的 Raft 实现的流程, 在没有 IO-reorder 时, 它是正确的.
+上面描述的流程是常见的 Raft 实现的流程, 在没有 IO-reorder 时, 它是正确的。但当 IO 操作可以重排序时，就会出现严重的安全问题。
 
 ## 问题场景
 
-用一个更完整的时间线来展示 IO-reorder 带来的问题：
+用一个具体的时间线来展示 IO-reorder 如何导致数据丢失：
 
 ```text
 Legend:
@@ -251,7 +221,6 @@ Raft 论文的抽象模型（只关注持久化状态）和实际实现（内存
 
 ## 相关资源
 
--   [之前的文章：Raft 中的 IO 执行顺序](https://blog.openacid.com/algo/raft-io-order-cn/)
 -   [OpenRaft docs: io-ordering](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 -   [tikv/tikv](https://github.com/tikv/tikv)
 -   [hashicorp/raft](https://github.com/hashicorp/raft)
@@ -265,8 +234,6 @@ Reference:
 
 - hashicorp/raft : [https://github.com/hashicorp/raft](https://github.com/hashicorp/raft)
 
-- Raft 中的 IO 执行顺序 : [https://blog.openacid.com/algo/raft-io-order-cn/](https://blog.openacid.com/algo/raft-io-order-cn/)
-
 - sofastack/sofa-jraft : [https://github.com/sofastack/sofa-jraft](https://github.com/sofastack/sofa-jraft)
 
 - tikv/tikv : [https://github.com/tikv/tikv](https://github.com/tikv/tikv)
@@ -274,6 +241,5 @@ Reference:
 
 [OpenRaft docs: io-ordering]:  https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
 [hashicorp/raft]:  https://github.com/hashicorp/raft
-[post-raft-io-order-cn]: https://blog.openacid.com/algo/raft-io-order-cn/ "Raft 中的 IO 执行顺序"
 [sofastack/sofa-jraft]:  https://github.com/sofastack/sofa-jraft
 [tikv/tikv]:  https://github.com/tikv/tikv
