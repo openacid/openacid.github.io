@@ -1,5 +1,5 @@
 ---
-title:      "Raft 中的 IO 执行顺序(修正版: SoftState 与 HardState)"
+title:      "Raft 中的 IO 执行顺序(修正版: 内存状态与持久化状态)"
 authors:
     - xp
 categories:
@@ -21,7 +21,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "修正之前文章对 Raft IO 顺序问题的理解。问题不在 Raft 的设计，而在于实现中 SoftState 与 HardState 的区分导致的陷阱"
+excerpt: "修正之前文章对 Raft IO 顺序问题的理解。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
 ---
 
 
@@ -64,25 +64,25 @@ N1 |  V1  L1                     E1-1
 **前文错误在于**：Raft 要求 save-term 和 save-entries 的 IO 都必须完成才能返回成功，所以 Leader 不会误认为数据已提交。Raft 的设计本身没有问题。
 
 这个例子不能反映出 IO-reorder 的问题. 要揭露 IO-reorder 的问题,
-我们需要考虑 Raft 实现中的 SoftState 和 HardState 的分离.
+我们需要考虑 Raft 实现中内存状态和持久化状态的分离.
 
 
-## SoftState 与 HardState 的陷阱
+## 内存状态与持久化状态的陷阱
 
-IO-reorder 之所以成为问题，是因为实际实现中为了性能，会分离内存状态(`soft_term`)和磁盘状态(`hard_term`)。处理 appendEntries 时，先更新内存状态，然后异步下发 IO：
-- 收到 appendEntries，如果 `req.term > soft_term`，立即更新 `soft_term`
+IO-reorder 之所以成为问题，是因为实际实现中为了性能，会分离内存状态(`current_term`)和磁盘状态(`persisted_term`)。处理 appendEntries 时，先更新内存状态，然后异步下发 IO：
+- 收到 appendEntries，如果 `req.term > current_term`，立即更新 `current_term`
 - 异步提交 save-term IO
-- IO 完成后更新 `hard_term`（有些实现中可能没有显式的 `hard_term`）
+- IO 完成后更新 `persisted_term`（有些实现中可能没有显式的 `persisted_term`）
 
 这种状态分离引入了 Raft 论文中没有定义的行为（Raft 只关注磁盘状态）：
 
 ```rust
 struct RaftState {
-    // In-memory state (SoftState), may be ahead of disk
-    soft_term: u64,
+    // In-memory term, updated immediately when receiving higher term
+    current_term: u64,
 
-    // On-disk state (HardState), updated only after IO completes
-    hard_term: u64,
+    // Persisted term on disk, updated only after IO completes
+    persisted_term: u64,
 }
 ```
 
@@ -110,7 +110,7 @@ N1 |  V1  L1                            E1-1
 ```
 
 - t1-t4: 两次选举，N1（term=1）和 N5（term=5）先后成为 leader
-- **t5**: L5 复制 E5-1 到 N3（N3 的 `soft_term=1 < req.term=5`）
+- **t5**: L5 复制 E5-1 到 N3（N3 的 `current_term=1 < req.term=5`）
   - N3 需要执行两个 IO：持久化 term=5 和 E5-1
   - 等待两个 IO 完成才返回成功
 - **t6**: L5 复制 E5-2 到 N3（关键时刻）
@@ -127,8 +127,8 @@ N3 收到 `appendEntries(term=5, entries=[E5-1])`：
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
     // Check: RPC term > in-memory term?
-    if req.term > self.soft_term {
-        self.soft_term = req.term;              // Update memory immediately: 5
+    if req.term > self.current_term {
+        self.current_term = req.term;           // Update memory immediately: 5
         self.submit_io(save_term(req.term));    // Submit IO request
     }
 
@@ -141,8 +141,8 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 ```
 
 N3 的状态：
-- `soft_term = 5`（内存已更新）
-- `hard_term = 1`（磁盘还未更新，IO 进行中）
+- `current_term = 5`（内存已更新）
+- `persisted_term = 1`（磁盘还未更新，IO 进行中）
 - IO 队列：`save_term(5)`, `save_entries(E5-1)`
 
 这个请求本身是正确的，问题出现在下一个时刻。
@@ -152,12 +152,12 @@ N3 的状态：
 
 N3 还没完成 t5 的 IO，就收到了 `appendEntries(term=5, entries=[E5-2])`。
 
-如果代码只检查内存 `soft_term`（大多数实现的做法）, 并提交 save-entries IO：
+如果代码只检查内存 `current_term`（大多数实现的做法）, 并提交 save-entries IO：
 
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
     // Check: 5 > 5? No
-    if req.term > self.soft_term {
+    if req.term > self.current_term {
         // Won't enter this branch
     }
 
@@ -170,13 +170,13 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 }
 ```
 
-**问题出现**：在允许 IO-reorder 的时候, 
+**问题出现**：在允许 IO-reorder 的时候,
 - `save_entries(E5-2)` 完成
 - 但 `save_term(5)` 可能还没完成（如果存在 IO 重排序）
 - N3 向 Leader 返回成功
 
 如果 N3 此时崩溃重启，磁盘状态可能是：
-- `hard_term = 1`（save_term(5) 未完成）
+- `persisted_term = 1`（save_term(5) 未完成）
 - `entries = [E5-1, E5-2]`（都完成了）
 - Leader L5 认为 E5-2 已提交
 
@@ -198,22 +198,22 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 
 ## 问题的本质
 
-如果允许 IO-reorder，必须检查 `hard_term` 来判断是否下发 save-term IO；如果不允许 IO-reorder，检查 `soft_term` 即可。
+如果允许 IO-reorder，必须检查 `persisted_term` 来判断是否下发 save-term IO；如果不允许 IO-reorder，检查 `current_term` 即可。
 
-Raft 论文不区分 soft/hard state，这是实现相关的陷阱。论文要求 "Before responding to RPCs, a server must update its persistent state"，在实现中需要更精确的表述： **必须等待所有使 `hard_term >= req.term` 的 IO 完成后，才能返回成功**。
+Raft 论文不区分内存状态和持久化状态，这是实现相关的陷阱。论文要求 "Before responding to RPCs, a server must update its persistent state"，在实现中需要更精确的表述： **必须等待所有使 `persisted_term >= req.term` 的 IO 完成后，才能返回成功**。
 
 
 ## 正确的做法
 
-检查磁盘 term（HardState）而不是内存 term：
+检查持久化的 term 而不是内存 term：
 
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
-    // Check disk state, not in-memory state!
-    let need_save_term = req.term > self.hard_term;
+    // Check persisted term, not in-memory term!
+    let need_save_term = req.term > self.persisted_term;
 
     if need_save_term {
-        self.soft_term = req.term;
+        self.current_term = req.term;
         self.submit_io(save_term(req.term));
     }
 
@@ -234,7 +234,7 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 
 ## 主流实现的方案
 
-主流实现（TiKV、HashiCorp Raft、SOFAJRaft）通过限制 save-term 和 save-entries 不能 reorder，因此只检查 `soft_term` 也是安全的：
+主流实现（TiKV、HashiCorp Raft、SOFAJRaft）通过限制 save-term 和 save-entries 不能 reorder，因此只检查 `current_term` 也是安全的：
 
 1. **原子批处理（TiKV）**：将 save-term 和 save-entries 放到一个 IO 请求里，一次性提交。这样根本不存在"第二个 appendEntries 只提交 save_entries"的情况。
 
@@ -245,13 +245,13 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 
 ## 总结
 
-Raft 论文的抽象模型（只有 HardState）和实际实现（SoftState + HardState）之间存在微妙的映射关系。
+Raft 论文的抽象模型（只关注持久化状态）和实际实现（内存状态 + 持久化状态）之间存在微妙的映射关系。
 
-**关键不变式**：log entry (term=T) 在磁盘 → hard_term ≥ T 也必须在磁盘
+**关键不变式**：log entry (term=T) 在磁盘 → persisted_term ≥ T 也必须在磁盘
 
 维护此不变式的两种方式：
 1. **消除 IO-reorder**：原子批处理、有序执行或混合方式（主流实现）
-2. **处理 IO-reorder**：检查 HardState，等待必要的 IO 完成
+2. **处理 IO-reorder**：检查持久化状态，等待必要的 IO 完成
 
 
 ## 相关资源

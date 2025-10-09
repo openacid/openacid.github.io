@@ -20,7 +20,7 @@ mathjax: false
 toc: true
 toc_label: Table of Content
 toc_sticky: true
-excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into SoftState and HardState. Here's what actually happens."
+excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into in-memory and persisted state. Here's what actually happens."
 ---
 
 
@@ -64,29 +64,29 @@ Let me show you the timeline I used in the previous article:
 So if Raft's design is correct, where does the IO ordering problem actually come from? The answer lies in a subtle gap between theory and implementation—specifically, how real Raft systems separate in-memory state from on-disk state.
 
 
-## The Real Culprit: SoftState vs HardState
+## The Real Culprit: In-Memory vs Persisted State
 
 Here's where things get interesting. The Raft paper describes a beautifully simple world where a server has just one state: what's on disk. But real implementations need to be fast, so they introduce an optimization—they split their state into two layers:
 
-**In-memory state (SoftState)**: The "optimistic" view that updates immediately when receiving RPCs
-**On-disk state (HardState)**: The "durable" view that updates only after IO completes
+**In-memory state**: The "optimistic" view that updates immediately when receiving RPCs
+**Persisted state**: The "durable" view that updates only after IO completes
 
 Here's how a typical implementation handles an appendEntries request:
 
 1. Receive appendEntries RPC with `req.term`
-2. If `req.term > soft_term`, immediately update `soft_term` to `req.term`
+2. If `req.term > current_term`, immediately update `current_term` to `req.term`
 3. Asynchronously submit a save-term IO operation
-4. Eventually update `hard_term` when the IO completes
+4. Eventually update `persisted_term` when the IO completes
 
 In code, this looks like:
 
 ```rust
 struct RaftState {
-    // In-memory state (SoftState) - may be ahead of what's on disk
-    soft_term: u64,
+    // In-memory term - may be ahead of what's on disk
+    current_term: u64,
 
-    // On-disk state (HardState) - the durable truth
-    hard_term: u64,
+    // Persisted term on disk - the durable truth
+    persisted_term: u64,
 }
 ```
 
@@ -119,7 +119,7 @@ Here's the sequence of events:
 
 - **t1-t4**: Two elections occur. First N1 becomes leader (term=1), then N5 becomes leader (term=5)
 - **t5**: Leader L5 sends its first entry E5-1 to follower N3
-  - N3's current state: `soft_term=1`, `hard_term=1`
+  - N3's current state: `current_term=1`, `persisted_term=1`
   - N3 receives `appendEntries(term=5, entries=[E5-1])`
   - N3 must persist both term=5 and entry E5-1
   - N3 responds "success" only after both IOs complete
@@ -137,8 +137,8 @@ When N3 receives `appendEntries(term=5, entries=[E5-1])`, here's what happens in
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
     // Check: Is the RPC term newer than our in-memory term?
-    if req.term > self.soft_term {
-        self.soft_term = req.term;              // Update memory immediately: 1 → 5
+    if req.term > self.current_term {
+        self.current_term = req.term;           // Update memory immediately: 1 → 5
         self.submit_io(save_term(req.term));    // Queue IO to persist term=5
     }
 
@@ -151,8 +151,8 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 ```
 
 After this call executes, N3's state looks like:
-- `soft_term = 5` (memory updated immediately)
-- `hard_term = 1` (disk not yet updated—IO still in flight)
+- `current_term = 5` (memory updated immediately)
+- `persisted_term = 1` (disk not yet updated—IO still in flight)
 - IO queue: `[save_term(5), save_entries(E5-1)]` waiting to complete
 
 So far, so good. This request is handled correctly—N3 won't respond until both IOs finish. The trouble starts at the next moment.
@@ -162,12 +162,12 @@ So far, so good. This request is handled correctly—N3 won't respond until both
 
 Now here's the critical moment. Before t5's IOs have completed, N3 receives a second request: `appendEntries(term=5, entries=[E5-2])`.
 
-Most implementations check only the in-memory `soft_term` to decide whether to persist the term. Watch what happens:
+Most implementations check only the in-memory `current_term` to decide whether to persist the term. Watch what happens:
 
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
     // Check: Is 5 > 5? Nope!
-    if req.term > self.soft_term {
+    if req.term > self.current_term {
         // We skip this branch entirely
     }
 
@@ -189,7 +189,7 @@ See the problem? N3 returns success as soon as `save_entries(E5-2)` completes. B
 N3 happily returns success to Leader L5, which then considers E5-2 replicated and potentially committed.
 
 Now imagine N3 crashes. When it restarts, its disk state is:
-- `hard_term = 1` (the save_term(5) never finished)
+- `persisted_term = 1` (the save_term(5) never finished)
 - `entries = [E5-1, E5-2]` (both successfully written)
 
 This is an inconsistent state that Raft's protocol assumes can never exist. And it's about to cause data loss.
@@ -216,31 +216,31 @@ N3's logic:
 
 Let's crystallize what we've learned:
 
-**The core issue**: When deciding whether to persist the term, should we check `soft_term` or `hard_term`?
+**The core issue**: When deciding whether to persist the term, should we check `current_term` or `persisted_term`?
 
-- If IO reordering is **not allowed** → checking `soft_term` is safe
-- If IO reordering **is allowed** → we must check `hard_term`
+- If IO reordering is **not allowed** → checking `current_term` is safe
+- If IO reordering **is allowed** → we must check `persisted_term`
 
-This isn't obvious because the Raft paper never talks about "soft" vs "hard" state—it only knows about one kind of state: what's on disk. The paper says: *"Before responding to RPCs, a server must update its persistent state."*
+This isn't obvious because the Raft paper never talks about in-memory vs persisted state—it only knows about one kind of state: what's on disk. The paper says: *"Before responding to RPCs, a server must update its persistent state."*
 
-But in real implementations with the SoftState/HardState split, this requirement needs to be more precise:
+But in real implementations with in-memory and persisted state split, this requirement needs to be more precise:
 
-**Before returning success, we must ensure all IOs that make `hard_term >= req.term` have completed.**
+**Before returning success, we must ensure all IOs that make `persisted_term >= req.term` have completed.**
 
-Checking only `soft_term` creates a window where we might respond successfully while the required disk updates are still in flight. If those updates can complete out of order, we've violated Raft's safety guarantees.
+Checking only `current_term` creates a window where we might respond successfully while the required disk updates are still in flight. If those updates can complete out of order, we've violated Raft's safety guarantees.
 
 
-## How to Fix It: Check HardState, Not SoftState
+## How to Fix It: Check Persisted State, Not In-Memory State
 
 If you need to support IO reordering, the fix is conceptually simple—check the on-disk term, not the in-memory term:
 
 ```rust
 fn handle_append_entries(&mut self, req: AppendEntries) {
     // Check against disk state, not memory!
-    let need_save_term = req.term > self.hard_term;
+    let need_save_term = req.term > self.persisted_term;
 
     if need_save_term {
-        self.soft_term = req.term;
+        self.current_term = req.term;
         self.submit_io(save_term(req.term));
     }
 
@@ -257,14 +257,14 @@ fn handle_append_entries(&mut self, req: AppendEntries) {
 }
 ```
 
-By checking `hard_term` instead of `soft_term`, we correctly detect when the term IO is still in flight and wait for it to complete.
+By checking `persisted_term` instead of `current_term`, we correctly detect when the term IO is still in flight and wait for it to complete.
 
 **Caveat**: This approach might submit multiple `save_term(T)` IOs for the same term T (if multiple AppendEntries arrive in quick succession). You'll need to handle this carefully—either make the IO layer idempotent or add deduplication logic.
 
 
 ## How Production Systems Solve This
 
-Here's the interesting part: most mature Raft implementations don't actually support IO reordering. Instead, they eliminate the problem entirely by ensuring save-term and save-entries execute in order. This lets them safely check `soft_term` without the bug we just analyzed.
+Here's the interesting part: most mature Raft implementations don't actually support IO reordering. Instead, they eliminate the problem entirely by ensuring save-term and save-entries execute in order. This lets them safely check `current_term` without the bug we just analyzed.
 
 Let's look at three different approaches from production systems:
 
@@ -295,13 +295,13 @@ This hybrid approach gets you most of the performance benefits of async IO while
 
 ## Summary: Bridging Theory and Practice
 
-The IO ordering bug in Raft implementations stems from a subtle gap between the paper's abstract model and real-world code. The Raft paper assumes a single state: what's on disk. Real implementations optimize with a SoftState/HardState split, introducing behaviors the paper never analyzed.
+The IO ordering bug in Raft implementations stems from a subtle gap between the paper's abstract model and real-world code. The Raft paper assumes a single state: what's on disk. Real implementations optimize with in-memory and persisted state split, introducing behaviors the paper never analyzed.
 
 **The invariant we must maintain**:
 
-> If a log entry with term=T is on disk, then hard_term ≥ T must also be on disk.
+> If a log entry with term=T is on disk, then persisted_term ≥ T must also be on disk.
 
-Violating this invariant—having entries from term T on disk while `hard_term < T`—breaks Raft's safety guarantees and can cause committed data loss.
+Violating this invariant—having entries from term T on disk while `persisted_term < T`—breaks Raft's safety guarantees and can cause committed data loss.
 
 **Two ways to maintain the invariant**:
 
@@ -311,7 +311,7 @@ Violating this invariant—having entries from term T on disk while `hard_term <
    - Hybrid ordering: Synchronous term, async entries
 
 2. **Handle IO reordering explicitly**
-   - Check `hard_term` instead of `soft_term` when deciding whether to persist the term
+   - Check `persisted_term` instead of `current_term` when deciding whether to persist the term
    - Wait for all required IOs to complete before responding
 
 Most production systems choose option 1—it's simpler to reason about and avoids the complexity of tracking multiple in-flight term updates. But if you do need to support IO reordering, now you know where the dragons are hiding.
