@@ -1,0 +1,56 @@
+# Justfile for building CRC presentation
+
+# Default recipe: build both HTML and PDF
+default: html pdf
+
+# Build HTML presentation
+html:
+    marp crc-presentation.md -o crc-presentation.html
+    @echo "✓ HTML presentation created: crc-presentation.html"
+
+# Build PDF presentation
+pdf:
+    marp crc-presentation.md -o crc-presentation.pdf --allow-local-files
+    @echo "✓ PDF presentation created: crc-presentation.pdf"
+
+# Build PowerPoint presentation
+pptx:
+    marp crc-presentation.md -o crc-presentation.pptx
+    @echo "✓ PowerPoint presentation created: crc-presentation.pptx"
+
+# Build all formats
+all: html pdf pptx
+
+# Watch mode: rebuild HTML on changes
+watch:
+    marp -w crc-presentation.md -o crc-presentation.html
+
+# Serve presentation with live preview
+serve:
+    marp -s crc-presentation.md -p 8080
+
+# Clean generated files
+clean:
+    rm -f crc-presentation.html crc-presentation.pdf crc-presentation.pptx
+    @echo "✓ Cleaned generated files"
+
+# Install marp-cli if not present
+install:
+    @command -v marp >/dev/null 2>&1 || { \
+        echo "Installing @marp-team/marp-cli..."; \
+        npm install -g @marp-team/marp-cli; \
+    }
+    @echo "✓ Marp CLI is ready"
+
+# Show help
+help:
+    @echo "Available recipes:"
+    @echo "  just          - Build HTML and PDF (default)"
+    @echo "  just html     - Build HTML presentation"
+    @echo "  just pdf      - Build PDF presentation"
+    @echo "  just pptx     - Build PowerPoint presentation"
+    @echo "  just all      - Build all formats"
+    @echo "  just watch    - Watch and rebuild HTML on changes"
+    @echo "  just serve    - Start live preview server on port 8080"
+    @echo "  just clean    - Remove generated files"
+    @echo "  just install  - Install marp-cli if needed"
