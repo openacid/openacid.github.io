@@ -135,4 +135,6 @@ build()
 # build "wechat" _src/crc/2025-08-27-crc.md
 # build "wechat" _src/raft-io-order/2025-10-02-raft-io-order-cn.md
 
-build "zhihu" _src/raft-io-order/2025-10-09-raft-io-order-complete-cn.md
+# build "zhihu" _src/raft-io-order/2025-10-09-raft-io-order-complete-cn.md
+
+build "wechat" _src/xp-vibe-coding/2026-01-04-xp-vibe-coding.md
