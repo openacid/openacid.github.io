@@ -15,7 +15,7 @@ url_base="https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev"
 
 # Call xp-md2html to convert md to html, using github-markdown.css
 # xp-md2html is a personal repo
-md2html()
+acid_md2html()
 {
     local src_path="$1"
     local output_path="$2"
@@ -107,8 +107,8 @@ build()
     cp assets/css/github-markdown.css ./md2-local/
 
     # Build html
-    md2html "./md2-local/$name-$platform.md"        "./md2-local/$name-$platform.html"
-    md2html "./md2-local/$name-$platform-remote.md" "./md2-local/$name-$platform-remote.html"
+    acid_md2html "./md2-local/$name-$platform.md"        "./md2-local/$name-$platform.html"
+    acid_md2html "./md2-local/$name-$platform-remote.md" "./md2-local/$name-$platform-remote.html"
 
     # Upload
     aws s3 sync ./md2-local/ s3://bed/
