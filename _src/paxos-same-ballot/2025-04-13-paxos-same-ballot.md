@@ -12,15 +12,14 @@ tags:
 refs:
     - x: y
 
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
 excerpt: "本文探讨 Paxos 协议中 Ballot number 的重用机制，分析何时可重复使用，以及为何只能使用系统中已存在的值而非提议新值"
 ---
+
+![](linearizable-banner-big.png)
 
 ![](./paxos-same-ballot-banner.webp)
 

@@ -10,12 +10,8 @@ tags:
     - config-change
     - joint
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -23,6 +19,8 @@ toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Is the single-log-entry approach to Raft configuration change simpler than the standard Joint Consensus?"
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./single-log-joint-banner.webp)

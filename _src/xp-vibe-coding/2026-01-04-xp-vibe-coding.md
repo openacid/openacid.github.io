@@ -9,12 +9,8 @@ tags:
     - ai
     - voice-input
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -22,6 +18,8 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "xp 的 AI 开发工作流"
 ---
+
+![](linearizable-banner-big.png)
 
 目前我的日常开发基本只需要"动嘴"就能完成。这篇文章分享我在用的工具组合。
 

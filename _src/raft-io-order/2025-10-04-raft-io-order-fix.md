@@ -9,12 +9,8 @@ tags:
     - raft
     - cn
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -22,6 +18,8 @@ toc_label: Table of Content
 toc_sticky: true
 excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into in-memory and persisted state. Here's what actually happens."
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./raft-io-order-fix-banner.webp)

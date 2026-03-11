@@ -11,12 +11,8 @@ tags:
     - consensus
     - 分布式
 
-
 refs:
     - x: y
-
-article:
-    image: /post-res/abstract-paxos/abstract-paxos-banner-small.png
 
 mathjax: true
 toc: true
@@ -24,6 +20,8 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 我用了整整三十天的时间, 将两招绝学并成了一整招, 看好了: abstract-paxos"
 ---
+
+![](abstract-paxos-banner-small.png)
 
 # 前言(客套话, 但会增加仪式感)
 

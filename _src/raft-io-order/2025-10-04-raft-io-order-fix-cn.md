@@ -10,12 +10,8 @@ tags:
     - raft
     - cn
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -23,6 +19,8 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "修正之前文章对 Raft IO 顺序问题的理解。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./raft-io-order-fix-banner.webp)

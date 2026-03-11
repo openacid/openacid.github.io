@@ -11,12 +11,8 @@ tags:
     - config-change
     - joint
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -24,6 +20,8 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./single-log-joint-banner.webp)

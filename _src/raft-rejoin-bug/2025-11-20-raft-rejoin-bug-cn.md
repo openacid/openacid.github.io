@@ -10,16 +10,14 @@ tags:
     - raft
     - en
 
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
 excerpt: "分析 Raft 实现中的 replication session 隔离缺陷。当节点在同一 term 内重新加入集群时，延迟的 AppendEntries 响应可能破坏 progress 跟踪，导致无限重试循环。虽然不影响数据安全，但会造成资源耗尽等运维问题。以 raft-rs 为例探讨触发条件和解决方案。"
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./raft-rejoin-bug-banner.webp)

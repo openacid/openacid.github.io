@@ -10,16 +10,14 @@ tags:
     - raft
     - en
 
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Writing logs before persisting term in Raft can silently destroy committed data. Here's why production systems like TiKV and HashiCorp Raft carefully control IO order—and three battle-tested solutions."
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./raft-io-order-banner.webp)

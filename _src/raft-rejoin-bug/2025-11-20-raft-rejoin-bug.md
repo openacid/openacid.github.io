@@ -10,16 +10,14 @@ tags:
     - raft
     - en
 
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Analyzes a replication session isolation bug in Raft implementations. When a node rejoins the cluster within the same term, delayed AppendEntries responses can corrupt progress tracking, causing infinite retry loops. While data safety remains intact, it creates operational issues like resource exhaustion. Uses raft-rs as a case study to examine trigger conditions and solutions."
 ---
+
+![](linearizable-banner-big.png)
 
 ![](./raft-rejoin-bug-banner.webp)
 

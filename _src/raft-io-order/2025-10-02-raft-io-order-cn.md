@@ -10,12 +10,8 @@ tags:
     - raft
     - cn
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -23,6 +19,8 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "Raft 先写日志后写 term 会导致已提交数据丢失。本文分析问题本质，总结 TiKV、HashiCorp Raft、SOFAJRaft 的三种安全解决方案"
 ---
+
+![](linearizable-banner-big.png)
 
 
 ![](./raft-io-order-banner.webp)
