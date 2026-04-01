@@ -137,4 +137,6 @@ build()
 
 # build "zhihu" _src/raft-io-order/2025-10-09-raft-io-order-complete-cn.md
 
-build "wechat" _src/xp-vibe-coding/2026-01-04-xp-vibe-coding.md
+# build "wechat" _src/xp-vibe-coding/2026-01-04-xp-vibe-coding.md
+
+build "wechat" _src/histogram/2026-04-02-histogram-cn.md
