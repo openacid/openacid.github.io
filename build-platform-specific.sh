@@ -139,4 +139,7 @@ build()
 
 # build "wechat" _src/xp-vibe-coding/2026-01-04-xp-vibe-coding.md
 
-build "wechat" _src/histogram/2026-04-02-histogram-cn.md
+# build "wechat" _src/histogram/2026-04-02-histogram-cn.md
+
+build "wechat" _src/raf-without-term/2026-05-11-raf-without-term-cn.md
+
