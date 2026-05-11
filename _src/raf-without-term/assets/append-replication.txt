@@ -1,0 +1,33 @@
+Append:
+                 .-- prev_log_id = (2,3)
+                 |   terms = [5,5]
+                 |   cmds  = [ø,c5]
+                 v
+leader terms: 0  1  2 [2] {5  5}
+leader cmds : ø  ø  ø [c3]{ø  c5}
+----------------------------------------> index
+              0  1  2  3   4  5  6  7
+    |   |   |
+    |   |   |
+    |   |   | accepted: prev matches, append missing suffix
+    |   |   v
+    |   |   terms: 0  1  2  2 {5  5}
+    |   |   cmds : ø  ø  ø  c3{ø  c5}
+    |   |   ----------------------------------------> index
+    |   |          0  1  2  3  4  5  6  7
+    |   |
+    |   |
+    |   | conflict at prev_log_id
+    |   v
+    |   terms: 0  1  2  3*
+    |   cmds : ø  ø  ø  x*
+    |   ----------------------------------------> index
+    |          0  1  2  3  4  5  6  7
+    |
+    |
+    | rejected: follower has newer term
+    v
+    terms: 0  1  2  2  4  5  6*
+    cmds : ø  ø  ø  c3 ø  ø  ø
+    ----------------------------------------> index
+           0  1  2  3  4  5  6  7

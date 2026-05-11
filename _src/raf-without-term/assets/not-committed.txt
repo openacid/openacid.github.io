@@ -1,0 +1,17 @@
+Not committed yet:
+
+leader term = 6
+
+node A terms: 0  1  2  2 {2} 2  6
+node A cmds : ø  ø  ø  c {x} ø  ø
+
+node B terms: 0  1  2  2 {2} 2  6
+node B cmds : ø  ø  ø  c {x}
+
+node C terms: 0  1  2  2  4  5  5  7  <-- new leader
+node C cmds : ø  ø  ø  c  ø  ø  ø
+----------------------------------------> index
+              0  1  2  3  4  5  6  7
+
+index 4 and 5 are on quorum A+B,
+but quorum has not matched index 6, the leader term index.

@@ -1,0 +1,184 @@
+svg {
+  background: #f8fafc;
+  color: #172033;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.canvas {
+  fill: #f8fafc;
+}
+
+.panel {
+  fill: #ffffff;
+  stroke: #cbd5e1;
+  stroke-width: 1.5;
+}
+
+.panel-muted {
+  fill: #eef2f7;
+  stroke: #cbd5e1;
+  stroke-width: 1.25;
+}
+
+.lane {
+  stroke: #cbd5e1;
+  stroke-width: 2;
+}
+
+.title {
+  fill: #172033;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.subtitle {
+  fill: #667085;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.label {
+  fill: #172033;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.small {
+  fill: #667085;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tiny {
+  fill: #667085;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.code {
+  fill: #172033;
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+  font-size: 13px;
+}
+
+.node {
+  fill: #ffffff;
+  stroke: #cbd5e1;
+  stroke-width: 1.5;
+}
+
+.node-leader {
+  stroke: #2563eb;
+  stroke-width: 2.5;
+}
+
+.node-follower {
+  stroke: #0f766e;
+}
+
+.node-candidate {
+  stroke: #7c3aed;
+  stroke-width: 2.5;
+}
+
+.entry {
+  fill: #ffffff;
+  stroke: #cbd5e1;
+  stroke-width: 1.25;
+}
+
+.entry-term {
+  fill: #fef3c7;
+  stroke: #f59e0b;
+  stroke-width: 1.25;
+}
+
+.entry-cmd {
+  fill: #d1fae5;
+  stroke: #10b981;
+  stroke-width: 1.25;
+}
+
+.entry-match {
+  fill: #dcfce7;
+  stroke: #16a34a;
+  stroke-width: 1.25;
+}
+
+.entry-conflict {
+  fill: #fee2e2;
+  stroke: #dc2626;
+  stroke-width: 1.25;
+}
+
+.entry-muted {
+  fill: #eef2f7;
+  stroke: #cbd5e1;
+  stroke-dasharray: 5 4;
+  stroke-width: 1.25;
+}
+
+.arrow {
+  fill: none;
+  stroke: #667085;
+  stroke-width: 2;
+  marker-end: url("#arrowhead");
+}
+
+.arrow-muted {
+  fill: none;
+  stroke: #cbd5e1;
+  stroke-width: 1.5;
+  marker-end: url("#arrowhead");
+}
+
+.arrow-strong {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 2.5;
+  marker-end: url("#arrowhead");
+}
+
+.arrow-conflict {
+  fill: none;
+  stroke: #dc2626;
+  stroke-width: 2.5;
+  marker-end: url("#arrowhead");
+}
+
+.quorum {
+  fill: #dbeafe;
+  stroke: #2563eb;
+  stroke-dasharray: 6 4;
+  stroke-width: 1.5;
+}
+
+.badge {
+  fill: #eef2f7;
+  stroke: #cbd5e1;
+  stroke-width: 1;
+}
+
+.badge-term {
+  fill: #fef3c7;
+  stroke: #f59e0b;
+  stroke-width: 1;
+}
+
+.badge-leader {
+  fill: #dbeafe;
+  stroke: #2563eb;
+  stroke-width: 1;
+}

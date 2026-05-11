@@ -1,0 +1,231 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 770" role="img" aria-label="Append replication scenarios: leader sends Append, three follower outcomes">
+  <style>
+    svg { background: #f8fafc; color: #172033;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .canvas { fill: #f8fafc; }
+    .title { fill: #172033; font-size: 18px; font-weight: 700; }
+    .label { fill: #172033; font-size: 13px; font-weight: 650; }
+    .node-label { fill: #667085; font-size: 12px; font-weight: 600; }
+    .small { fill: #667085; font-size: 12px; font-weight: 500; }
+    .code { fill: #172033; font-family: "SFMono-Regular", Consolas,
+      "Liberation Mono", Menlo, monospace; font-size: 18px; }
+    .label-accepted { fill: #16a34a; font-size: 14px; font-weight: 700; }
+    .label-rejected { fill: #dc2626; font-size: 14px; font-weight: 700; }
+    .entry { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.25; }
+    .entry-term { fill: #fef3c7; stroke: #f59e0b; stroke-width: 1.25; }
+    .entry-term-payload { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2.5; }
+    .entry-cmd { fill: #d1fae5; stroke: #10b981; stroke-width: 1.25; }
+    .entry-cmd-payload { fill: #d1fae5; stroke: #10b981; stroke-width: 2.5; }
+    .entry-empty-payload { fill: #ffffff; stroke: #10b981; stroke-width: 2.5; }
+    .entry-match { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .entry-conflict { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; }
+    .arrow { fill: none; stroke: #667085; stroke-width: 2;
+      marker-end: url("#arrowhead"); }
+    .spine { fill: none; stroke: #94a3b8; stroke-width: 2; }
+    .change-box { fill: none; stroke: #2563eb; stroke-width: 1.5;
+      stroke-dasharray: 5 4; }
+    .payload-box { fill: none; stroke: #f59e0b; stroke-width: 1.5;
+      stroke-dasharray: 5 4; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#667085"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" width="680" height="770"/>
+
+  <text class="title" x="20" y="26">Append</text>
+
+  <!-- ============ Leader ============ -->
+  <text class="label" x="252" y="50">prev_log_id = (2, 3)</text>
+  <text class="label" x="252" y="70">terms = [5, 5]</text>
+  <text class="label" x="252" y="90">cmds  = [ø, c5]</text>
+  <line class="arrow" x1="242" y1="56" x2="242" y2="108"/>
+
+  <text class="label" x="62" y="140" text-anchor="end">terms</text>
+  <rect class="entry-term" x="70"  y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="92"  y="141" text-anchor="middle">0</text>
+  <rect class="entry-term" x="120" y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="142" y="141" text-anchor="middle">1</text>
+  <rect class="entry-term" x="170" y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="192" y="141" text-anchor="middle">2</text>
+  <rect class="entry-match" x="220" y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="242" y="141" text-anchor="middle">2</text>
+  <rect class="entry-term-payload" x="270" y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="292" y="141" text-anchor="middle">5</text>
+  <rect class="entry-term-payload" x="320" y="118" width="44" height="32" rx="3"/>
+  <text class="code" x="342" y="141" text-anchor="middle">5</text>
+
+  <text class="label" x="62" y="184" text-anchor="end">cmds</text>
+  <rect class="entry" x="70"  y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="92"  y="185" text-anchor="middle">ø</text>
+  <rect class="entry" x="120" y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="142" y="185" text-anchor="middle">ø</text>
+  <rect class="entry" x="170" y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="192" y="185" text-anchor="middle">ø</text>
+  <rect class="entry-match" x="220" y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="242" y="185" text-anchor="middle">c3</text>
+  <rect class="entry-empty-payload" x="270" y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="292" y="185" text-anchor="middle">ø</text>
+  <rect class="entry-cmd-payload" x="320" y="162" width="44" height="32" rx="3"/>
+  <text class="code" x="342" y="185" text-anchor="middle">c5</text>
+
+  <!-- payload range box -->
+  <rect class="payload-box" x="266" y="114" width="102" height="84" rx="4"/>
+  <text class="small" x="317" y="208" text-anchor="middle">Append entries</text>
+
+  <line class="arrow" x1="55" y1="226" x2="440" y2="226"/>
+  <text class="node-label" x="448" y="230">Leader</text>
+
+  <text class="label" x="62" y="250" text-anchor="end">index</text>
+  <text class="small" x="92"  y="250" text-anchor="middle">0</text>
+  <text class="small" x="142" y="250" text-anchor="middle">1</text>
+  <text class="small" x="192" y="250" text-anchor="middle">2</text>
+  <text class="small" x="242" y="250" text-anchor="middle">3</text>
+  <text class="small" x="292" y="250" text-anchor="middle">4</text>
+  <text class="small" x="342" y="250" text-anchor="middle">5</text>
+  <text class="small" x="392" y="250" text-anchor="middle">6</text>
+  <text class="small" x="442" y="250" text-anchor="middle">7</text>
+
+  <!-- Spine from leader, branching to each follower -->
+  <line class="spine" x1="80" y1="254" x2="80" y2="624"/>
+  <line class="arrow" x1="80" y1="302" x2="125" y2="302"/>
+  <line class="arrow" x1="80" y1="472" x2="125" y2="472"/>
+  <line class="arrow" x1="80" y1="622" x2="125" y2="622"/>
+
+  <!-- ============ Follower 1: accepted ============ -->
+  <text class="label-accepted" x="130" y="294">accepted</text>
+
+  <text class="label" x="152" y="326" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="327" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="327" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="327" text-anchor="middle">2</text>
+  <rect class="entry-term" x="310" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="327" text-anchor="middle">2</text>
+  <rect class="entry-match" x="360" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="327" text-anchor="middle">5</text>
+  <rect class="entry-match" x="410" y="304" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="327" text-anchor="middle">5</text>
+
+  <text class="label" x="152" y="370" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="371" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="371" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="371" text-anchor="middle">ø</text>
+  <rect class="entry-cmd" x="310" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="371" text-anchor="middle">c3</text>
+  <rect class="entry-match" x="360" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="371" text-anchor="middle">ø</text>
+  <rect class="entry-match" x="410" y="348" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="371" text-anchor="middle">c5</text>
+
+  <!-- change box around newly written cells (terms[4..5] and cmds[4..5]) -->
+  <rect class="change-box" x="356" y="300" width="102" height="84" rx="4"/>
+  <text class="small" x="407" y="396" text-anchor="middle">written by Append</text>
+
+  <line class="arrow" x1="145" y1="412" x2="530" y2="412"/>
+  <text class="node-label" x="538" y="416">Follower 1</text>
+
+  <text class="label" x="152" y="434" text-anchor="end">index</text>
+  <text class="small" x="182" y="434" text-anchor="middle">0</text>
+  <text class="small" x="232" y="434" text-anchor="middle">1</text>
+  <text class="small" x="282" y="434" text-anchor="middle">2</text>
+  <text class="small" x="332" y="434" text-anchor="middle">3</text>
+  <text class="small" x="382" y="434" text-anchor="middle">4</text>
+  <text class="small" x="432" y="434" text-anchor="middle">5</text>
+  <text class="small" x="482" y="434" text-anchor="middle">6</text>
+  <text class="small" x="532" y="434" text-anchor="middle">7</text>
+
+  <!-- ============ Follower 2: conflict at prev_log_id ============ -->
+  <text class="label-rejected" x="130" y="464">conflict at prev_log_id</text>
+
+  <text class="label" x="152" y="496" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="474" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="497" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="474" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="497" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="474" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="497" text-anchor="middle">2</text>
+  <rect class="entry-conflict" x="310" y="474" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="497" text-anchor="middle">3</text>
+
+  <text class="label" x="152" y="540" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="518" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="541" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="518" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="541" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="518" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="541" text-anchor="middle">ø</text>
+  <rect class="entry-conflict" x="310" y="518" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="541" text-anchor="middle">x</text>
+
+  <line class="arrow" x1="145" y1="570" x2="530" y2="570"/>
+  <text class="node-label" x="538" y="574">Follower 2</text>
+
+  <text class="label" x="152" y="592" text-anchor="end">index</text>
+  <text class="small" x="182" y="592" text-anchor="middle">0</text>
+  <text class="small" x="232" y="592" text-anchor="middle">1</text>
+  <text class="small" x="282" y="592" text-anchor="middle">2</text>
+  <text class="small" x="332" y="592" text-anchor="middle">3</text>
+  <text class="small" x="382" y="592" text-anchor="middle">4</text>
+  <text class="small" x="432" y="592" text-anchor="middle">5</text>
+  <text class="small" x="482" y="592" text-anchor="middle">6</text>
+  <text class="small" x="532" y="592" text-anchor="middle">7</text>
+
+  <!-- ============ Follower 3: rejected, newer term ============ -->
+  <text class="label-rejected" x="130" y="614">rejected: follower has newer term</text>
+
+  <text class="label" x="152" y="646" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="647" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="647" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="647" text-anchor="middle">2</text>
+  <rect class="entry-term" x="310" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="647" text-anchor="middle">2</text>
+  <rect class="entry-term" x="360" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="647" text-anchor="middle">4</text>
+  <rect class="entry-term" x="410" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="647" text-anchor="middle">5</text>
+  <rect class="entry-conflict" x="460" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="482" y="647" text-anchor="middle">6</text>
+
+  <text class="label" x="152" y="690" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="691" text-anchor="middle">ø</text>
+  <rect class="entry-cmd" x="310" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="691" text-anchor="middle">c3</text>
+  <rect class="entry" x="360" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="410" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="460" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="482" y="691" text-anchor="middle">ø</text>
+
+  <line class="arrow" x1="145" y1="720" x2="530" y2="720"/>
+  <text class="node-label" x="538" y="724">Follower 3</text>
+
+  <text class="label" x="152" y="742" text-anchor="end">index</text>
+  <text class="small" x="182" y="742" text-anchor="middle">0</text>
+  <text class="small" x="232" y="742" text-anchor="middle">1</text>
+  <text class="small" x="282" y="742" text-anchor="middle">2</text>
+  <text class="small" x="332" y="742" text-anchor="middle">3</text>
+  <text class="small" x="382" y="742" text-anchor="middle">4</text>
+  <text class="small" x="432" y="742" text-anchor="middle">5</text>
+  <text class="small" x="482" y="742" text-anchor="middle">6</text>
+  <text class="small" x="532" y="742" text-anchor="middle">7</text>
+</svg>
