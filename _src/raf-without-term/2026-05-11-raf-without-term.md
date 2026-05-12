@@ -23,7 +23,7 @@ excerpt: "raf is an experimental Raft variant that does not persist currentTerm 
 
 > Note: The idea in this article came from Zhang Yanpo. The code was implemented by Zhang Yanpo by hand. This article was drafted and refined with Codex.
 
-Repository: [raf][] (`v0.1.0`).
+Repository: [raf][] (`v0.1.1`).
 
 ## Introduction
 
@@ -357,7 +357,7 @@ The repository includes a three-node in-process example that demonstrates the ba
 
 The example source is here:
 
-https://github.com/drmingdrmer/raf/blob/v0.1.0/examples/three_node.rs
+https://github.com/drmingdrmer/raf/blob/v0.1.1/examples/three_node.rs
 
 Run it from the repository root:
 
@@ -405,8 +405,8 @@ During election, a candidate chooses `terms.len()` as its term. After it becomes
 
 That is the core of this experimental implementation: keep Raft's logical time model, but change where that logical time comes from in persistent state.
 
-Repository: [raf][] (`v0.1.0`).
+Repository: [raf][] (`v0.1.1`).
 
-[raf]: https://github.com/drmingdrmer/raf/tree/v0.1.0 "raf"
+[raf]: https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
 [raft]: https://raft.github.io/ "Raft"
 [raft-paper]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"

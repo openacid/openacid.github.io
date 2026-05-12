@@ -24,7 +24,7 @@ excerpt: "raf 是一个实验性的 Raft 变体：不再独立持久化 currentT
 
 > 声明：这篇文章的想法来自 Zhang Yanpo，代码由 Zhang Yanpo 古法编程实现，文章由 Codex 起草并改进。
 
-代码仓库：[raf][]（`v0.1.0`）。
+代码仓库：[raf][]（`v0.1.1`）。
 
 ## 导读
 
@@ -366,7 +366,7 @@ _leader 只直接提交 quorum 覆盖且位于当前 leader term 范围内的 in
 
 示例源码在这里：
 
-https://github.com/drmingdrmer/raf/blob/v0.1.0/examples/three_node.rs
+https://github.com/drmingdrmer/raf/blob/v0.1.1/examples/three_node.rs
 
 可以在仓库根目录运行：
 
@@ -414,8 +414,8 @@ election 时，candidate 用 `terms.len()` 选择 term；成为 leader 后，缺
 
 这就是这个实验实现的核心：不改变 Raft 的逻辑时间模型，只改变这个逻辑时间在持久化状态中的来源。
 
-代码仓库：[raf][]（`v0.1.0`）。
+代码仓库：[raf][]（`v0.1.1`）。
 
-[raf]: https://github.com/drmingdrmer/raf/tree/v0.1.0 "raf"
+[raf]: https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
 [raft]: https://raft.github.io/ "Raft"
 [raft-paper]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"

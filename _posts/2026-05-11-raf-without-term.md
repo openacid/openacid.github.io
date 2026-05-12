@@ -17,7 +17,7 @@ toc_sticky: true
 excerpt: "raf is an experimental Raft variant that does not persist currentTerm as a separate field. Instead, each election reserves a log index, and that index becomes the leader term."
 ---
 
-![](/post-res/raf-without-term/6edcbb20ee5b9867-raf-banner-small.png)
+![](/post-res/raf-without-term/a9a9ca7fa5a1b329-raf-banner-small.png)
 
 > Summary: `raf: Raft without [T]erm` is an experimental Raft variant. It does not persist `currentTerm` as a separate piece of state. Instead, a candidate reserves a log index when it starts an election, and that index becomes the leader term. This does not remove Raft's logical time model. It only changes where the term is derived from in storage.
 
@@ -25,7 +25,7 @@ excerpt: "raf is an experimental Raft variant that does not persist currentTerm 
 > Note: The idea in this article came from Zhang Yanpo. The code was implemented by Zhang Yanpo by hand. This article was drafted and refined with Codex.
 
 
-Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.0) (`v0.1.0`).
+Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1) (`v0.1.1`).
 
 ## Introduction
 
@@ -89,7 +89,7 @@ The following is one possible storage state. `ø` means empty command. `cmds` on
 
 <!-- [ASCII source](assets/storage-layout.txt) -->
 
-![Storage layout](/post-res/raf-without-term/772dd480ea7613ba-storage-layout.png)
+![Storage layout](/post-res/raf-without-term/10e4df1ad2741f72-storage-layout.png)
 
 Index by index, this state means:
 
@@ -97,8 +97,8 @@ Index by index, this state means:
 -   Index `1`: a successful election for term `1`. The leader reserved index `1` when it was elected and wrote its first empty command there.
 -   Index `2`: a successful election for term `2`. The new leader reserved index `2`; its first log entry is also an empty command.
 -   Index `3`: a user log entry `C3` written by the leader of term `2`, so `terms[3] = 2` and `cmds[3] = C3`.
--   Index `4`: an election attempt for term `4`, but it did not produce an established leader. Later, when the leader of term `6` was established, this position was filled with an empty command so `cmds` could catch up with `terms`.
--   Index `5`: another failed election attempt for term `5`. It was also later filled with an empty command.
+-   Index `4`: this position used to be an election attempt for term `4`, but it did not produce an established leader. Later, when the leader of term `6` was established, this position was filled as an empty command owned by term `6`, so now `terms[4] = 6`.
+-   Index `5`: this position used to be another failed election attempt for term `5`. It was also later filled as an empty command owned by term `6`, so now `terms[5] = 6`.
 -   Index `6`: a successful election for term `6`. The leader reserved index `6` when it was elected, and wrote its first empty command there.
 -   Index `7`: a user log entry `C7` written by the leader of term `6`, so `terms[7] = 6` and `cmds[7] = C7`.
 -   Index `8`: a new election attempt for term `8`. So far we have only seen `terms[8] = 8`; there is no command for this index yet, so it is not a complete log entry.
@@ -124,14 +124,15 @@ log_id     = (terms[index], index)
 
 *`terms` and `cmds` share the same log index. During election, `terms` may be ahead of `cmds`.*
 
-During an election, `terms` can temporarily be longer than `cmds`. A candidate first reserves an index as its term. Multiple failed elections may reserve multiple indexes. Only after a candidate becomes an established leader does it fill `cmds` up to that term index with empty commands.
+During an election, `terms` can temporarily be longer than `cmds`. A candidate first reserves an index as its term. Multiple failed elections may reserve multiple indexes. Only after some candidate becomes an established leader are the positions with missing commands filled with empty commands.
 
-So this implementation maintains two basic invariants:
+So this implementation maintains a few basic facts:
 
 -   `cmds` should never be longer than `terms`.
--   For every index `i`, `i >= terms[i]` should hold.
+-   When an election first reserves a term slot, `terms[term] = term`.
+-   When an established leader fills positions that still miss commands, those positions are rewritten to the current `leader.term`.
 
-The second invariant follows from the design itself. A term is created from a log index. After the corresponding leader is established, every entry it appends is at an index greater than or equal to that term, and `terms` stores that same term for those entries. Therefore every value stored in `terms` is less than or equal to its index.
+Therefore `terms[i] <= i` is not a protocol invariant. A backfilled empty entry may have `terms[i] > i`. That is not a problem by itself; standard Raft terms can also be greater than log indexes. The important property is different: every complete log entry must carry the term of an established leader, except for the fixed default entry at index `0`.
 
 ## Why Split 
 `terms`
@@ -184,13 +185,14 @@ If the election for term `4` does not reach a quorum, it leaves only an observed
 
 ![Leader election retry term=5](/post-res/raf-without-term/3863b4a533d8cdf5-leader-election-term5.png)
 
-At this point `last_log_id` is still `(2, 3)`, because `cmds` has not moved beyond index `3`. What changed is the candidate term: it advanced from `4` to `5`. Only after an election succeeds and a leader is established does the system fill `cmds` up to that term index with empty commands.
+At this point `last_log_id` is still `(2, 3)`, because `cmds` has not moved beyond index `3`. What changed is the candidate term: it advanced from `4` to `5`. Only after an election succeeds and a leader is established does the system rewrite the positions with missing commands to this leader's term and fill `cmds` with empty commands.
 
 ## How a Voter Handles RequestVote
 
-When a voter receives `RequestVote`, it checks two things:
+When a voter receives `RequestVote`, it checks three things:
 
-1.  Whether the requested term is new enough. In this design, that means checking whether the term, interpreted as a log index, does not already exist locally.
+1.  Whether the requested term is greater than the last term observed locally.
+1.  Whether the requested term slot does not already exist locally.
 1.  Whether the candidate's log, represented by `last_log_id`, is fresh enough. It must not be older than the voter's own log.
 
 Aside from the term check, the rest of the logic is standard Raft. The subtle difference is that the term is no longer stored independently, so term freshness is expressed through `terms`.
@@ -200,9 +202,11 @@ The core condition looks like this:
 ```rust
 let local_last_log_index = cmds.len() - 1;
 let local_last_log_id = (terms[local_last_log_index], local_last_log_index);
+let local_last_term = terms[terms.len() - 1];
 
 let can_vote =
-    req.term >= terms.len()
+    req.term > local_last_term
+        && req.term >= terms.len()
         && req.last_log_id >= local_last_log_id;
 ```
 
@@ -214,8 +218,8 @@ The next diagram sends the same `RequestVote { term: 5, last_log_id: (2, 3) }` t
 
 The three outcomes are:
 
--   `granted`: the voter's `terms` reaches only index `3`, and `cmds` also reaches only index `3`. Therefore `req.term = 5` is a new term index that has not appeared locally, and `req.last_log_id = (2, 3)` is not behind the voter. The vote can be granted.
--   `rejected: term=7`: the voter has already observed a later term index `7`. Since `req.term = 5 < terms.len()`, the candidate's requested term is stale from this voter's perspective, so the vote is rejected.
+-   `granted`: the voter's `terms` reaches only index `3`, and `cmds` also reaches only index `3`. Therefore `req.term = 5` is greater than the last locally observed term, names a term slot that has not appeared locally, and `req.last_log_id = (2, 3)` is not behind the voter. The vote can be granted.
+-   `rejected: term=7`: the voter has already observed a later term `7`. Since `req.term = 5` is not greater than the last locally observed term, the candidate's requested term is stale from this voter's perspective, so the vote is rejected.
 -   `rejected: last log id = (4,4)`: the voter's last complete log entry is `(4, 4)`, which is newer than the candidate's `(2, 3)`. Even if the requested term could be recorded, the log freshness check still fails, so the vote is rejected.
 
 If the request is valid, the voter records the term in local `terms`. If local `terms` is shorter than `req.term`, it fills the missing positions with default indexes until local state contains index `req.term`:
@@ -229,13 +233,13 @@ if can_vote {
 }
 ```
 
-These default items have term values equal to their own indexes. That preserves `i >= terms[i]`. They mean the node has observed the corresponding term indexes. They do not mean those indexes are complete log entries, because the matching `cmds` may not exist yet. On the final iteration, `index == req.term`, so the voter has observed and accepted that term. Later, it will not accept an older term or a term index that already exists locally.
+These default items have term values equal to their own indexes. They mean the node has observed the corresponding term indexes. They do not mean those indexes are complete log entries, because the matching `cmds` may not exist yet. If a later leader fills those positions as complete empty entries, it rewrites their terms to its own `leader.term`. On the final iteration, `index == req.term`, so the voter has observed and accepted that term. Later, it will not accept an older term or a term index that already exists locally.
 
 This replaces the role of standard Raft's persisted `currentTerm`, but it is not fully equivalent to standard Raft's `votedFor`. The current implementation does not persist "which candidate this term was granted to." As a result, RequestVote retry and restart behavior are more conservative. We will return to this trade-off in "Current Boundaries."
 
 *The candidate chooses `terms.len()` as its term. Other nodes record that term in their local `terms` when they grant the vote.*
 
-After the candidate receives granted replies from a quorum, it becomes an established leader. It then appends one empty command so that `cmds.len()` catches up with `terms.len()`. That log entry corresponds to the index the leader reserved during election.
+After the candidate receives granted replies from a quorum, it becomes an established leader. It first rewrites the local `cmds.len()..terms.len()` range to its own `leader.term`, then appends empty commands so that `cmds.len()` catches up with `terms.len()`. The index reserved by the leader's election becomes this leader's first complete log entry.
 
 ## Establishing Leader State
 
@@ -266,13 +270,13 @@ The important fields are:
 > look at which nodes have `matched` covering an index, then check whether those nodes form a quorum.
 
 
-After the leader is established, every position that already exists in local `terms` but is still missing from `cmds` is filled with an empty command. After that, every local index on the leader has a corresponding command, and new application writes can start at the next index.
+After the leader is established, every position that already exists in local `terms` but is still missing from `cmds` is taken over by the current leader: the term at that position is rewritten to `leader.term`, and the command is filled with an empty command. After that, every local index on the leader has a corresponding command, and new application writes can start at the next index.
 
 <!-- [ASCII source](assets/establish-leader.txt) -->
 
-![Establish leader](/post-res/raf-without-term/ff33f2223130ddd1-establish-leader.png)
+![Establish leader](/post-res/raf-without-term/3494a2b8ffc3e936-establish-leader.png)
 
-In this example, term `4` is the term index left behind by a previous failed election, and term `5` is the index reserved by the current leader. When the candidate for term `5` becomes an established leader, indexes `4` and `5` are both filled with `ø`. The `ø` at index `5` is this leader's first log entry.
+In this example, index `4` used to be a term slot left behind by a failed election, and term `5` is the index reserved by the current leader. When the candidate for term `5` becomes an established leader, indexes `4` and `5` are both rewritten as term `5` empty log entries. The `ø` at index `5` is the entry reserved by this leader's election; the `ø` at index `4` is the backfilled entry that keeps the log prefix contiguous.
 
 ## Appending a Log Entry
 
@@ -306,7 +310,7 @@ The following diagram shows one Append request applied to several follower state
 
 <!-- [ASCII source](assets/append-replication.txt) -->
 
-![Append replication scenarios](/post-res/raf-without-term/f43c6bec56a6d6c1-append-replication.png)
+![Append replication scenarios](/post-res/raf-without-term/a0e8c4e1f7671c25-append-replication.png)
 
 The three outcomes are:
 
@@ -331,7 +335,7 @@ This is still Raft's core replication model: the leader finds a shared log prefi
 
 Replication to a quorum does not mean every historical entry can be committed immediately. Standard Raft has an important rule: a leader may only directly commit log entries from its own current term. Entries from older terms become committed only as a consequence of committing an entry from the current term.
 
-`raf` keeps this rule. Since the current leader's log starts at the index it reserved during election, the leader only considers matched indexes in the current leader's term range when calculating commit.
+`raf` keeps this rule. Although an established leader rewrites earlier gap slots to its own term, the leader still only directly commits matched indexes that are not smaller than its election index. Empty entries backfilled before `leader.term` are committed only indirectly, together with the leader's election index or a later entry.
 
 Intuitively:
 
@@ -347,7 +351,7 @@ The following state shows why "replicated to a quorum" is not enough. The leader
 
 <!-- [ASCII source](assets/not-committed.txt) -->
 
-![Not committed yet](/post-res/raf-without-term/f6b692c2112905e6-not-committed.png)
+![Not committed yet](/post-res/raf-without-term/d98978c7f1b7fab2-not-committed.png)
 
 If a new leader for term `7` appears later, and its `last_log_id=(5,6)` is newer, it can overwrite those uncommitted log entries. In the diagram, `{x}` marks the range replaced by the new leader.
 
@@ -359,7 +363,7 @@ The repository includes a three-node in-process example that demonstrates the ba
 
 The example source is here:
 
-https://github.com/drmingdrmer/raf/blob/v0.1.0/examples/three_node.rs
+https://github.com/drmingdrmer/raf/blob/v0.1.1/examples/three_node.rs
 
 Run it from the repository root:
 
@@ -403,19 +407,17 @@ struct RafStorage {
 }
 ```
 
-During election, a candidate chooses `terms.len()` as its term. After it becomes leader, later log entries all use that term. Replication and commitment still follow the basic Raft rules.
-
-This design also has a small side benefit: failed elections leave their term indexes in `terms`. They do not automatically become complete log entries, but they do make observed election attempts visible. That can be useful when debugging leader churn, frequent elections, or network partitions.
+During election, a candidate chooses `terms.len()` as its term. After it becomes leader, both the missing-command gap slots and later log entries use this leader term. Replication and commitment still follow the basic Raft rules.
 
 That is the core of this experimental implementation: keep Raft's logical time model, but change where that logical time comes from in persistent state.
 
-Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.0) (`v0.1.0`).
+Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1) (`v0.1.1`).
 
 
 
 Reference:
 
-- raf : [https://github.com/drmingdrmer/raf/tree/v0.1.0](https://github.com/drmingdrmer/raf/tree/v0.1.0)
+- raf : [https://github.com/drmingdrmer/raf/tree/v0.1.1](https://github.com/drmingdrmer/raf/tree/v0.1.1)
 
 
-[raf]:  https://github.com/drmingdrmer/raf/tree/v0.1.0 "raf"
+[raf]:  https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
