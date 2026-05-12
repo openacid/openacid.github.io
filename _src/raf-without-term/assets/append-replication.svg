@@ -42,7 +42,7 @@
 
   <!-- ============ Leader ============ -->
   <text class="label" x="252" y="50">prev_log_id = (2, 3)</text>
-  <text class="label" x="252" y="70">terms = [5, 5]</text>
+  <text class="label" x="252" y="70">terms = [4, 4]</text>
   <text class="label" x="252" y="90">cmds  = [ø, c5]</text>
   <line class="arrow" x1="242" y1="56" x2="242" y2="108"/>
 
@@ -56,9 +56,9 @@
   <rect class="entry-match" x="220" y="118" width="44" height="32" rx="3"/>
   <text class="code" x="242" y="141" text-anchor="middle">2</text>
   <rect class="entry-term-payload" x="270" y="118" width="44" height="32" rx="3"/>
-  <text class="code" x="292" y="141" text-anchor="middle">5</text>
+  <text class="code" x="292" y="141" text-anchor="middle">4</text>
   <rect class="entry-term-payload" x="320" y="118" width="44" height="32" rx="3"/>
-  <text class="code" x="342" y="141" text-anchor="middle">5</text>
+  <text class="code" x="342" y="141" text-anchor="middle">4</text>
 
   <text class="label" x="62" y="184" text-anchor="end">cmds</text>
   <rect class="entry" x="70"  y="162" width="44" height="32" rx="3"/>
@@ -110,9 +110,9 @@
   <rect class="entry-term" x="310" y="304" width="44" height="32" rx="3"/>
   <text class="code" x="332" y="327" text-anchor="middle">2</text>
   <rect class="entry-match" x="360" y="304" width="44" height="32" rx="3"/>
-  <text class="code" x="382" y="327" text-anchor="middle">5</text>
+  <text class="code" x="382" y="327" text-anchor="middle">4</text>
   <rect class="entry-match" x="410" y="304" width="44" height="32" rx="3"/>
-  <text class="code" x="432" y="327" text-anchor="middle">5</text>
+  <text class="code" x="432" y="327" text-anchor="middle">4</text>
 
   <text class="label" x="152" y="370" text-anchor="end">cmds</text>
   <rect class="entry" x="160" y="348" width="44" height="32" rx="3"/>

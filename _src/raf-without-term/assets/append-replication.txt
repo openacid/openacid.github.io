@@ -1,9 +1,9 @@
 Append:
                  .-- prev_log_id = (2,3)
-                 |   terms = [5,5]
+                 |   terms = [4,4]
                  |   cmds  = [ø,c5]
                  v
-leader terms: 0  1  2 [2] {5  5}
+leader terms: 0  1  2 [2] {4  4}
 leader cmds : ø  ø  ø [c3]{ø  c5}
 ----------------------------------------> index
               0  1  2  3   4  5  6  7
@@ -11,7 +11,7 @@ leader cmds : ø  ø  ø [c3]{ø  c5}
     |   |   |
     |   |   | accepted: prev matches, append missing suffix
     |   |   v
-    |   |   terms: 0  1  2  2 {5  5}
+    |   |   terms: 0  1  2  2 {4  4}
     |   |   cmds : ø  ø  ø  c3{ø  c5}
     |   |   ----------------------------------------> index
     |   |          0  1  2  3  4  5  6  7
