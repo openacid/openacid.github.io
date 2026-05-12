@@ -28,7 +28,7 @@
   <rect class="canvas" width="600" height="250"/>
 
   <text class="title" x="20" y="26">Establish leader</text>
-  <text class="small" x="20" y="48">term 5 candidate becomes leader; index 4 and 5 of cmds are backfilled with empty commands.</text>
+  <text class="small" x="20" y="48">term 5 candidate becomes leader; index 4 and 5 are backfilled as term 5 empty entries.</text>
 
   <!-- Terms row -->
   <text class="label" x="62" y="100" text-anchor="end">terms</text>
@@ -40,8 +40,8 @@
   <text class="code" x="192" y="101" text-anchor="middle">2</text>
   <rect class="entry-term" x="220" y="78" width="44" height="32" rx="3"/>
   <text class="code" x="242" y="101" text-anchor="middle">2</text>
-  <rect class="entry-term" x="270" y="78" width="44" height="32" rx="3"/>
-  <text class="code" x="292" y="101" text-anchor="middle">4</text>
+  <rect class="entry-term-new" x="270" y="78" width="44" height="32" rx="3"/>
+  <text class="code" x="292" y="101" text-anchor="middle">5</text>
   <rect class="entry-term-new" x="320" y="78" width="44" height="32" rx="3"/>
   <text class="code" x="342" y="101" text-anchor="middle">5</text>
 

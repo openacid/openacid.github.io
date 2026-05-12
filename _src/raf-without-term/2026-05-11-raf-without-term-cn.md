@@ -96,8 +96,8 @@ struct RafStorage {
 - index `1`：term `1` 对应的一次成功 election。这个 leader 当选时占用 index `1`，并写入第一条 empty command。
 - index `2`：term `2` 对应的一次成功 election。新的 leader 占用 index `2`，第一条 log entry 同样是 empty command。
 - index `3`：term `2` 的 leader 写入的一条业务 log entry `C3`，所以 `terms[3] = 2`，`cmds[3] = C3`。
-- index `4`：term `4` 对应的一次 election attempt，但没有形成 established leader。后来 term `6` 的 leader 建立时，为了让 `cmds` 追上 `terms`，这里被补成 empty command。
-- index `5`：term `5` 对应的一次 election attempt，同样没有形成 established leader；后来也被补成 empty command。
+- index `4`：这里曾经是 term `4` 对应的一次 election attempt，但没有形成 established leader。后来 term `6` 的 leader 建立时，为了让 `cmds` 追上 `terms`，这里被补成 term `6` 的 empty command，所以现在 `terms[4] = 6`。
+- index `5`：这里曾经是 term `5` 对应的一次 election attempt，同样没有形成 established leader；后来也被 term `6` 的 leader 补成 empty command，所以现在 `terms[5] = 6`。
 - index `6`：term `6` 对应的一次成功 election。这个 leader 当选时占用 index `6`，并写入第一条 empty command。
 - index `7`：term `6` 的 leader 写入的一条业务 log entry `C7`，所以 `terms[7] = 6`，`cmds[7] = C7`。
 - index `8`：term `8` 对应的一次新的 election attempt。当前只看到 `terms[8] = 8`，还没有对应的 command，因此它还不是完整 log entry。
@@ -126,17 +126,15 @@ log_id     = (terms[index], index)
 
 _`terms` 和 `cmds` 共享同一个 log index；election 期间，`terms` 领先于 `cmds`。_
 
-在 election 期间，`terms` 可以短暂比 `cmds` 长。原因是 candidate 会先占用一个 index 作为 term (多次未成功选举会占用多个 index 作为 term)；只有当它成为 established leader 后，才会用一条 empty command 把 `cmds` 补齐。
+在 election 期间，`terms` 可以短暂比 `cmds` 长。原因是 candidate 会先占用一个 index 作为 term (多次未成功选举会占用多个 index 作为 term)；只有当某个 candidate 成为 established leader 后，才会把这些缺失 command 的位置补成 empty command。
 
-因此这个实现需要维持两个基本事实：
+因此这个实现需要维持几个基本事实：
 
 - `cmds` 不应比 `terms` 长。
-- 对所有 index `i`，都应满足 `i >= terms[i]`。
+- election 刚占用 term slot 时，`terms[term] = term`。
+- 当 established leader 补齐缺失 command 时，这些位置会被改写成当前 `leader.term`。
 
-第二个不变量来自这个设计本身：
-最开始生成一个 term 的时候是使用一个 log index 去作为 term 的值。
-当这个 leader established 后, 开始 append log entries 的时候，都会用这个 term 去填充 terms 数组对应的位置。
-所以每个 terms 里面的元素都小于等于它的 index。
+因此，`terms[i] <= i` 不是协议不变量。对于被新 leader 补齐的旧 gap slot，可能出现 `terms[i] > i`；这和标准 Raft 中 term 可以大于 log index 并不矛盾。真正需要保持的是：完整 log entry 上的 term 必须来自某个 established leader，或者来自固定的 index `0` 默认项。
 
 ## 为什么拆成 `terms` 和 `cmds`
 
@@ -185,15 +183,16 @@ let last_log_id = (terms[last_log_index], last_log_index);
 
 ![Leader election retry term=5](assets/leader-election-term5.png)
 
-这时 `last_log_id` 仍然是 `(2, 3)`，因为 `cmds` 仍然没有超过 index `3`；变化的是新的 candidate term 从 `4` 前进到 `5`。只有当某次 election 成功并建立 leader 后，系统才会用 empty command 把 `cmds` 补到对应的 term index。
+这时 `last_log_id` 仍然是 `(2, 3)`，因为 `cmds` 仍然没有超过 index `3`；变化的是新的 candidate term 从 `4` 前进到 `5`。只有当某次 election 成功并建立 leader 后，系统才会把缺失 command 的 slots 改写成这个 leader 的 term，并用 empty commands 把 `cmds` 补齐。
 
 
 ## Voter 处理 RequestVote 请求
 
-收到 `RequestVote` 后，voter 需要判断两件事：
+收到 `RequestVote` 后，voter 需要判断三件事：
 
-1. candidate 请求用的 term 是否最大, 即 term 作为 log index 是否尚未在本地存在。
-2. candidate 的 log (`last_log_id`) 是否够新(不比自己的小)。
+1. candidate 请求用的 term 是否大于本地最后观察到的 term。
+2. candidate 请求用的 term slot 是否尚未在本地存在。
+3. candidate 的 log (`last_log_id`) 是否够新(不比自己的小)。
 
 这部分逻辑, 对 term 的判断之外, 跟标准的 Raft 也几乎没有区别。因为我们 term
 没有独立存储了，所以这里的 term 判断有一点点差别。
@@ -203,9 +202,11 @@ let last_log_id = (terms[last_log_index], last_log_index);
 ```rust
 let local_last_log_index = cmds.len() - 1;
 let local_last_log_id = (terms[local_last_log_index], local_last_log_index);
+let local_last_term = terms[terms.len() - 1];
 
 let can_vote =
-    req.term >= terms.len()
+    req.term > local_last_term
+        && req.term >= terms.len()
         && req.last_log_id >= local_last_log_id;
 ```
 
@@ -217,8 +218,8 @@ let can_vote =
 
 三种结果分别是：
 
-- `granted`：voter 的 `terms` 只到 index `3`，`cmds` 也只到 index `3`。因此 `req.term = 5` 是一个尚未出现过的新 term index，并且 `req.last_log_id = (2, 3)` 不落后于 voter，本次投票可以授予。
-- `rejected: term=7`：voter 已经观察到更靠后的 term index `7`。因为 `req.term = 5 < terms.len()`，candidate 请求的 term 在 voter 本地已经过期，所以拒绝。
+- `granted`：voter 的 `terms` 只到 index `3`，`cmds` 也只到 index `3`。因此 `req.term = 5` 大于本地最后观察到的 term，且是一个尚未出现过的新 term slot；`req.last_log_id = (2, 3)` 也不落后于 voter，本次投票可以授予。
+- `rejected: term=7`：voter 已经观察到更靠后的 term `7`。因为 `req.term = 5` 不大于本地最后观察到的 term，candidate 请求的 term 在 voter 本地已经过期，所以拒绝。
 - `rejected: last log id = (4,4)`：voter 的最后一条完整 log entry 是 `(4, 4)`，比 candidate 的 `(2, 3)` 更新。即使 candidate 请求的 term 可以写入，log freshness 也不满足，所以拒绝。
 
 如果请求合法，voter 会把这个 term 记录进本地 `terms`。如果本地 `terms` 比 `req.term` 短，就用默认 index 补齐，直到本地已经包含 index `req.term`：
@@ -232,14 +233,14 @@ if can_vote {
 }
 ```
 
-这些默认项的 term 值等于自己的 index，用来保持 `i >= terms[i]`。它们表示本地已经观察到对应 term index，并不表示这些 index 都已经有完整 log entry，因为对应的 `cmds` 可能还不存在。循环最后一次写入时，`index == req.term`，因此这个 voter 已经观察并接受了该 term；后续它不会再接受旧 term 或已经存在于本地 `terms` 中的 term。
+这些默认项的 term 值等于自己的 index。它们表示本地已经观察到对应 term index，并不表示这些 index 都已经有完整 log entry，因为对应的 `cmds` 可能还不存在。如果后续某个更高 term 的 leader 把这些位置补成完整 empty entry，它会把这些位置的 term 改写成自己的 `leader.term`。循环最后一次写入时，`index == req.term`，因此这个 voter 已经观察并接受了该 term；后续它不会再接受旧 term 或已经存在于本地 `terms` 中的 term。
 
 这部分替代了标准 Raft 中持久化 `currentTerm` 的角色，但它不完全等价于标准 Raft 的 `votedFor`。
 当前实现没有持久化“这个 term 投给了谁”，因此 RequestVote 重试和节点重启后的行为会更保守；后面的“当前边界”会单独说明这个取舍。
 
 _candidate 选择 `terms.len()` 作为 term；其它节点在本地 `terms` 中记录这个 term 并授予投票。_
 
-当 candidate 收到 quorum 的 granted reply 后，它成为 established leader。此时它会追加一条 empty command，使 `cmds.len()` 追上 `terms.len()`。这条 log entry 对应 leader 当选时占用的 index。
+当 candidate 收到 quorum 的 granted reply 后，它成为 established leader。此时它会先把本地 `cmds.len()..terms.len()` 这段缺失 command 的 term 改成自己的 `leader.term`，再追加 empty commands，使 `cmds.len()` 追上 `terms.len()`。其中 leader 当选时占用的 index 对应这个 leader 的第一条完整 log entry。
 
 ## 建立 leader 状态
 
@@ -270,14 +271,14 @@ struct ReplicationState {
 > 只需要看哪些节点的 `matched` 覆盖了某个 index，并判断这些节点是否组成 quorum。
 
 
-建立 leader 之后，本地 `terms` 存储中已经存在但 `cmds` 还缺失的位置都会被补成 empty command。
+建立 leader 之后，本地 `terms` 存储中已经存在但 `cmds` 还缺失的位置都会被当前 leader 接管：这些位置的 term 会被改写成 `leader.term`，然后补成 empty command。
 这样做之后，leader 本地的每个 index 都有对应 command，后续新的业务写入就可以从下一个 index 开始。
 
 <!-- [ASCII source](assets/establish-leader.txt) -->
 
 ![Establish leader](assets/establish-leader.png)
 
-在这个例子里，term `4` 是之前失败 election 留下的 term index；term `5` 是当前 leader 当选时占用的 index。当 term `5` 的 candidate 成为 established leader 后，index `4` 和 index `5` 都会被补上 `ø`。其中 index `5` 上的 `ø` 就是这个 leader 的第一条 log entry。
+在这个例子里，index `4` 曾经是失败 election 留下的 term slot；term `5` 是当前 leader 当选时占用的 index。当 term `5` 的 candidate 成为 established leader 后，index `4` 和 index `5` 都会被改写为 term `5` 的 empty log entries。其中 index `5` 上的 `ø` 是这个 leader 当选时占用的 entry；index `4` 上的 `ø` 是为了让 log prefix 连续而补齐的 entry。
 
 ## 写入 log entry
 
@@ -336,7 +337,7 @@ _Append 先用 `prev_log_id` 找到共同前缀，再截断 follower 的冲突�
 
 replication 到 quorum 不等于立刻提交所有历史。标准 Raft 有一个重要规则：leader 只能直接提交自己当前 term 内的 log entry；旧 term 的 log entries 需要被当前 term 的 log entry 间接带上。
 
-`raf` 保留这个规则。因为当前 leader 的 log 从它当选时占用的 index 开始，所以 leader 在计算 commit 时只考虑已经进入当前 leader 历史范围的 matched index。
+`raf` 保留这个规则。虽然 established leader 会把更早的 gap slot 改写成自己的 term，但 leader 在计算 commit 时仍然只直接提交不小于自己 election index 的 matched index。那些被补齐在 `leader.term` 之前的 empty entries，只能随着 leader term index 或更靠后的 entry 一起间接提交。
 
 直观地说：
 
@@ -409,9 +410,7 @@ struct RafStorage {
 }
 ```
 
-election 时，candidate 用 `terms.len()` 选择 term；成为 leader 后，后续 log entries 都写入这个 term；replication 和提交仍然沿用 Raft 的基本规则。
-
-这个设计还有一个意外的好处：失败的 election 也会在 `terms` 中留下对应的 term index。它们不会自动变成完整 log entry，但会让系统曾经观察到哪些 election attempt 变得可见。对调试 leader 抖动、频繁 election 或网络分区期间的状态变化，这可能会提供一些额外线索。
+election 时，candidate 用 `terms.len()` 选择 term；成为 leader 后，缺失 command 的 gap slots 和后续 log entries 都写入这个 leader term；replication 和提交仍然沿用 Raft 的基本规则。
 
 这就是这个实验实现的核心：不改变 Raft 的逻辑时间模型，只改变这个逻辑时间在持久化状态中的来源。
 
