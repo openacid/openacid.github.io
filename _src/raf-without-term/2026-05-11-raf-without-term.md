@@ -1,5 +1,5 @@
 ---
-title:      "Raf: Raft Without a Separate Term Field"
+title:      "Do Not Read: Raf Is a Useless and Valueless Failed Experiment"
 authors:
     - xp
 categories:
@@ -20,6 +20,8 @@ excerpt: "raf is an experimental Raft variant that does not persist currentTerm 
 ![](raf-banner-small.png)
 
 > Summary: `raf: Raft without [T]erm` is an experimental Raft variant. It does not persist `currentTerm` as a separate piece of state. Instead, a candidate reserves a log index when it starts an election, and that index becomes the leader term. This does not remove Raft's logical time model. It only changes where the term is derived from in storage.
+
+> Declaration: This approach is just the same as saving terms in the separate first extra slot in the terms array. So it actually still stores the term and has no value at all. Please do not read this as a useful design; it is only a failed personal experiment.
 
 > Note: The idea in this article came from Zhang Yanpo. The code was implemented by Zhang Yanpo by hand. This article was drafted and refined with Codex.
 

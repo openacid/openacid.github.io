@@ -1,5 +1,5 @@
 ---
-title:      "Raf: 去掉 Raft 的 Term"
+title:      "不必阅读：Raf 是一次无用且无价值的失败实验"
 authors:
     - xp
 categories:
@@ -21,6 +21,8 @@ excerpt: "raf 是一个实验性的 Raft 变体：不再独立持久化 currentT
 ![](raf-banner-small.png)
 
 > 摘要：`raf: Raft without [T]erm` 是一个实验性的 Raft 变体。它不再单独持久化 `currentTerm`，而是让 candidate 在发起 election 时占用一个 log index，并把这个 index 作为 leader term。这样做不会取消 Raft 的逻辑时间模型，而是简化了 term 在存储中的来源。
+
+> 声明：这个方法本质上等同于把 term 保存在 `terms` array 里额外的第一个 slot 中，所以它实际上仍然存储了 term，并没有任何价值。请不要把它当作一个有用的设计来阅读；这只是一次失败的个人实验。
 
 > 声明：这篇文章的想法来自 Zhang Yanpo，代码由 Zhang Yanpo 古法编程实现，文章由 Codex 起草并改进。
 
