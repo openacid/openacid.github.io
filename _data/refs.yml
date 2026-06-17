@@ -46,6 +46,8 @@ universal:
   - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
   - "post-raft-io-order": https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
   - "post-raft-io-order-cn": https://blog.openacid.com/algo/raft-io-order-cn/ "Raft 中的 IO 执行顺序"
+  - "post-raft-rejoin-bug": https://blog.openacid.com/algo/raft-rejoin-bug/ "Raft Node Rejoin Bug"
+  - "post-raft-rejoin-bug-cn": https://blog.openacid.com/algo/raft-rejoin-bug-cn/ "Raft Node Rejoin Bug"
 
   - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
 
