@@ -7,6 +7,12 @@ universal:
   # - "install-protoc": https://grpc.io/docs/protoc-installation/
   - "grpc":     https://grpc.io/
 
+  - "raft-website": https://raft.github.io/ "Raft"
+  - "rust-lang": https://www.rust-lang.org/ "Rust"
+  - "serde": https://serde.rs/ "serde"
+  - "zookeeper": https://zookeeper.apache.org/ "Apache ZooKeeper"
+  - "etcd": https://etcd.io/ "etcd"
+
   - "ref-classic-paxos": http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple "classic paxos"
 
   # wiki
@@ -22,6 +28,8 @@ universal:
 
   # ref and doc
   - "ref-cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
+  - "failure-rate": https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/ "Backblaze 硬盘故障率统计 2016 Q1"
+  - "rust-btreemap": https://doc.rust-lang.org/std/collections/struct.BTreeMap.html "BTreeMap"
 
   # repo
   - "repo-abstract-paxos": https://github.com/openacid/abstract-paxos "abstract-paxos"
@@ -29,7 +37,12 @@ universal:
   - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
   - "repo-mmp3": https://github.com/openacid/mmp3 "multi-master-paxos-3"
   - "repo-paxoskv": https://github.com/openacid/paxoskv/tree/naive "paxoskv"
-  - "repo-openraft": https://github.com/datafuselabs/openraft "openraft"
+  # datafuselabs 已改名为 databendlabs, 后续统一用新地址
+  - "repo-openraft": https://github.com/databendlabs/openraft "openraft"
+  - "repo-ezraft": https://github.com/drmingdrmer/ezraft "ezraft"
+  - "repo-ezraft-kvstore": https://github.com/drmingdrmer/ezraft/blob/main/examples/kvstore.rs "ezraft kvstore example"
+  - "crates-ezraft": https://crates.io/crates/ezraft "ezraft on crates.io"
+  - "docs-ezraft": https://docs.rs/ezraft "ezraft docs"
   - "repo-leveldb": https://github.com/google/leveldb "leveldb"
   - "repo-consensus-bug-paxos": https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
 
@@ -41,13 +54,15 @@ universal:
   - "post-paxos":  https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"
   - "post-paxoskv": https://blog.openacid.com/algo/paxoskv/ "200行代码实现基于paxos的kv存储"
   - "post-quorum": https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现"
-  - "post-raft-bug": https://blog.openacid.com/algo/raft-bug/ "TiDB 在 Raft 成员变更上踩的坑"
+  - "post-raft-bug": https://blog.openacid.com/distributed/raft-bug/ "TiDB 在 Raft 成员变更上踩的坑"
   - "post-mmp3": https://blog.openacid.com/algo/mmp3/ "Multi-Master-Paxos 3"
   - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
   - "post-raft-io-order": https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
-  - "post-raft-io-order-cn": https://blog.openacid.com/algo/raft-io-order-cn/ "Raft 中的 IO 执行顺序"
+  - "post-raft-io-order-cn": https://blog.openacid.com/algo/raft-io-order-complete-cn/ "Raft 中的 IO 执行顺序"
   - "post-raft-rejoin-bug": https://blog.openacid.com/algo/raft-rejoin-bug/ "Raft Node Rejoin Bug"
-  - "post-raft-rejoin-bug-cn": https://blog.openacid.com/algo/raft-rejoin-bug-cn/ "Raft Node Rejoin Bug"
+  # 中文版发布后再补 "post-raft-rejoin-bug-cn", 目前只有英文版
+  - "post-linearizable": https://blog.openacid.com/algo/linearizable/ "分布式系统中的 Linearizable 事务"
+  - "post-openraft-read": https://blog.openacid.com/algo/openraft-read/ "Openraft 对 ReadIndex 的优化"
 
   - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
 

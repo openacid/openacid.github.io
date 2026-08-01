@@ -293,7 +293,7 @@ leaves 的检查在查询的最后一步, 如果一个要查询的 key 匹配到
 
 第一个是找出一个 bitmap 中第`i`个bit之前有多少个`1`(或多少个`0`).
 对定长整数, 例如一个uint64, 它的有O(1)的实现, 例如
-- 在cpp里叫做 [popcount][cpp-popcount], i.e., count of population of ones;
+- 在cpp里叫做 [popcount][ref-cpp-popcount], i.e., count of population of ones;
 - 在go里面它被封装在`bits.OnesCount64()`这个函数, 数数一个uint64里有多少个1;
 - 一般的, 叫做rank1(i), 如果要计算一个bitmap里有多少个0, 则是rank0(i).
 

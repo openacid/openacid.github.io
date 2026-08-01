@@ -142,5 +142,7 @@ build()
 # build "wechat" _src/histogram/2026-04-02-histogram-cn.md
 
 # build "wechat" _src/raf-without-term/2026-05-11-raf-without-term-cn.md
-build "zhihu" _src/raf-without-term/2026-05-11-raf-without-term-cn.md
+# build "zhihu" _src/raf-without-term/2026-05-11-raf-without-term-cn.md
+
+build "wechat" _src/ezraft/2026-08-01-ezraft-cn.md
 

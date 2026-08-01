@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Failover in a three-node EzRaft cluster</title>
+  <desc id="desc">After leader node 0 fails, nodes 2 and 6 still form a majority. Node 6 becomes the new leader and writes continue.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#0f8f87"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      text:not([fill]) { fill: #0f1b3d; }
+      .title { font-size: 30px; font-weight: 750; }
+      .panel-title { font-size: 22px; font-weight: 750; }
+      .node-title { font-size: 18px; font-weight: 750; }
+      .body { font-size: 15px; }
+      .body:not([fill]) { fill: #475569; }
+      .msg { font-size: 15px; font-weight: 700; }
+      .small { font-size: 13px; }
+      .small:not([fill]) { fill: #64748b; }
+      .mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 14px; }
+    </style>
+  </defs>
+
+  <rect x="10" y="10" width="1380" height="740" rx="28" fill="#f8fafc" stroke="#dbe4ee"/>
+  <text x="60" y="66" class="title">How the Service Continues after the Leader Fails</text>
+
+  <rect x="50" y="96" width="585" height="582" rx="24" fill="#ffffff" stroke="#dbe4ee"/>
+  <rect x="765" y="96" width="585" height="582" rx="24" fill="#ffffff" stroke="#dbe4ee"/>
+  <rect x="74" y="118" width="118" height="34" rx="17" fill="#dbeafe"/>
+  <text x="133" y="141" text-anchor="middle" fill="#1d4ed8" class="msg">Before failure</text>
+  <text x="210" y="143" class="panel-title">Node 0 is the leader</text>
+  <rect x="789" y="118" width="118" height="34" rx="17" fill="#ccfbf1"/>
+  <text x="848" y="141" text-anchor="middle" fill="#0f766e" class="msg">After failure</text>
+  <text x="925" y="143" class="panel-title">Node 6 takes over</text>
+
+  <g transform="translate(228 178)">
+    <rect width="230" height="100" rx="18" fill="#e0f2fe" stroke="#2498c7" stroke-width="2.5"/>
+    <circle cx="42" cy="43" r="23" fill="#2498c7"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" class="node-title">0</text>
+    <text x="78" y="38" class="node-title">Node 0</text>
+    <text x="78" y="63" class="mono" style="fill:#64748b">:8080</text>
+    <rect x="138" y="70" width="76" height="22" rx="11" fill="#2498c7"/>
+    <text x="176" y="86" text-anchor="middle" fill="#ffffff" class="small" style="font-weight:700">leader</text>
+  </g>
+  <g transform="translate(88 450)">
+    <rect width="210" height="92" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <circle cx="40" cy="39" r="21" fill="#2563eb"/>
+    <text x="40" y="46" text-anchor="middle" fill="#ffffff" class="node-title">2</text>
+    <text x="75" y="38" class="node-title">Node 2</text>
+    <text x="75" y="62" class="mono" style="fill:#64748b">:8081</text>
+    <text x="105" y="82" text-anchor="middle" class="small">follower · voter</text>
+  </g>
+  <g transform="translate(388 450)">
+    <rect width="210" height="92" rx="18" fill="#f0fdfa" stroke="#0f8f87" stroke-width="2"/>
+    <circle cx="40" cy="39" r="21" fill="#0f8f87"/>
+    <text x="40" y="46" text-anchor="middle" fill="#ffffff" class="node-title">6</text>
+    <text x="75" y="38" class="node-title">Node 6</text>
+    <text x="75" y="62" class="mono" style="fill:#64748b">:8082</text>
+    <text x="105" y="82" text-anchor="middle" class="small">follower · voter</text>
+  </g>
+
+  <line x1="290" y1="278" x2="206" y2="444" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <line x1="396" y1="278" x2="480" y2="444" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <text x="343" y="352" text-anchor="middle" class="msg" style="fill:#1d4ed8">Replicate and commit</text>
+
+  <g transform="translate(70 292)">
+    <rect width="180" height="66" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="90" y="26" text-anchor="middle" class="small">client</text>
+    <text x="90" y="49" text-anchor="middle" class="mono">write(k, before)</text>
+  </g>
+  <line x1="250" y1="325" x2="281" y2="279" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <rect x="142" y="572" width="402" height="54" rx="17" fill="#eff6ff"/>
+  <text x="343" y="595" text-anchor="middle" class="msg">Any 2 of 3 voters can commit</text>
+  <text x="343" y="616" text-anchor="middle" class="small">Acknowledged writes survive one node failure</text>
+
+  <g>
+    <line x1="658" y1="360" x2="742" y2="360" stroke="#64748b" stroke-width="3" marker-end="url(#arrow-blue)"/>
+    <circle cx="700" cy="360" r="33" fill="#ffffff" stroke="#cbd5e1"/>
+    <path d="M687 360h26M706 353l7 7-7 7" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="700" y="414" text-anchor="middle" class="small">After a few heartbeats</text>
+  </g>
+
+  <g transform="translate(943 178)" opacity="0.62">
+    <rect width="230" height="100" rx="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+    <circle cx="42" cy="43" r="23" fill="#94a3b8"/>
+    <text x="42" y="50" text-anchor="middle" fill="#ffffff" class="node-title">0</text>
+    <text x="78" y="38" class="node-title">Node 0</text>
+    <text x="78" y="63" class="mono" style="fill:#64748b">:8080</text>
+    <text x="176" y="84" text-anchor="middle" class="small">Unavailable</text>
+    <line x1="16" y1="12" x2="214" y2="88" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+    <line x1="214" y1="12" x2="16" y2="88" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(803 450)">
+    <rect width="210" height="92" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <circle cx="40" cy="39" r="21" fill="#2563eb"/>
+    <text x="40" y="46" text-anchor="middle" fill="#ffffff" class="node-title">2</text>
+    <text x="75" y="38" class="node-title">Node 2</text>
+    <text x="75" y="62" class="mono" style="fill:#64748b">:8081</text>
+    <text x="105" y="82" text-anchor="middle" class="small">follower · voter</text>
+  </g>
+  <g transform="translate(1103 450)">
+    <rect width="210" height="92" rx="18" fill="#ecfdf9" stroke="#0f8f87" stroke-width="3"/>
+    <circle cx="40" cy="39" r="21" fill="#0f8f87"/>
+    <text x="40" y="46" text-anchor="middle" fill="#ffffff" class="node-title">6</text>
+    <text x="75" y="38" class="node-title">Node 6</text>
+    <text x="75" y="62" class="mono" style="fill:#64748b">:8082</text>
+    <rect x="126" y="67" width="70" height="20" rx="10" fill="#0f8f87"/>
+    <text x="161" y="82" text-anchor="middle" fill="#ffffff" class="small" style="font-weight:700">leader</text>
+  </g>
+
+  <path d="M1002 454Q1058 382 1114 454" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrow-teal)"/>
+  <text x="1058" y="392" text-anchor="middle" class="msg" style="fill:#b45309">Election: 2 / 3 majority</text>
+
+  <g transform="translate(788 292)">
+    <rect width="180" height="66" rx="14" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="90" y="26" text-anchor="middle" class="small">client</text>
+    <text x="90" y="49" text-anchor="middle" class="mono">write(k, after)</text>
+  </g>
+  <line x1="878" y1="358" x2="896" y2="444" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <path d="M1014 482Q1058 430 1102 482" fill="none" stroke="#0f8f87" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <text x="1058" y="449" text-anchor="middle" class="small" style="fill:#0f766e;font-weight:700">Forward to new leader</text>
+  <line x1="1102" y1="520" x2="1016" y2="520" stroke="#0f8f87" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <text x="1059" y="514" text-anchor="middle" class="small" style="fill:#0f766e;font-weight:700">Replicate</text>
+
+  <rect x="857" y="572" width="402" height="54" rx="17" fill="#ecfdf9"/>
+  <text x="1058" y="595" text-anchor="middle" class="msg">Nodes 2 + 6 still form a majority</text>
+  <text x="1058" y="616" text-anchor="middle" class="small">Old data remains; new writes continue</text>
+
+  <rect x="398" y="700" width="604" height="34" rx="17" fill="#0f1b3d"/>
+  <text x="700" y="723" text-anchor="middle" fill="#ffffff" class="msg">3 nodes tolerate 1 failure: 2 available ≥ quorum of 2</text>
+</svg>
