@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="svg.css"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Heartbeats renew the Leader lease</title>
+  <desc id="desc">Three node lanes show completed heartbeat RPCs followed by heartbeat timeouts. The last completed acknowledgment starts the Leader lease. Each get-timestamp request calls leader_term to check that lease locally: one before expiration succeeds, one after expiration is rejected, and one succeeds again after a new Leader is elected and reserves a range.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#627fa6"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#5b8b83"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#b28a55"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#9ba5b3"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" x="10" y="10" width="1580" height="880" rx="28"/>
+  <text class="title" x="60" y="62">Heartbeats renew the Leader lease</text>
+  <text class="body" x="60" y="90">Every get-timestamp request calls leader_term() to check the local lease.</text>
+
+  <g transform="translate(650 105)">
+    <rect class="panel" width="230" height="72" rx="19"/>
+    <text class="label" x="115" y="29" text-anchor="middle">Client</text>
+    <text class="small" x="115" y="57" text-anchor="middle">get-timestamp request</text>
+    <rect class="badge-blue" y="82" width="230" height="40" rx="20"/>
+    <text class="small blue-text" x="115" y="109" text-anchor="middle">leader_term() → OK</text>
+  </g>
+  <path class="arrow-local" d="M765 227H900V354"/>
+
+  <g transform="translate(925 105)">
+    <rect class="panel" width="230" height="72" rx="19"/>
+    <text class="label" x="115" y="29" text-anchor="middle">Client</text>
+    <text class="small" x="115" y="57" text-anchor="middle">get-timestamp request</text>
+    <rect class="badge-reject" y="82" width="230" height="40" rx="20"/>
+    <text class="small reject-text" x="115" y="109" text-anchor="middle">leader_term() → reject</text>
+  </g>
+  <path class="arrow-local-dashed" d="M1040 227V354"/>
+
+  <g transform="translate(1265 105)">
+    <rect class="panel" width="240" height="72" rx="19"/>
+    <text class="label" x="120" y="29" text-anchor="middle">Client</text>
+    <text class="small" x="120" y="57" text-anchor="middle">get-timestamp request</text>
+    <rect class="badge-teal" y="82" width="240" height="40" rx="20"/>
+    <text class="small teal-text" x="120" y="109" text-anchor="middle">leader_term() → OK</text>
+  </g>
+  <path class="arrow-raft" d="M1385 227V514"/>
+
+  <rect x="590" y="290" width="340" height="466" rx="20" fill="#f3eadb" fill-opacity="0.52" stroke="#d7c5a8" stroke-dasharray="6 5"/>
+  <text class="label amber-text" x="760" y="326" text-anchor="middle">Lease remains valid</text>
+  <rect x="930" y="290" width="190" height="466" rx="20" fill="#efedf3" fill-opacity="0.72" stroke="#c9c1d5" stroke-dasharray="6 5"/>
+  <text class="label purple-text" x="1025" y="472" text-anchor="middle">Election</text>
+
+  <path d="M590 282v-12h340v12" fill="none" stroke="#b28a55" stroke-width="2"/>
+  <text class="label amber-text" x="760" y="260" text-anchor="middle">Leader lease</text>
+
+  <text class="label" x="160" y="391" text-anchor="end">Node 1</text>
+  <text class="small blue-text" x="160" y="412" text-anchor="end">Old Leader</text>
+  <text class="label" x="160" y="551" text-anchor="end">Node 2</text>
+  <text class="small" x="160" y="572" text-anchor="end">Follower A</text>
+  <text class="label" x="160" y="711" text-anchor="end">Node 3</text>
+  <text class="small" x="160" y="732" text-anchor="end">Follower B</text>
+
+  <rect class="available" x="190" y="354" width="740" height="70" rx="16"/>
+  <text class="label blue-text" x="365" y="384" text-anchor="middle">Leader · lease valid</text>
+  <text class="small blue-text" x="365" y="406" text-anchor="middle">May issue timestamps</text>
+  <rect class="invalid" x="930" y="354" width="570" height="70" rx="16"/>
+  <text class="label muted-text" x="1215" y="395" text-anchor="middle">Lease expired · reject get-timestamp request</text>
+
+  <rect class="badge-muted" x="190" y="514" width="740" height="70" rx="16"/>
+  <text class="label muted-text" x="310" y="555" text-anchor="middle">Follower</text>
+  <rect class="badge-purple" x="930" y="514" width="190" height="70" rx="16"/>
+  <text class="label purple-text" x="1025" y="555" text-anchor="middle">Candidate</text>
+  <rect class="reserved-new" x="1120" y="514" width="380" height="70" rx="16"/>
+  <text class="label teal-text" x="1310" y="544" text-anchor="middle">New Leader</text>
+  <text class="small teal-text" x="1310" y="568" text-anchor="middle">reserve() → serve timestamps</text>
+
+  <rect class="badge-muted" x="190" y="674" width="1310" height="70" rx="16"/>
+  <text class="label muted-text" x="310" y="715" text-anchor="middle">Follower</text>
+
+  <text class="small teal-text" x="370" y="316" text-anchor="middle">completed heartbeat RPCs</text>
+  <circle cx="280" cy="424" r="6" fill="#5b8b83"/>
+  <path class="heartbeat-ok" d="M280 424C258 452 255 482 255 514"/>
+  <path class="heartbeat-ok" d="M280 424C315 490 320 565 320 674"/>
+  <circle cx="440" cy="424" r="6" fill="#5b8b83"/>
+  <path class="heartbeat-ok" d="M440 424C418 452 415 482 415 514"/>
+  <path class="heartbeat-ok" d="M440 424C475 490 480 565 480 674"/>
+  <circle cx="590" cy="424" r="6" fill="#5b8b83"/>
+  <path class="heartbeat-ok" d="M590 424C568 452 565 482 565 514"/>
+  <path class="heartbeat-ok" d="M590 424C625 490 630 565 630 674"/>
+
+  <text class="small muted-text" x="790" y="350" text-anchor="middle">heartbeat RPCs time out</text>
+  <circle cx="740" cy="424" r="6" fill="#9ba5b3"/>
+  <path class="heartbeat-missed" d="M740 424C718 450 715 472 715 498"/>
+  <path class="heartbeat-missed" d="M740 424C775 490 780 575 780 658"/>
+  <path d="M708 491l14 14M722 491l-14 14M773 651l14 14M787 651l-14 14" stroke="#a9787b" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="860" cy="424" r="6" fill="#9ba5b3"/>
+  <path class="heartbeat-missed" d="M860 424C838 450 835 472 835 498"/>
+  <path class="heartbeat-missed" d="M860 424C895 490 900 575 900 658"/>
+  <path d="M828 491l14 14M842 491l-14 14M893 651l14 14M907 651l-14 14" stroke="#a9787b" stroke-width="2" stroke-linecap="round"/>
+
+  <path class="heartbeat-ok" d="M1010 584V674"/>
+  <text class="small purple-text" x="1025" y="634" text-anchor="middle">vote granted</text>
+
+  <line class="guide" x1="590" y1="214" x2="590" y2="810"/>
+  <line class="guide" x1="930" y1="214" x2="930" y2="810"/>
+  <line class="guide" x1="1120" y1="258" x2="1120" y2="810"/>
+  <circle cx="590" cy="389" r="7" fill="#5b8b83"/>
+  <circle cx="930" cy="389" r="7" fill="#a9787b"/>
+  <circle cx="1120" cy="549" r="7" fill="#5b8b83"/>
+
+  <line class="axis" x1="190" y1="810" x2="1520" y2="810"/>
+  <text class="small" x="590" y="837" text-anchor="middle">last completed heartbeat</text>
+  <text class="small" x="930" y="837" text-anchor="middle">lease expires</text>
+  <text class="small" x="1120" y="837" text-anchor="middle">new Leader elected</text>
+  <text class="label" x="1520" y="837" text-anchor="end">time</text>
+</svg>
