@@ -145,5 +145,9 @@ build()
 # build "zhihu" _src/raf-without-term/2026-05-11-raf-without-term-cn.md
 
 # build "wechat" _src/ezraft/2026-08-01-ezraft-cn.md
-build "zhihu" _src/ezraft/2026-08-01-ezraft-cn.md
+# build "zhihu" _src/ezraft/2026-08-01-ezraft-cn.md
+
+# build "wechat" _src/ez-ts-oracle/2026-08-11-ez-ts-oracle-cn.md
+build "zhihu" _src/ez-ts-oracle/2026-08-11-ez-ts-oracle-cn.md
+
 
