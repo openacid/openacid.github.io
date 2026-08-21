@@ -48,7 +48,7 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
    - 在 Acceptor-2 和 Acceptor-3 上完成了 phase-1（Prepare 阶段）
    - 然后在 Acceptor-1 和 Acceptor-2 上完成了 phase-2（Accept 阶段），提交了值 Y
 
-![](paxos-same-ballot-0.x.svg)
+![](assets/paxos-same-ballot-0.x.png)
 
 > 图中的事件以这种格式表示: `<phase><ballot_number>(<value>)`:
 >
@@ -68,13 +68,13 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 
 在时间点 t1，如果我们再次用同样的 Ballot number = 1 发起 Paxos，它可以完成 phase-1, 因为 Acceptor 总是接受同样的 Ballot number 的请求(Prepare 或 Accept). 但这次完成（Prepare）之后，并不会看到任何已存在的值。而前面我们说过, 用相同的 Ballot number 重复运行时也不能 propose 任何值. “无值”情况下也就无法运行 phase-2（Accept 阶段），所以协议会结束，等同于没有做任何更改。
 
-![](paxos-same-ballot-1.x.svg)
+![](assets/paxos-same-ballot-1.x.png)
 
 #### 场景 2：t2 时刻 - 部分节点存在历史值
 
 与 t1 情况相似。如果此时系统只观测到部分 Acceptor(Acceptor-1 和 2)（它并不知道已有 `A1(X)` 的存在），那么结果与 t1 一样，无法提交新的值。
 
-![](paxos-same-ballot-2.x.svg)
+![](assets/paxos-same-ballot-2.x.png)
 
 #### 场景 3：t3 时刻 - 多数派存在历史值（关键场景）
 
@@ -82,13 +82,13 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 
 示意图如下所示，`P1'` 表示重复使用同一个 Ballot=1 进行再次 Prepare 且成功完成；在 Acceptor-1 上看到了值 `X`，然后在 `t3'` 时刻完成 phase-2 Accept 阶段，成功将值 `X` 提交到多数派。这次 Paxos 的运行可以视为修复了之前 `A1(X)` 未完成的提交（该值仅写入了 Acceptor-1 但未达到多数派共识）。
 
-![](paxos-same-ballot-3.x.svg)
+![](assets/paxos-same-ballot-3.x.png)
 
 #### 场景 4：t4 时刻 - 更高 Ballot 存在（被拒绝场景）
 
 如果在时间点 t4 用 Ballot number = 1 去 Prepare，因为这时系统中已经出现了更新的提案（使用 Ballot=2 的提案），那么 Acceptor-2 会拒绝较小的 Ballot number 1 的 Prepare。这意味着 Paxos 提议会在第一阶段就被否定，不能往下进行 phase-2 的 Accept 阶段。
 
-![](paxos-same-ballot-4.x.svg)
+![](assets/paxos-same-ballot-4.x.png)
 
 #### 场景 5：t5 时刻及之后 - 完全被新 Ballot 覆盖
 
