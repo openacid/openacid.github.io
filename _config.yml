@@ -15,12 +15,12 @@
 minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "zh-CN"
+locale                   : "en-US"
 title                    : "OpenACID Blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "OpenACID-分布式研究小院"
-description              : "分布式研究小院."
+name                     : "OpenACID - Distributed Systems Research"
+description              : "Distributed systems research notes."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 # url                      : https://blog.openacid.com
 baseurl                  : # the subpath of your site, e.g. "/blog"
@@ -110,7 +110,7 @@ analytics:
 author:
   name             : "OpenACID"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "分布式研究小院."
+  bio              : "Distributed systems research notes."
   # location         : "Somewhere"
   location         :
   email            :
