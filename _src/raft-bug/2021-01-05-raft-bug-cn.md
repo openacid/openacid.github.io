@@ -295,8 +295,8 @@ M(abc) x M(bcd) = {
 
 ```
 C₀ = {a, b, c, d}
-Cᵤ = C₁ ∪ {u}
-Cᵥ = C₁ ∪ {v}
+Cᵤ = C₀ ∪ {u}
+Cᵥ = C₀ ∪ {v}
 
 Lᵢ: Leader in term `i`
 Fᵢ: Follower in term `i`
