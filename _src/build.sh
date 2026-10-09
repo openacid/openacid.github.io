@@ -10,7 +10,7 @@ fn="${path##*/}"
 echo "article: $path"
 
 md2zhihu \
-    --platform   zhihu \
+    --platform   transparent \
     --refs       "$base/_data/refs.yml" \
     --jekyll     \
     --output-dir "$base/post-res" \
