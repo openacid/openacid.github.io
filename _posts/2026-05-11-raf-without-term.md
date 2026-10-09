@@ -16,16 +16,13 @@ toc_label: Table of Contents
 toc_sticky: true
 excerpt: "raf is an experimental Raft variant that does not persist currentTerm as a separate field. Instead, each election reserves a log index, and that index becomes the leader term."
 ---
-
 ![](/post-res/raf-without-term/a9a9ca7fa5a1b329-raf-banner-small.png)
 
 > Summary: `raf: Raft without [T]erm` is an experimental Raft variant. It does not persist `currentTerm` as a separate piece of state. Instead, a candidate reserves a log index when it starts an election, and that index becomes the leader term. This does not remove Raft's logical time model. It only changes where the term is derived from in storage.
 
 > Declaration: This approach is just the same as saving terms in the separate first extra slot in the terms array. So it actually still stores the term and has no value at all. Please do not read this as a useful design; it is only a failed personal experiment.
 
-
 > Note: The idea in this article came from Zhang Yanpo. The code was implemented by Zhang Yanpo by hand. This article was drafted and refined with Codex.
-
 
 Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1) (`v0.1.1`).
 
@@ -136,10 +133,7 @@ So this implementation maintains a few basic facts:
 
 Therefore `terms[i] <= i` is not a protocol invariant. A backfilled empty entry may have `terms[i] > i`. That is not a problem by itself; standard Raft terms can also be greater than log indexes. The important property is different: every complete log entry must carry the term of an established leader, except for the fixed default entry at index `0`.
 
-## Why Split 
-`terms`
- and 
-`cmds`
+## Why Split `terms` and `cmds`
 
 This implementation separates leader terms and application commands into two `Vec`s. Raft's protocol semantics do not require this layout. It is mainly a storage design choice that creates room for cleaner optimization.
 
@@ -270,7 +264,6 @@ The important fields are:
 > The leader also has its own replication state.
 > This makes commit calculation uniform:
 > look at which nodes have `matched` covering an index, then check whether those nodes form a quorum.
-
 
 After the leader is established, every position that already exists in local `terms` but is still missing from `cmds` is taken over by the current leader: the term at that position is rewritten to `leader.term`, and the command is filled with an empty command. After that, every local index on the leader has a corresponding command, and new application writes can start at the next index.
 

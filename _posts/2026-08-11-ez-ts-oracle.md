@@ -18,7 +18,6 @@ toc_label: Table of Contents
 toc_sticky: true
 excerpt: "`timestamp_oracle` is a 200-line timestamp service on EzRaft. A background task reserves ranges through Raft; `next_timestamp` allocates from memory. Leader leases and term-scoped caches keep the sequence strictly increasing across failovers, with no Raft write on the request path."
 ---
-
 ![](/post-res/ez-ts-oracle/b43c2a98b06d02ef-ez-time-server-banner.png)
 
 A timestamp oracle issues one globally increasing sequence. Transaction systems built on [MVCC](https://en.wikipedia.org/wiki/Multiversion_concurrency_control) consume two of those values on every commit, so the oracle sits on the critical path of every write. The naive way to keep the sequence safe is one Raft commit per request. That design is correct. It is also too slow.
@@ -88,7 +87,7 @@ impl EzApp for TimeState {
 }
 ```
 
-`Reserve` asks the state machine to move `reserved_end` to at least `reserve_upto_us`. The response is the newly claimed half-open interval `[start, end)`. Those types and `apply()` are all that [`EzApp`][docs-ezraft-ezapp] needs. See [timestamp_oracle.rs:66-112](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112).
+`Reserve` asks the state machine to move `reserved_end` to at least `reserve_upto_us`. The response is the newly claimed half-open interval `[start, end)`. Those types and `apply()` are all that [`EzApp`](https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html) needs. See [timestamp_oracle.rs:66-112](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112).
 
 The `max` in `apply()` makes the transition idempotent. Applying the same upper bound again leaves `reserved_end` unchanged, so a timed-out reservation can be retried safely.
 
@@ -101,7 +100,6 @@ One Raft entry can reserve a wide range instead of a single value. By default th
 > `reserved_end` is durable. The leader's position inside the reserved range is not: it lives only in memory.
 > If the leader fails, its successor skips the unused suffix and reserves a new range.
 > The sequence may contain gaps. It never goes backward.
-
 
 A background reservation task keeps the leader's cache filled. Each successful reservation is stored in a `Reserved` value with three fields: the term that owns the range, the next available timestamp, and the exclusive upper bound.
 
@@ -177,7 +175,7 @@ Once the latest quorum acknowledgment is older than the lease timeout, the node 
 
 ![Three-node timeline: heartbeat acknowledgments keep the old leader's lease valid; after the lease expires, a local check rejects `next_timestamp` requests, and the cluster then elects a new leader](/post-res/ez-ts-oracle/cac807cbb92f1fc1-time-server-lease-handoff.png)
 
-[`EzRaft::linearizable(ReadPolicy::LeaseRead)`][code-ezraft-linearizable] reads the most recent heartbeat state in memory. It does not contact the quorum again. Internally it calls OpenRaft's [`Raft::ensure_linearizable()`][docs-openraft-ensure-linearizable] and returns `(term, index)`. The term identifies the current leadership; the allocator uses it to validate the cached range:
+[`EzRaft::linearizable(ReadPolicy::LeaseRead)`](https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365) reads the most recent heartbeat state in memory. It does not contact the quorum again. Internally it calls OpenRaft's [`Raft::ensure_linearizable()`](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable) and returns `(term, index)`. The term identifies the current leadership; the allocator uses it to validate the cached range:
 
 ```rust
 async fn leader_term(&self) -> io::Result<u64> {
@@ -186,9 +184,7 @@ async fn leader_term(&self) -> io::Result<u64> {
 }
 ```
 
-## Serve 
-`next_timestamp`
- from Memory
+## Serve `next_timestamp` from Memory
 
 With a reserved range in place, the request path has three steps:
 
@@ -333,6 +329,8 @@ Reference:
 
 - Reserve / Interval / TimeState / impl EzApp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112)
 
+- EzRaft::linearizable : [https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365](https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365)
+
 - TimeService::leader_term : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210)
 
 - TimeService::next_timestamp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168)
@@ -348,6 +346,10 @@ Reference:
 - TiDB: Timestamp Oracle (TSO) : [https://docs.pingcap.com/tidb/stable/glossary/#timestamp-oracle-tso](https://docs.pingcap.com/tidb/stable/glossary/#timestamp-oracle-tso)
 
 - ezraft docs : [https://docs.rs/ezraft](https://docs.rs/ezraft)
+
+- EzApp : [https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html](https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html)
+
+- Raft::ensure_linearizable : [https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable)
 
 - OpenRaft ReadPolicy : [https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/enum.ReadPolicy.html](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/enum.ReadPolicy.html)
 
@@ -377,6 +379,7 @@ Reference:
 
 
 [code-ezapp]:  https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112 "Reserve / Interval / TimeState / impl EzApp"
+[code-ezraft-linearizable]:  https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365 "EzRaft::linearizable"
 [code-leader-term]:  https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210 "TimeService::leader_term"
 [code-next-timestamp]:  https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168 "TimeService::next_timestamp"
 [code-refill]:  https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L188-L205 "TimeService::refill"
@@ -385,6 +388,8 @@ Reference:
 [crates-ezraft]:  https://crates.io/crates/ezraft "ezraft on crates.io"
 [doc-tidb-tso]:  https://docs.pingcap.com/tidb/stable/glossary/#timestamp-oracle-tso "TiDB: Timestamp Oracle (TSO)"
 [docs-ezraft]:  https://docs.rs/ezraft "ezraft docs"
+[docs-ezraft-ezapp]:  https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html "EzApp"
+[docs-openraft-ensure-linearizable]:  https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable "Raft::ensure_linearizable"
 [docs-openraft-readpolicy]:  https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/enum.ReadPolicy.html "OpenRaft ReadPolicy"
 [post-ezraft-cn]:  https://blog.openacid.com/algo/ezraft/ "EzRaft: Build a Distributed KV Store in 100 Lines"
 [post-linearizable]:  https://blog.openacid.com/algo/linearizable/ "Linearizable Transactions in Distributed Systems"

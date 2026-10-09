@@ -20,7 +20,6 @@ toc_label: Table of Contents
 toc_sticky: true
 excerpt: "A lightweight histogram that tracks latency distributions in 2KB of memory with sub-0.2% error. Uses a float-like encoding for O(1) bucket indexing and trapezoid interpolation for accurate percentile estimation — no floating-point math needed."
 ---
-
 ![](/post-res/histogram/7b72af58792aed59-histagram-banner.png)
 
 ## The Problem: Tracking Request Latency Without Slowing Things Down
@@ -175,50 +174,14 @@ Groups top out at 64 (they still double in size, covering the full u64 range).
 
 Here's how the trade-off plays out:
 
-<table>
-<tr class="header">
-<th>WIDTH</th>
-<th>Buckets</th>
-<th>Mem/slot</th>
-<th>Buckets per group</th>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>65</td>
-<td>520 B</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>128</td>
-<td>1.0 KB</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>252</td>
-<td>2.0 KB</td>
-<td>4 (default)</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>496</td>
-<td>3.9 KB</td>
-<td>8</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>976</td>
-<td>7.6 KB</td>
-<td>16</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>1920</td>
-<td>15.0 KB</td>
-<td>32</td>
-</tr>
-</table>
+| WIDTH | Buckets | Mem/slot | Buckets per group |
+| --- | --- | --- | --- |
+| 1 | 65 | 520 B | 1 |
+| 2 | 128 | 1.0 KB | 2 |
+| 3 | 252 | 2.0 KB | 4 (default) |
+| 4 | 496 | 3.9 KB | 8 |
+| 5 | 976 | 7.6 KB | 16 |
+| 6 | 1920 | 15.0 KB | 32 |
 
 At the default WIDTH=3, one histogram costs 2 KB and records every sample in O(1).
 
@@ -242,20 +205,9 @@ All error numbers below come from a log-normal distribution (API latency scenari
 Many histogram libraries do this (e.g., [iopsystems/histogram](https://github.com/iopsystems/histogram)).
 It's a blind guess — it ignores everything about how samples are distributed within the bucket.
 
-<table>
-<tr class="header">
-<th></th>
-<th>P50</th>
-<th>P95</th>
-<th>P99</th>
-</tr>
-<tr class="odd">
-<td>midpoint</td>
-<td>5.018%</td>
-<td>7.732%</td>
-<td>4.861%</td>
-</tr>
-</table>
+|  | P50 | P95 | P99 |
+| --- | --- | --- | --- |
+| midpoint | 5.018% | 7.732% | 4.861% |
 
 **Uniform interpolation**: assume samples are spread evenly across the bucket (a flat rectangle), then interpolate linearly: `estimate = min + (max - min) × rank / count`.
 
@@ -285,26 +237,10 @@ To find the percentile, we solve for the x-position where the trapezoid's area f
 
 Same distribution, same buckets — here's how it stacks up:
 
-<table>
-<tr class="header">
-<th></th>
-<th>P50</th>
-<th>P95</th>
-<th>P99</th>
-</tr>
-<tr class="odd">
-<td>midpoint</td>
-<td>5.018%</td>
-<td>7.732%</td>
-<td>4.861%</td>
-</tr>
-<tr class="even">
-<td>trapezoid</td>
-<td>0.000%</td>
-<td>0.080%</td>
-<td>0.086%</td>
-</tr>
-</table>
+|  | P50 | P95 | P99 |
+| --- | --- | --- | --- |
+| midpoint | 5.018% | 7.732% | 4.861% |
+| trapezoid | 0.000% | 0.080% | 0.086% |
 
 Two orders of magnitude better, with zero additional storage.
 
@@ -312,28 +248,12 @@ The three-bucket layout:
 
 ![](/post-res/histogram/bd85430d86e35843-009-slope-estimation.png)
 
-<table>
-<tr class="header">
-<th>Variable</th>
-<th>Meaning</th>
-</tr>
-<tr class="odd">
-<td><code>x0, x1, x2, x3</code></td>
-<td>Boundaries of the three adjacent buckets</td>
-</tr>
-<tr class="even">
-<td><code>w0, w1, w2</code></td>
-<td>Bucket widths: <code>w0 = x1-x0</code>, <code>w1 = x2-x1</code>, <code>w2 = x3-x2</code></td>
-</tr>
-<tr class="odd">
-<td><code>c0, c1, c2</code></td>
-<td>Sample counts in each bucket</td>
-</tr>
-<tr class="even">
-<td><code>rank</code></td>
-<td>How many samples into the target bucket the percentile falls</td>
-</tr>
-</table>
+| Variable | Meaning |
+| --- | --- |
+| `x0, x1, x2, x3` | Boundaries of the three adjacent buckets |
+| `w0, w1, w2` | Bucket widths: `w0 = x1-x0`, `w1 = x2-x1`, `w2 = x3-x2` |
+| `c0, c1, c2` | Sample counts in each bucket |
+| `rank` | How many samples into the target bucket the percentile falls |
 
 ```
 d0 = c0 / w0       -- left bucket density

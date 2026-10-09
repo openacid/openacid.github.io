@@ -24,7 +24,6 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "SlimTrie的代码级实现详解：通过Trie裁剪去除单分支节点将空间从O(n*k)降至O(n)，再用compacted array压缩存储，最终每条索引仅需约6字节（加4字节value共10字节）。实测内存开销约为B-Tree的13%，查询速度约为其2.6倍。"
 ---
-
 ![](/post-res/slimtrie-impl/ee87842a24c5711c-slim-2-00.webp)
 
 Github: [SlimTrie](https://github.com/openacid/slim)
@@ -110,33 +109,12 @@ Trie的特点在于原生的前缀压缩, 而Trie上的节点数最少是O(n), �
 
 最终 性能目标对比其他几种常见的数据结构应是：
 
-<table>
-<tr class="header">
-<th></th>
-<th>空间开销</th>
-<th>查询时间</th>
-</tr>
-<tr class="odd">
-<td>hashmap</td>
-<td>O(k * n)</td>
-<td>O(k)</td>
-</tr>
-<tr class="even">
-<td>btree</td>
-<td>O(k * n)</td>
-<td>O(k * log(n))</td>
-</tr>
-<tr class="odd">
-<td>Trie</td>
-<td>O(k * n)</td>
-<td>O(k)</td>
-</tr>
-<tr class="even">
-<td>SlimTrie</td>
-<td>O(n)</td>
-<td>O(log(n))</td>
-</tr>
-</table>
+|  | 空间开销 | 查询时间 |
+| --- | --- | --- |
+| hashmap | O(k * n) | O(k) |
+| btree | O(k * n) | O(k * log(n)) |
+| Trie | O(k * n) | O(k) |
+| SlimTrie | O(n) | O(log(n)) |
 
 ### SlimTrie的术语定义
 
@@ -156,9 +134,9 @@ SlimTrie的生成分为3部分：
 
 -   1.  先用一个Trie来构建所有key的索引。
 
--   1.  在Trie的基础上进行裁剪, 将索引数据的量级从O(n * k)降低到O(n)。
+-   2.  在Trie的基础上进行裁剪, 将索引数据的量级从O(n * k)降低到O(n)。
 
--   1.  通过3个compacted array来存储整个Trie的数据结构, 将内存开销降低。
+-   3.  通过3个compacted array来存储整个Trie的数据结构, 将内存开销降低。
 
 ### 1 SlimTrie原始Trie的建立
 
@@ -226,128 +204,19 @@ SlimTrie的生成分为3部分：
 
 另外为了更具体的说明这个例子，我们假设value是1个4 byte的记录, 来展示SlimTrie中每个节点对应的信息，其中只有 绿色 是需要记录的, 如下图：
 
-<table>
-<tr class="header">
-<th>层</th>
-<th>节点ID</th>
-<th>对应前缀</th>
-<th>分支</th>
-<th>第一个子节点ID</th>
-<th>Step 数</th>
-<th>是否是leaf</th>
-<th>value</th>
-</tr>
-<tr class="odd">
-<td><code>&lt;root&gt;</code></td>
-<td>0</td>
-<td></td>
-<td>a,b</td>
-<td>1</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Lvl-1</td>
-<td>1</td>
-<td>a..</td>
-<td>e,f</td>
-<td>3</td>
-<td>2</td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Lvl-1</td>
-<td>2</td>
-<td>b.</td>
-<td>2,4</td>
-<td>5</td>
-<td>1</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Lvl-2</td>
-<td>3</td>
-<td>a..e</td>
-<td>f,g</td>
-<td>7</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Lvl-2</td>
-<td>4</td>
-<td>a..f.</td>
-<td></td>
-<td></td>
-<td>1</td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Lvl-2</td>
-<td>5</td>
-<td>b.2.</td>
-<td></td>
-<td></td>
-<td>1</td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Lvl-2</td>
-<td>6</td>
-<td>b.4</td>
-<td></td>
-<td></td>
-<td></td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>Lvl-3</td>
-<td>7</td>
-<td>a..ef</td>
-<td></td>
-<td></td>
-<td></td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>Lvl-3</td>
-<td>8</td>
-<td>a..eg</td>
-<td></td>
-<td></td>
-<td></td>
-<td><code>&lt;leaf&gt;</code></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>最大数量</td>
-<td></td>
-<td></td>
-<td>n - 1</td>
-<td>n - 1</td>
-<td>n - 1</td>
-<td>n</td>
-<td>n</td>
-</tr>
-<tr class="odd">
-<td>长度</td>
-<td></td>
-<td></td>
-<td>16bit</td>
-<td>16bit</td>
-<td>16bit</td>
-<td>0</td>
-<td>4 byte</td>
-</tr>
-</table>
+| 层 | 节点ID | 对应前缀 | 分支 | 第一个子节点ID | Step 数 | 是否是leaf | value |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `<root>` | 0 |  | a,b | 1 |  |  |  |
+| Lvl-1 | 1 | a.. | e,f | 3 | 2 | `<leaf>` |  |
+| Lvl-1 | 2 | b. | 2,4 | 5 | 1 |  |  |
+| Lvl-2 | 3 | a..e | f,g | 7 |  |  |  |
+| Lvl-2 | 4 | a..f. |  |  | 1 | `<leaf>` |  |
+| Lvl-2 | 5 | b.2. |  |  | 1 | `<leaf>` |  |
+| Lvl-2 | 6 | b.4 |  |  |  | `<leaf>` |  |
+| Lvl-3 | 7 | a..ef |  |  |  | `<leaf>` |  |
+| Lvl-3 | 8 | a..eg |  |  |  | `<leaf>` |  |
+| 最大数量 |  |  | n - 1 | n - 1 | n - 1 | n | n |
+| 长度 |  |  | 16bit | 16bit | 16bit | 0 | 4 byte |
 
 上面的表格中, 因为1个节点”是否leaf“的信息跟”是否有value“是对等的，所以leaf信息不需要记录。而最终的索引需要的 总存储量是:
 
@@ -450,43 +319,12 @@ struct slimtrie {
 
 再考虑compacted array的额外开销，最终整体的内存开销如下：
 
-<table>
-<tr class="header">
-<th>数据</th>
-<th>最大个数</th>
-<th>有效大小(byte)</th>
-<th>总大小(byte)</th>
-<th>总实际大小(byte)</th>
-</tr>
-<tr class="odd">
-<td>Inner(branch, offset)</td>
-<td>n - 1</td>
-<td>4</td>
-<td>4 * n</td>
-<td>4 * 1.15 * n + 8</td>
-</tr>
-<tr class="even">
-<td>Step</td>
-<td>n - 1</td>
-<td>2</td>
-<td>2 * n</td>
-<td>2 * 1.15 * n + 8</td>
-</tr>
-<tr class="odd">
-<td>LeafParent</td>
-<td>n</td>
-<td>4</td>
-<td>4 * n</td>
-<td>4 * 1.15 * n + 8</td>
-</tr>
-<tr class="even">
-<td>总和</td>
-<td></td>
-<td></td>
-<td></td>
-<td>10 * 1.15 * n + 24</td>
-</tr>
-</table>
+| 数据 | 最大个数 | 有效大小(byte) | 总大小(byte) | 总实际大小(byte) |
+| --- | --- | --- | --- | --- |
+| Inner(branch, offset) | n - 1 | 4 | 4 * n | 4 * 1.15 * n + 8 |
+| Step | n - 1 | 2 | 2 * n | 2 * 1.15 * n + 8 |
+| LeafParent | n | 4 | 4 * n | 4 * 1.15 * n + 8 |
+| 总和 |  |  |  | 10 * 1.15 * n + 24 |
 
 在存储系统 中使用SlimTrie作为数据索引的场景里, 如果用 32G内存, 大约可以索引32亿个文件。
 
@@ -619,7 +457,4 @@ type  Valule struct  {
 
 当然，SlimTrie 目前仅适用于静态数据场景，在适用范围上仍有局限。我们希望在后续工作中继续探索和完善。)
 
-
-
-Reference:
 
