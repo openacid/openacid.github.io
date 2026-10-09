@@ -24,7 +24,6 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "单机100TB存储如何索引百亿小文件？经典的hash map和B-Tree索引的内存开销为O(k*n)，无法全部放入内存。SlimTrie基于Trie裁剪和压缩，将空间复杂度降至O(n)，实现每条索引仅约10字节，在1GB内存中即可建立100TB数据量的索引。"
 ---
-
 ![](/post-res/slimtrie-design/53177fcdbfc5fce0-slim-1-00.jpg)
 
 Github: [SlimTrie](https://github.com/openacid/slim)
@@ -243,33 +242,12 @@ Trie 的特点在于在于原生的前缀压缩, 而Trie 上的节点数最少�
 
 假设n 个key ，每个key 的长度为k ，各数据结构的特性如下表：
 
-<table>
-<tr class="header">
-<th></th>
-<th>空间开销</th>
-<th>查询时间</th>
-</tr>
-<tr class="odd">
-<td>Hash map</td>
-<td>O(k * n)</td>
-<td>O(k)</td>
-</tr>
-<tr class="even">
-<td>Skiplist, btree</td>
-<td>O(k * n)</td>
-<td>O(k * log(n))</td>
-</tr>
-<tr class="odd">
-<td>Trie</td>
-<td>O(k * n)</td>
-<td>O(k)</td>
-</tr>
-<tr class="even">
-<td>SlimTrie</td>
-<td>O(n)</td>
-<td>O(log(n))</td>
-</tr>
-</table>
+|  | 空间开销 | 查询时间 |
+| --- | --- | --- |
+| Hash map | O(k * n) | O(k) |
+| Skiplist, btree | O(k * n) | O(k * log(n)) |
+| Trie | O(k * n) | O(k) |
+| SlimTrie | O(n) | O(log(n)) |
 
 ## 生成的SlimTrie 三个步骤
 
@@ -293,7 +271,7 @@ Trie 的特点在于在于原生的前缀压缩, 而Trie 上的节点数最少�
 
 首先我们用一个基本的实验来证明我们的实现和上文说到的理论是相符的。实验选取Hash 类数据结构的map 和Tree 类数据结构的B-Tree 与SlimTrie 做对比，计算在同等条件下，各个数据结构建立索引所耗费的内存空间。
 
-实验在go 语言环境下进行，map 使用golang 的map 实现，B-Tree 使用Google 的BTree implementation for Go (  [github.com/google/btree](https://www.google.com/url?q=https://github.com/google/btree&amp;sa=D&amp;ust=1552110053540000)  ) 。key 和value 都是string 类型（我们更多关心它的大小）。实验的结果数据如下：
+实验在go 语言环境下进行，map 使用golang 的map 实现，B-Tree 使用Google 的BTree implementation for Go (  [github.com/google/btree](https://www.google.com/url?q=https://github.com/google/btree&sa=D&ust=1552110053540000)  ) 。key 和value 都是string 类型（我们更多关心它的大小）。实验的结果数据如下：
 
 索引内存占用对比图：
 
@@ -355,7 +333,4 @@ SlimTrie 的查询效率远好于Btree, 也非常接近Hash map 的性能。
 
 Github: [SlimTrie](https://github.com/openacid/slim)
 
-
-
-Reference:
 
