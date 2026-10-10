@@ -12,19 +12,15 @@ tags:
 refs:
     - x: y
 
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
 excerpt: "本文探讨 Paxos 协议中 Ballot number 的重用机制，分析何时可重复使用，以及为何只能使用系统中已存在的值而非提议新值"
 ---
-
 ![](/post-res/paxos-same-ballot/f3c38ebb6fbef4c9-paxos-same-ballot-banner.webp)
 
-欢迎各位读者探讨 Paxos 的深层机制。在我此前发表的 [Paxos 的直观解释](https://zhuanlan.zhihu.com/p/145044486) 文章后，它作为一个完整的介绍 Paxos 文章, 收到了不少读者提出的深入问题，这些问题我已在 [Paxos 的读者答疑](https://github.com/openacid/openacid.github.io/discussions/31) 中详细回应。考虑到分布式共识算法的复杂性，我决定通过一系列 回答 Paxos 的特定问题 形式的文章来作为补充，本文是该系列的第一篇。希望这些分析能帮助你解决疑惑，从不同角度理解 Paxos，帮助自己在分布式系统领域构建更加完整的思维框架。
+欢迎各位读者探讨 Paxos 的深层机制。在我此前发表的 [Paxos 的直观解释](https://blog.openacid.com/algo/paxos/) 文章后，它作为一个完整的介绍 Paxos 文章, 收到了不少读者提出的深入问题，这些问题我已在 [Paxos 的读者答疑](https://github.com/openacid/openacid.github.io/discussions/31) 中详细回应。考虑到分布式共识算法的复杂性，我决定通过一系列 回答 Paxos 的特定问题 形式的文章来作为补充，本文是该系列的第一篇。希望这些分析能帮助你解决疑惑，从不同角度理解 Paxos，帮助自己在分布式系统领域构建更加完整的思维框架。
 
 ## 问：是否可以用同样的 Ballot number（rnd）运行 Paxos？
 
@@ -50,7 +46,7 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
     -   在 Acceptor-2 和 Acceptor-3 上完成了 phase-1（Prepare 阶段）
     -   然后在 Acceptor-1 和 Acceptor-2 上完成了 phase-2（Accept 阶段），提交了值 Y
 
-![](/post-res/paxos-same-ballot/5abd75633aa50198-paxos-same-ballot-0.x.svg)
+![](/post-res/paxos-same-ballot/89d049f011292de8-paxos-same-ballot-0.x.png)
 
 > 图中的事件以这种格式表示: `<phase><ballot_number>(<value>)`:
 > 
@@ -63,7 +59,6 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 > 
 > 例如 `P1` 指的是使用 **Ballot=1** 进行 Prepare，`A1(X)` 则指的是使用 **Ballot=1** 接受值 **X**。
 
-
 ### 不同时间下使用同一个 Ballot number 重新运行 Paxos 的效果示例
 
 在上面的例子中, 我们将分析在几个不同的时刻(t1, t2, t3, t4, t5)分别使用相同的 Ballot number = 1 重新运行 Paxos 时会发生什么情况, 并详细描述每种场景下的具体行为和结果.
@@ -72,13 +67,13 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 
 在时间点 t1，如果我们再次用同样的 Ballot number = 1 发起 Paxos，它可以完成 phase-1, 因为 Acceptor 总是接受同样的 Ballot number 的请求(Prepare 或 Accept). 但这次完成（Prepare）之后，并不会看到任何已存在的值。而前面我们说过, 用相同的 Ballot number 重复运行时也不能 propose 任何值. “无值”情况下也就无法运行 phase-2（Accept 阶段），所以协议会结束，等同于没有做任何更改。
 
-![](/post-res/paxos-same-ballot/9c06b2c3e814b3ae-paxos-same-ballot-1.x.svg)
+![](/post-res/paxos-same-ballot/eb862f19da46b0ed-paxos-same-ballot-1.x.png)
 
 #### 场景 2：t2 时刻 - 部分节点存在历史值
 
 与 t1 情况相似。如果此时系统只观测到部分 Acceptor(Acceptor-1 和 2)（它并不知道已有 `A1(X)` 的存在），那么结果与 t1 一样，无法提交新的值。
 
-![](/post-res/paxos-same-ballot/a17787ad9c3273b8-paxos-same-ballot-2.x.svg)
+![](/post-res/paxos-same-ballot/d4196aa1a11670c1-paxos-same-ballot-2.x.png)
 
 #### 场景 3：t3 时刻 - 多数派存在历史值（关键场景）
 
@@ -86,13 +81,13 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 
 示意图如下所示，`P1'` 表示重复使用同一个 Ballot=1 进行再次 Prepare 且成功完成；在 Acceptor-1 上看到了值 `X`，然后在 `t3'` 时刻完成 phase-2 Accept 阶段，成功将值 `X` 提交到多数派。这次 Paxos 的运行可以视为修复了之前 `A1(X)` 未完成的提交（该值仅写入了 Acceptor-1 但未达到多数派共识）。
 
-![](/post-res/paxos-same-ballot/56f61d3f1f71e0fd-paxos-same-ballot-3.x.svg)
+![](/post-res/paxos-same-ballot/28c09d2ffe8970b4-paxos-same-ballot-3.x.png)
 
 #### 场景 4：t4 时刻 - 更高 Ballot 存在（被拒绝场景）
 
 如果在时间点 t4 用 Ballot number = 1 去 Prepare，因为这时系统中已经出现了更新的提案（使用 Ballot=2 的提案），那么 Acceptor-2 会拒绝较小的 Ballot number 1 的 Prepare。这意味着 Paxos 提议会在第一阶段就被否定，不能往下进行 phase-2 的 Accept 阶段。
 
-![](/post-res/paxos-same-ballot/321be959bc05288a-paxos-same-ballot-4.x.svg)
+![](/post-res/paxos-same-ballot/33984ea991c5982c-paxos-same-ballot-4.x.png)
 
 #### 场景 5：t5 时刻及之后 - 完全被新 Ballot 覆盖
 
@@ -115,8 +110,8 @@ Reference:
 
 - paxos的读者答疑 : [https://github.com/openacid/openacid.github.io/discussions/31](https://github.com/openacid/openacid.github.io/discussions/31)
 
-- 可靠分布式系统-paxos的直观解释 : [https://zhuanlan.zhihu.com/p/145044486](https://zhuanlan.zhihu.com/p/145044486)
+- 可靠分布式系统-paxos的直观解释 : [https://blog.openacid.com/algo/paxos/](https://blog.openacid.com/algo/paxos/)
 
 
 [discuss-paxos]: https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
-[post-paxos]: https://zhuanlan.zhihu.com/p/145044486 "可靠分布式系统-paxos的直观解释"
+[post-paxos]: https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"

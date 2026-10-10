@@ -10,12 +10,8 @@ tags:
     - config-change
     - joint
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -23,7 +19,6 @@ toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Is the single-log-entry approach to Raft configuration change simpler than the standard Joint Consensus?"
 ---
-
 ![](/post-res/single-log-joint/c915c4fcc98591ed-single-log-joint-banner.webp)
 
 # Preface
@@ -194,7 +189,6 @@ After `entry-j` (containing `C_new`) commits under `C_old_new`, append a special
 
 > **Important**: The barrier must come *after* `entry-j` commits. Otherwise it can't serve as proof of the commit.
 
-
 When a restarting node sees this barrier, it knows the joint phase ended successfully. It can safely use `C_new` for elections without trying to contact old nodes that might not exist anymore.
 
 In the diagram below, when `entry-3` commits under `C_old_new`, we add barrier `entry-4`:
@@ -219,7 +213,6 @@ Now when all nodes restart, there's no regression. Nodes `x` and `y` see the bar
 > -   **At-most-once** (commit on `C_new` only): commit-index reaches `C_new` but might not reach `C_old`. Those nodes don't know the cluster moved on, so they keep trying to run elections.
 > 
 > Either way, we can still end up with `C_old` and `C_new` nodes competing for leadership.
-
 
 So here's what the **patched single-log approach** looks like:
 

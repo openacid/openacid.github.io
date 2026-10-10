@@ -9,12 +9,8 @@ tags:
     - ai
     - voice-input
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -22,7 +18,6 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "xp 的 AI 开发工作流"
 ---
-
 目前我的日常开发基本只需要"动嘴"就能完成。这篇文章分享我在用的工具组合。
 
 **偏见声明**：我更希望把精力放在问题分析上，所以市面上流行的工具并没有一一尝试。只要满足需要就不会替换，除非发现明显的效率瓶颈。
@@ -60,8 +55,7 @@ excerpt: "xp 的 AI 开发工作流"
 
 以下是几种我尝试过、都能满足需要的语音输入法：
 
-### [闪电说](https://shandianshuo.cn/)
-（本地模型）
+### [闪电说](https://shandianshuo.cn/)（本地模型）
 
 ![闪电说](/post-res/xp-vibe-coding/3676e2058bc85027-shandianshuo.webp)
 
@@ -111,9 +105,7 @@ excerpt: "xp 的 AI 开发工作流"
 
 > [tig](https://github.com/jonas/tig) 是基于 ncurses 的 Git 文本界面工具。
 
-
-### 为什么用 tig 而非 
-`git add -p`
+### 为什么用 tig 而非 `git add -p`
 
 `git add -p` 只能显示固定的 2-3 行上下文，有时不够理解修改(我的 context 太小 🤔)。
 
@@ -146,32 +138,13 @@ AI 能极大提升效率——前提是: 你了解这个领域。否则无法判
 
 ## 工具清单
 
-<table>
-<tr class="header">
-<th>工具</th>
-<th>用途</th>
-</tr>
-<tr class="odd">
-<td><a href="https://www.jetbrains.com/rust/">Rust Rover</a></td>
-<td>代码分析</td>
-</tr>
-<tr class="even">
-<td><a href="https://shandianshuo.cn/">闪电说</a> / <a href="https://www.doubao.com/">豆包</a> / <a href="https://autoglm.zhipuai.cn/autotyper/">智谱语音输入法</a></td>
-<td>语音输入</td>
-</tr>
-<tr class="odd">
-<td><a href="https://github.com/anthropics/claude-code">Claude Code</a></td>
-<td>AI 编程</td>
-</tr>
-<tr class="even">
-<td><a href="https://open.bigmodel.cn/">GLM 4.7</a></td>
-<td>后端模型</td>
-</tr>
-<tr class="odd">
-<td><a href="https://github.com/jonas/tig">tig</a></td>
-<td>代码审核，增量提交</td>
-</tr>
-</table>
+| 工具 | 用途 |
+| --- | --- |
+| [Rust Rover](https://www.jetbrains.com/rust/) | 代码分析 |
+| [闪电说](https://shandianshuo.cn/) / [豆包](https://www.doubao.com/) / [智谱语音输入法](https://autoglm.zhipuai.cn/autotyper/) | 语音输入 |
+| [Claude Code](https://github.com/anthropics/claude-code) | AI 编程 |
+| [GLM 4.7](https://open.bigmodel.cn/) | 后端模型 |
+| [tig](https://github.com/jonas/tig) | 代码审核，增量提交 |
 
 ---
 

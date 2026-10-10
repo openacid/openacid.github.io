@@ -11,12 +11,8 @@ tags:
     - consensus
     - 分布式
 
-
 refs:
     - x: y
-
-article:
-    image: /post-res/abstract-paxos/abstract-paxos-banner-small.png
 
 mathjax: true
 toc: true
@@ -24,10 +20,11 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 我用了整整三十天的时间, 将两招绝学并成了一整招, 看好了: abstract-paxos"
 ---
+![](/post-res/abstract-paxos/16fe829e4bf9f3f7-abstract-paxos-banner-small.png)
 
 # 前言(客套话, 但会增加仪式感)
 
-之前写了一篇 [paxos的直观解释](https://zhuanlan.zhihu.com/p/145044486) , 用简单的语言描述了 paxos 的工作原理, 看过的朋友说是看过的最易懂的paxos介绍, 同时也问我是否也写一篇 raft 的. 但 raft 介绍文章已经很多很优质了, 感觉没什么可写的, 就一直拖着.
+之前写了一篇 [paxos的直观解释](https://blog.openacid.com/algo/paxos/) , 用简单的语言描述了 paxos 的工作原理, 看过的朋友说是看过的最易懂的paxos介绍, 同时也问我是否也写一篇 raft 的. 但 raft 介绍文章已经很多很优质了, 感觉没什么可写的, 就一直拖着.
 
 后来想起来, 在分布式岗的面试中, 会经常被问到 raft 和 paxos 有什么区别, 虽然可能会惹恼面试官, 但我会说: 没区别. 今天介绍一个把 paxos 和 raft 等统一到一起的分布式一致性算法 [abstract-paxos](https://github.com/openacid/abstract-paxos), 解释各种分布式一致性算法从 0 到 1 的推导过程. 算是填了 raft 的坑, 同时在更抽象的视角看 raft, 也可以很容易看出它设计上的不足和几个优化的方法.
 
@@ -86,11 +83,12 @@ excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 
 
 因为 writer 写入的信息 reader 必须能读到, 所以任意2个 quorum 必须有交集:
 
-<img src="https://www.zhihu.com/equation?tex=q_i%20%5Ccap%20q_j%20%5Cne%20%5Cemptyset%5C%5C" alt="q_i \cap q_j \ne \emptyset\\" class="ee_img tr_noresize" eeimg="1">
+$$
+q_i \cap q_j \ne \emptyset
+$$
 
 > 大部分时候, 一个 quorum 都是指 **majority**, 也就是多于半数个node的集合.
 > 例如`{a,b}, {b,c}, {c,a}` 是集合`{a,b,c}`的3个 quorum.
-
 
 如果 任何一个 reader 都能通过访问一个 quorum 来读到某个数据, 那么这条数据就满足了  **香农信息定义** , 我们称这条数据为  commit  的.
 
@@ -109,8 +107,7 @@ excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 
 
 -   `N1` 存储了`[x,y]`,
 -   `N3` 存储了 `[z]`,
-
-使用 **quorum-read** 去读的时候, 有时能得到 `[x,y]` (访问 `N1,N2` ),有时能得到 `[z]` (访问 `N2,N3`).
+    使用 **quorum-read** 去读的时候, 有时能得到 `[x,y]` (访问 `N1,N2` ),有时能得到 `[z]` (访问 `N2,N3`).
 
 所以 `[x,y]` 和 `[z]` 在这个系统中都 **不是信息**, 都不是 commit 完成的状态.
 
@@ -169,7 +166,6 @@ N3: [z]                   | [z]
 > 经历了 `x=1`,再到 `x=2` 的一个 State (`[x=1, x=2]`), 跟直接到 `x=2` 的 State (`[x=2]`)是不同的.
 > 这个不同之处体现在: 可能有个时间点, 可以从第一个 State 读出 `x=1` 的信息, 而第二个 State 不行.
 
-
 常见的 State 定义是: **一个 Cmd 为元素的, 只允许 append 的 list**: `Vec<Cmd>`.
 
 这也就是一个记录变更操作(Cmd)的日志(log), 或称为 write-ahead-log(WAL). 而系统的 State 也由 WAL 唯一定义的.
@@ -194,14 +190,12 @@ log 中的每个 entry 是一个改变系统状态的命令(Cmd).
 
 > 这是 State 的初步设计, 为了实现这个一致性协议, 后面我们将对 State 增加更多的信息来满足我们的要求.
 
-
 根据 **commit-写quorum** 的要求, 最终 State 会写到一个 quorum 中以完成 commit,
 我们将这个过程暂时称作 **phase-2**. 它是最后一步, 在执行这一步之前, 我们需要设计一个协议, 让整个 commit 的过程也遵守:
 
 -   **commit-唯一**,
 -   **commit后不能修改**
-
-的约束.
+    的约束.
 
 首先看如何让 commit 后的数据 **唯一**, 这涉及到 reader 如何从 quorum 中多个node返回的不同的 State 副本中选择一个作为`读`操作的最终结果:
 
@@ -211,7 +205,6 @@ log 中的每个 entry 是一个改变系统状态的命令(Cmd).
 但多个 writer 可能会(在互不知晓的情况下)并发的向多个 node 写入 **不同** 的 State.
 
 > 写入了 **不同** 的 State 指, 两个 State: s₁, s₂,  如果 `s₁ ⊆ s₂` 和 `s₂ ⊆ s₁` 都不满足, 那么只有一个是可能被 commit 的. 否则就产生了信息的丢失.
-
 
 而当 reader 在不同的 node 上读到2个不同的 State 时, reader 必须能排除其中一个肯定没有 commit 的 State, 如 **例子2** 中描述问题.
 
@@ -233,7 +226,6 @@ State 的 **全序关系** 来表示 commit 的有效性,
 > x --> y --> z
 >        `--> w
 > ```
-
 
 所以 State 必须具备更多的信息让它能形成全序关系.
 
@@ -330,14 +322,12 @@ writer 通过 quorum-write 写入一个足够大的 State, 就能保证一定被
 > 
 > > 关于 [abstract-paxos](https://github.com/openacid/abstract-paxos) 如何映射为 paxos 或 raft, 在本文的最后讨论.
 > 
-> 
 > 另一方面, 从 writer 的角度来说:
 > 
 > -   如果一个 writer 可以生成一个 `commit_index` 使之大于任何一个已知的 `commit_index`, 那么这时 [abstract-paxos](https://github.com/openacid/abstract-paxos) 就是一个**活锁**的系统: 它永远不会阻塞, 但有可能永远都不会成功提交. 例如 paxos 或 raft
 > -   如果一个 writer 无法生成任意大的 `commit_index`, 那么它就是一个 **死锁** 的系统, 例如 [2pc](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
 > 
 > 当然也可以构造 `commit_index` 使 [abstract-paxos](https://github.com/openacid/abstract-paxos) 既活锁又死锁, 那么可以认为它是一个结合了 paxos 和 2pc 的协议.
-
 
 有了 State 之间的全序关系,
 然后再让 writer 保证 **phase-2** 写到 quorum 里的 State 一定是最大的,
@@ -380,7 +370,6 @@ struct Writer {
 > 
 > --- 例子5 ---
 > ```
-
 
 所以: **writer 在 commit 一个 State 前, 必须阻止更小的 State 被 commit**.
 这就是 **phase-1** 要做的第一件事:
@@ -425,7 +414,6 @@ struct Node {
 > ```
 > 7,[x₃, y₅]
 > ```
-
 
 一个直接的推论是, 一个 node 如果记录了一个 `commit_index` , 就不能接受更小的 `commit_index` ,
 否则意味着它的防御失效了: **Node.commit_index 单调增**.
@@ -566,7 +554,6 @@ impl Node {
 > --- 例子6 ---
 > ```
 
-
 所以必须满足: `s₁.commit_index() == w₁.commit_index`
 
 这时, 只要将 State 写入到 `w₁.quorum`, 就可以认为提交.
@@ -602,7 +589,7 @@ struct P2Reply {
 
 ### Phase-2: Reply
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-07991557108a4141.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-85d0166435658147.jpg)
 
 ### Phase-2: Handler
 
@@ -624,7 +611,6 @@ impl Node {
 也就是说 **phase-2** 不止可能修改 `Node.state`, 同时也会修改 `Node.commit_index`.
 
 > 这里也是一个学习分布式容易产生误解的地方, 例如很多人曾经以为的一个paxos的bug: [paxos-bug](https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple).
-
 
 这里也很容易看出为何在 raft 中必须当前 term 复制到 quorum 才认为是 commit 了.
 
@@ -678,8 +664,7 @@ impl Writer {
 -   State 不能留空洞: 有空洞的 State 跟没空洞的 State 不同, 不能通过最后一条日志来确定其所在的 State 大小.
 
 -   writer 在 **phase-1** 完成后可以保证一定包含所有已经 commit 的 State .
-
-所以在一个接受 **phase-2** 的node 上, 它 Node.state 中任何跟 Writer.State 不同的部分都可以删除, 因为不一致的部分一定没有被 commit.
+    所以在一个接受 **phase-2** 的node 上, 它 Node.state 中任何跟 Writer.State 不同的部分都可以删除, 因为不一致的部分一定没有被 commit.
 
 以下是 **phase-2** 过程中删除 `N3` 上不一致数据的过程:
 
@@ -746,7 +731,6 @@ snapshot 复制跟 State 分段复制没有本质区别, 将 State 中的 log �
 > {c,a, z,x}
 > ```
 
-
 然后, 我们对成员变更增加约束, 让成员变更的过程同样保证 **香农信息定** 的要求:
 
 ## 成员变更约束-1
@@ -754,7 +738,11 @@ snapshot 复制跟 State 分段复制没有本质区别, 将 State 中的 log �
 首先, 显然有 **2个相邻 config 的 quorum 必须有交集**. 否则新配置启用后就立即会产生脑裂.
 即:
 
-<img src="https://www.zhihu.com/equation?tex=%5Cforall%20q%20%5Cin%20c_i%2C%5Cforall%20p%20%5Cin%20c_j%2Cq%20%5Ccap%20p%20%5Cne%20%5Cempty%5C%5C" alt="\forall q \in c_i,\forall p \in c_j,q \cap p \ne \empty\\" class="ee_img tr_noresize" eeimg="1">
+$$
+\forall q \in c_i,
+\forall p \in c_j,
+q \cap p \ne \empty
+$$
 
 在后面的讨论中我们将满足以上约束的2个 config 的关系表示为: **cᵢ ~ cᵢ₊₁**.
 
@@ -834,28 +822,12 @@ snapshot 复制跟 State 分段复制没有本质区别, 将 State 中的 log �
 
 其中概念对应关系为:
 
-<table>
-<tr class="header">
-<th style="text-align: left;">abstract-paxos</th>
-<th style="text-align: left;">classic-paxos</th>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">writer</td>
-<td style="text-align: left;">proposer</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">node</td>
-<td style="text-align: left;">acceptor</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Writer.commit_index</td>
-<td style="text-align: left;">rnd/ballot</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">State.commit_index()</td>
-<td style="text-align: left;">vrnd/vbal</td>
-</tr>
-</table>
+| abstract-paxos | classic-paxos |
+| :-- | :-- |
+| writer | proposer |
+| node | acceptor |
+| Writer.commit_index | rnd/ballot |
+| State.commit_index() | vrnd/vbal |
 
 ## 秒变 Raft
 
@@ -921,35 +893,15 @@ struct RaftState {
 > 
 > 但不否认 raft 的设计在出现时是一个非常漂亮的抽象, 主要在于它对 multi-paxos 没有明确定义的问题, 即多条日志之间的关系到底应该是怎样的, 给出了一个确定的答案.
 
-
 概念对应关系:
 
-<table>
-<tr class="header">
-<th style="text-align: left;">abstract-Paxos</th>
-<th style="text-align: left;">raft</th>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">writer at phase-1</td>
-<td style="text-align: left;">Candidate</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">writer at phase-2</td>
-<td style="text-align: left;">Leader</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">node</td>
-<td style="text-align: left;">node</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Writer.commit_index</td>
-<td style="text-align: left;">(Term,VotedFor)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">State.commit_index()</td>
-<td style="text-align: left;">Term</td>
-</tr>
-</table>
+| abstract-Paxos | raft |
+| :-- | :-- |
+| writer at phase-1 | Candidate |
+| writer at phase-2 | Leader |
+| node | node |
+| Writer.commit_index | (Term,VotedFor) |
+| State.commit_index() | Term |
 
 成员变更方面, raft 的 **joint 成员变更** 算法将条件限制为只允许 uniform 和 joint 交替的变更: `c0 -> c0c1 -> c1 -> c1c2 -> c2 ...`.
 
@@ -963,13 +915,13 @@ struct RaftState {
 -   2, **提前commit**: raft 中 commit 的标准是复制本 term 的一条日志到 quorum. 这样在新 leader 刚刚选出后可能会延后 commit 的确认, 如果有较多的较小 term 的日志需要复制的话. 因此一个可以较快 commit 的做法是复制一段 State 时(raft 的 log), 也带上 writer 的 `commit_index` 信息(即 raft leader 的 `term`) 到每个 node, 同时, 对 State 的比较(即raft 的 log 的比较) 改为比较 `[writer.commit_index, last_log_commit_index, log.len()]`, 在raft 中, 对应的是比较 `[leader_term, last_log_term, log.len()]`.
 -   3, **成员变更允许更灵活的变化**: 例如 `c0c1 -> c1c2`.
 
-其中1,3已经在 [openraft](https://github.com/datafuselabs/openraft) 中实现(朋友说它是披着raft皮的paxos`/:-)`).
+其中1,3已经在 [openraft](https://github.com/databendlabs/openraft) 中实现(朋友说它是披着raft皮的paxos`/:-)`).
 
 
 
 Reference:
 
-- 可靠分布式系统-paxos的直观解释 : [https://zhuanlan.zhihu.com/p/145044486](https://zhuanlan.zhihu.com/p/145044486)
+- 可靠分布式系统-paxos的直观解释 : [https://blog.openacid.com/algo/paxos/](https://blog.openacid.com/algo/paxos/)
 
 - abstract-paxos : [https://github.com/openacid/abstract-paxos](https://github.com/openacid/abstract-paxos)
 
@@ -977,7 +929,7 @@ Reference:
 
 - leveldb : [https://github.com/google/leveldb](https://github.com/google/leveldb)
 
-- openraft : [https://github.com/datafuselabs/openraft](https://github.com/datafuselabs/openraft)
+- openraft : [https://github.com/databendlabs/openraft](https://github.com/databendlabs/openraft)
 
 - Two phase commit : [https://en.wikipedia.org/wiki/Two-phase_commit_protocol](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
 
@@ -986,11 +938,11 @@ Reference:
 - 字典序 : [https://zh.wikipedia.org/wiki/字典序](https://zh.wikipedia.org/wiki/字典序)
 
 
-[post-paxos]: https://zhuanlan.zhihu.com/p/145044486 "可靠分布式系统-paxos的直观解释"
+[post-paxos]: https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"
 [repo-abstract-paxos]: https://github.com/openacid/abstract-paxos "abstract-paxos"
 [repo-consensus-bug-paxos]: https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
 [repo-leveldb]: https://github.com/google/leveldb "leveldb"
-[repo-openraft]: https://github.com/datafuselabs/openraft "openraft"
+[repo-openraft]: https://github.com/databendlabs/openraft "openraft"
 [wiki-2pc]: https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit"
 [wiki-偏序关系]: https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
 [wiki-字典序]: https://zh.wikipedia.org/wiki/字典序 "字典序"

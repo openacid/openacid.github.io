@@ -30,9 +30,6 @@ platform_refs:
     zhihu:
         - "post-zipf": https://zhuanlan.zhihu.com/p/94525243 "zipf"
 
-article:
-    image: /post-res/succinctset/succinctset-wechat-banner-small.jpg
-
 pdf: false
 
 mathjax: false
@@ -41,38 +38,38 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "压缩前缀树, 减少50%存储空间, 支持创建和查询, 只需100行代码"
 ---
+![](/post-res/succinctset/3cadf29333159eef-succinctset-wechat-banner-small.jpg)
 
-这文介绍一个压缩前缀树实现的sorted set(github: [succinct.Set][]), 区区95行代码, 包含了一组完整的功能:
+这文介绍一个压缩前缀树实现的sorted set(github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100)), 区区95行代码, 包含了一组完整的功能:
 
-- 用 [前缀树][] 存储一个排序数组, 去掉指针, 压缩掉50%的空间;
-  例如在本文的例子中, 存储2.4MB的200万个单词, 只需要1.2MB.
+-   用 [前缀树](https://en.wikipedia.org/wiki/Trie) 存储一个排序数组, 去掉指针, 压缩掉50%的空间;
+    例如在本文的例子中, 存储2.4MB的200万个单词, 只需要1.2MB.
 
-- 创建: 从key列表创建一个压缩的前缀树;
+-   创建: 从key列表创建一个压缩的前缀树;
 
-- 查询: 支持Has() 操作来查询1个key是否存在;
+-   查询: 支持Has() 操作来查询1个key是否存在;
 
-- 优化: 通过索引来加速 bitmap 的操作, 将较大的 bitmap 操作优化到O(1)的时间开销.
+-   优化: 通过索引来加速 bitmap 的操作, 将较大的 bitmap 操作优化到O(1)的时间开销.
 
 `loc100` 分支是本文中使用的最简实现, 没有任何外部依赖,
 main分支中的实现面向生产环境, 要快4倍左右.
 
-**如果要生产环境使用, 移步 [slim][repo-slim]**.
-
+**如果要生产环境使用, 移步 [slim](https://github.com/openacid/slim)**.
 
 用20万个网上词汇来测试本文实现的succinctSet:
 
-- succinctSet 空间开销是源数据的 **57%**.
-- `Has()` 开销为 `350 ns`.
+-   succinctSet 空间开销是源数据的 **57%**.
+-   `Has()` 开销为 `350 ns`.
 
 原始数据大小: 2204 KB
 
-跟 string 数组的 bsearch, 以及 [google-btree][] 的对比:
+跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree) 的对比:
 
-| Data         | Engine       | Size(KB) | Size/original | ns/op |
-| :--          | :--          | --:      | --:           | --:   |
-| 200kweb2     | bsearch      |  5890    |  267%         | 229   |
-| 200kweb2     | succinct.Set |  1258    |   57%         | 356   |
-| 200kweb2     | btree        | 12191    |  553%         | 483   |
+| Data | Engine | Size(KB) | Size/original | ns/op |
+| :-- | :-- | --: | --: | --: |
+| 200kweb2 | bsearch | 5890 | 267% | 229 |
+| 200kweb2 | succinct.Set | 1258 | 57% | 356 |
+| 200kweb2 | btree | 12191 | 553% | 483 |
 
 # 场景和问题
 
@@ -92,15 +89,13 @@ rocksdb的一个sstable.
 > 例如通过SIMD指令一次处理多个字节的比较, 用bitmap来优化labels的存储,
 > 对只有一个出向label的节点的合并优化等.
 
-
 # 思路: 前缀树
 
-[前缀树][], 或字典树, prefix tree,  trie, 是解决这类问题的一个典型思路.
+[前缀树](https://en.wikipedia.org/wiki/Trie), 或字典树, prefix tree,  trie, 是解决这类问题的一个典型思路.
 例如要存储5个key: [ab, abc, abcd, axy, buv]
 可以建立下面这样一个前缀树, 省去大量重复的前缀,
 其中`^` 是root节点(也记做0), 1, 2, 3...是trie节点, `$`标记一个叶子节点,
- 字母`a,
-b...` 表示一个节点到下级节点的边(labeled branch):
+字母`a, b...` 表示一个节点到下级节点的边(labeled branch):
 
 ```
 ^ -a-> 1 -b-> 3 $
@@ -122,7 +117,6 @@ b...` 表示一个节点到下级节点的边(labeled branch):
 于是对于这类key集合确定的场景(例如rocksdb中的sstable, 就是典型的静态排序key的存储),
 使用压缩的前缀树是一种更简洁有效的方式来去掉指针开销.
 
-
 # 前缀树的压缩算法
 
 在这个前缀树中, 每个节点至多有256个出向label, 指向下一级节点.
@@ -138,8 +132,9 @@ b...` 表示一个节点到下级节点的边(labeled branch):
 ```
 
 要压缩这个 trie, 对每个 trie 节点, 我们需要的最核心的信息是:
-- 一个节点的分支(label)都有哪些,
-- 以及label指向的节点的位置.
+
+-   一个节点的分支(label)都有哪些,
+-   以及label指向的节点的位置.
 
 我们有以下这种紧凑的结构来描述这个 trie:
 
@@ -225,7 +220,6 @@ node-id:               0  1  2 3 4 5 6 789  // node-id 不需要存储
     第1个`1`对应节点`1:bx`,
     第2个`1`对应节点`2:u`...
 
-
 你品, 你细品...
 
 品完后发现, **要找到某个 label 指向的节点, 只需要先数数这个 label 对应第几个`0`, 例如是第i个`0`,
@@ -237,11 +231,11 @@ node-id:               0  1  2 3 4 5 6 789  // node-id 不需要存储
 
 假设从根节点开始, 要查找的key是axy,
 
-- 首先在根节点 `0:ab` 中找到label `a`,
-- label `a` 对应第0个`0`, 然后找到第0个`1`的位置, 也就是`1:bx`节点.
-- 再在`1:bx` 节点的 label 中找到 label `x`, 对应第3个`0`, 再找到第3个`1`的位置, 也就是`4:y` 的节点.
-- 在`4:y`中找到 label `y`, 对应第6个`0`, 再找到第7个`1`, 也就是`7:ø`的节点.
-- 节点7没有任何 label, 结束.
+-   首先在根节点 `0:ab` 中找到label `a`,
+-   label `a` 对应第0个`0`, 然后找到第0个`1`的位置, 也就是`1:bx`节点.
+-   再在`1:bx` 节点的 label 中找到 label `x`, 对应第3个`0`, 再找到第3个`1`的位置, 也就是`4:y` 的节点.
+-   在`4:y`中找到 label `y`, 对应第6个`0`, 再找到第7个`1`, 也就是`7:ø`的节点.
+-   节点7没有任何 label, 结束.
 
 在 succinctSet 数据结构中画出 axy 的查询过程如下:
 
@@ -294,9 +288,10 @@ leaves 的检查在查询的最后一步, 如果一个要查询的 key 匹配到
 
 第一个是找出一个 bitmap 中第`i`个bit之前有多少个`1`(或多少个`0`).
 对定长整数, 例如一个uint64, 它的有O(1)的实现, 例如
-- 在cpp里叫做 [popcount][cpp-popcount], i.e., count of population of ones;
-- 在go里面它被封装在`bits.OnesCount64()`这个函数, 数数一个uint64里有多少个1;
-- 一般的, 叫做rank1(i), 如果要计算一个bitmap里有多少个0, 则是rank0(i).
+
+-   在cpp里叫做 [popcount](https://en.cppreference.com/w/cpp/numeric/popcount), i.e., count of population of ones;
+-   在go里面它被封装在`bits.OnesCount64()`这个函数, 数数一个uint64里有多少个1;
+-   一般的, 叫做rank1(i), 如果要计算一个bitmap里有多少个0, 则是rank0(i).
 
 第二个, 要得到第`i`个1的位置的操作, 叫做select1(i).
 
@@ -429,7 +424,6 @@ func NewSet(keys []string) *Set {
 }
 ```
 
-
 ## 查询
 
 trie的查询过程也很简单:
@@ -548,56 +542,83 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 # 性能分析
 
 我们用网上搜集到的数据集做了下测试.
-测试中使用的负载模型都是 [zipf][post-zipf], 比较符合互联网的真实场景, zipf 的参数 s 取 1.5,
-细节参考 [report][] 的代码, 结果如下:
+测试中使用的负载模型都是 [zipf](https://blog.openacid.com/tech/zipf/), 比较符合互联网的真实场景, zipf 的参数 s 取 1.5,
+细节参考 [report](https://github.com/openacid/succinct/blob/v0.1.0/report/main.go) 的代码, 结果如下:
 
 -   20万个网上词汇:
-    - succinctSet 空间开销是源数据的 **57%**.
-    - `Has()` 开销为 `350 ns`.
+
+    -   succinctSet 空间开销是源数据的 **57%**.
+    -   `Has()` 开销为 `350 ns`.
 
     原始数据大小: 2204 KB
 
-    跟 string 数组的 bsearch, 以及 [google-btree][] 的对比:
+    跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree) 的对比:
 
-    | Data         | Engine       | Size(KB) | Size/original | ns/op |
-    | :--          | :--          | --:      | --:           | --:   |
-    | 200kweb2     | bsearch      |  5890    |  267%         | 229   |
-    | 200kweb2     | succinct.Set |  1258    |   57%         | 356   |
-    | 200kweb2     | btree        | 12191    |  553%         | 483   |
+    | Data | Engine | Size(KB) | Size/original | ns/op |
+    | :-- | :-- | --: | --: | --: |
+    | 200kweb2 | bsearch | 5890 | 267% | 229 |
+    | 200kweb2 | succinct.Set | 1258 | 57% | 356 |
+    | 200kweb2 | btree | 12191 | 553% | 483 |
 
 -   87万个某站提供的 ipv4 列表:
-    - succinctSet 空间开销是源数据的  **67%**.
-    - `Has()` 开销为 `528 ns`.
+
+    -   succinctSet 空间开销是源数据的  **67%**.
+    -   `Has()` 开销为 `528 ns`.
 
     原始数据大小: 6823 KB
 
-    | Data         | Engine       | Size(KB) | Size/original | ns/op |
-    | :--          | :--          | --:      | --:           | --:   |
-    | 870k_ip4_hex | bsearch      | 17057    |  500%         | 276   |
-    | 870k_ip4_hex | succinct.Set |  2316    |   67%         | 496   |
-    | 870k_ip4_hex | btree        | 40388    | 1183%         | 577   |
+    | Data | Engine | Size(KB) | Size/original | ns/op |
+    | :-- | :-- | --: | --: | --: |
+    | 870k_ip4_hex | bsearch | 17057 | 500% | 276 |
+    | 870k_ip4_hex | succinct.Set | 2316 | 67% | 496 |
+    | 870k_ip4_hex | btree | 40388 | 1183% | 577 |
 
 可以看出在内存方面:
 
-- succinctSet 对内存开销优势明显, 不仅容量没有额外增加, 还少很多.
+-   succinctSet 对内存开销优势明显, 不仅容量没有额外增加, 还少很多.
 
-- go中的string有2个字段: 到string内容的指针, 以及一个length,
+-   go中的string有2个字段: 到string内容的指针, 以及一个length,
     所以每条记录开销会多16字节.
 
-- [google-btree][] 内部因为还有interface, 额外存储开销更大.
-
+-   [google-btree](https://github.com/google/btree) 内部因为还有interface, 额外存储开销更大.
 
 对查询性能:
 
-- 短字符串查询二分查找性能最好, 一个字符串读取一次差不多都能缓存在L1 cache里, 对主存的访问应该非常趋近于lg₂(n).
+-   短字符串查询二分查找性能最好, 一个字符串读取一次差不多都能缓存在L1 cache里, 对主存的访问应该非常趋近于lg₂(n).
 
-- succinctSet 因为每个字符串的每个字符都被分散存储了,
+-   succinctSet 因为每个字符串的每个字符都被分散存储了,
     以及ranks和selects的访问也是跳跃的, 在一个key的查询中要访问多个位置.
     所以对缓存的友好不如数组.
 
-- btree的时间开销更大, 可能由于间接访问比较多, 导致btree的优势没有发挥出来.
+-   btree的时间开销更大, 可能由于间接访问比较多, 导致btree的优势没有发挥出来.
 
-
-github: [succinct.Set][]
+github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100)
 
 {% include build_ref %}
+
+
+
+Reference:
+
+- btree : [https://github.com/google/btree](https://github.com/google/btree)
+
+- zipf : [https://blog.openacid.com/tech/zipf/](https://blog.openacid.com/tech/zipf/)
+
+- popcount : [https://en.cppreference.com/w/cpp/numeric/popcount](https://en.cppreference.com/w/cpp/numeric/popcount)
+
+- slim : [https://github.com/openacid/slim](https://github.com/openacid/slim)
+
+- report : [https://github.com/openacid/succinct/blob/v0.1.0/report/main.go](https://github.com/openacid/succinct/blob/v0.1.0/report/main.go)
+
+- succinct.Set : [https://github.com/openacid/succinct/tree/loc100](https://github.com/openacid/succinct/tree/loc100)
+
+- trie : [https://en.wikipedia.org/wiki/Trie](https://en.wikipedia.org/wiki/Trie)
+
+
+[google-btree]: https://github.com/google/btree "btree"
+[post-zipf]: https://blog.openacid.com/tech/zipf/ "zipf"
+[ref-cpp-popcount]: https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
+[repo-slim]: https://github.com/openacid/slim "slim"
+[report]: https://github.com/openacid/succinct/blob/v0.1.0/report/main.go "report"
+[succinct.Set]: https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
+[前缀树]: https://en.wikipedia.org/wiki/Trie "trie"

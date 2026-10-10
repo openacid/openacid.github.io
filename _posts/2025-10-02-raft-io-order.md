@@ -10,17 +10,12 @@ tags:
     - raft
     - en
 
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Writing logs before persisting term in Raft can silently destroy committed data. Here's why production systems like TiKV and HashiCorp Raft carefully control IO order—and three battle-tested solutions."
 ---
-
 ![](/post-res/raft-io-order/1af51b7ddbd3efd5-raft-io-order-banner.webp)
 
 ## IO Reordering Breaks Committed Data
@@ -80,7 +75,6 @@ At its core, this problem breaks a critical invariant:
 
 > **If a log entry E (term=T) exists on disk → the stored term must be ≥T**
 
-
 Proper IO ordering preserves this invariant, guaranteeing that whenever a log entry hits disk, its term is already there.
 
 ## What Raft's Paper Doesn't Say
@@ -109,33 +103,12 @@ The trap is subtle: developers focus on persisting logs (the "real" application 
 
 I examined 4 production Raft implementations to see how they tackle this:
 
-<table>
-<tr class="header">
-<th>Implementation</th>
-<th>Result</th>
-<th>How It Avoids the Problem</th>
-</tr>
-<tr class="odd">
-<td><strong>TiKV</strong></td>
-<td>✅ Safe</td>
-<td>Atomic batching: term and log in the same LogBatch</td>
-</tr>
-<tr class="even">
-<td><strong>HashiCorp Raft</strong></td>
-<td>✅ Safe</td>
-<td>Ordered writes: write term first (panic on fail), then log</td>
-</tr>
-<tr class="odd">
-<td><strong>SOFAJRaft</strong></td>
-<td>✅ Safe</td>
-<td>Hybrid order: term sync, log async</td>
-</tr>
-<tr class="even">
-<td><strong>tikv/raft-rs library</strong></td>
-<td>⚠️ Depends on application</td>
-<td>Library itself is safe, but no ordering enforcement</td>
-</tr>
-</table>
+| Implementation | Result | How It Avoids the Problem |
+| --- | --- | --- |
+| **TiKV** | ✅ Safe | Atomic batching: term and log in the same LogBatch |
+| **HashiCorp Raft** | ✅ Safe | Ordered writes: write term first (panic on fail), then log |
+| **SOFAJRaft** | ✅ Safe | Hybrid order: term sync, log async |
+| **tikv/raft-rs library** | ⚠️ Depends on application | Library itself is safe, but no ordering enforcement |
 
 ## Three Safe Solutions
 
@@ -214,3 +187,16 @@ When IO lets term roll back, you're letting time itself rewind. But here's the p
 
 Reference:
 
+- OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
+
+- hashicorp/raft : [https://github.com/hashicorp/raft](https://github.com/hashicorp/raft)
+
+- sofastack/sofa-jraft : [https://github.com/sofastack/sofa-jraft](https://github.com/sofastack/sofa-jraft)
+
+- tikv/tikv : [https://github.com/tikv/tikv](https://github.com/tikv/tikv)
+
+
+[OpenRaft docs: io-ordering]:  https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
+[hashicorp/raft]:  https://github.com/hashicorp/raft
+[sofastack/sofa-jraft]:  https://github.com/sofastack/sofa-jraft
+[tikv/tikv]:  https://github.com/tikv/tikv

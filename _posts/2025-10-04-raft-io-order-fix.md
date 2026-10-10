@@ -9,12 +9,8 @@ tags:
     - raft
     - cn
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -22,7 +18,6 @@ toc_label: Table of Content
 toc_sticky: true
 excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into in-memory and persisted state. Here's what actually happens."
 ---
-
 ![](/post-res/raft-io-order-fix/62b7bb390d222f2e-raft-io-order-fix-banner.webp)
 
 ## Preface
@@ -58,7 +53,6 @@ Let me show you the timeline I used in the previous article:
 > -   At t6: The old leader L1 (term=1) could then overwrite E5-1, causing data loss
 > 
 > **Here's the flaw in my reasoning**: Raft's protocol explicitly requires that *both* the term update and log entries must be successfully persisted before a follower responds with success. If either IO fails or is incomplete, the leader never receives confirmation and therefore never considers the entry committed. The Raft paper's design is actually bulletproof here.
-
 
 So if Raft's design is correct, where does the IO ordering problem actually come from? The answer lies in a subtle gap between theory and implementation—specifically, how real Raft systems separate in-memory state from on-disk state.
 
@@ -295,7 +289,6 @@ The IO ordering bug in Raft implementations stems from a subtle gap between the 
 **The invariant we must maintain**:
 
 > If a log entry with term=T is on disk, then persisted_term ≥ T must also be on disk.
-
 
 Violating this invariant—having entries from term T on disk while `persisted_term < T`—breaks Raft's safety guarantees and can cause committed data loss.
 

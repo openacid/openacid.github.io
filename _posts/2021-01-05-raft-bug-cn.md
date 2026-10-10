@@ -21,10 +21,6 @@ platform_refs:
     zhihu:
         - "多数派读写的少数派实现": https://zhuanlan.zhihu.com/p/267559303 "多数派读写的少数派实现"
 
-
-article:
-    image: /post-res/raft-bug/raft-bug-banner-sharp-small.jpg
-
 pdf: false
 
 mathjax: true
@@ -33,12 +29,13 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "Raft 在单步成员变更的设计上存在缺陷, 一定要抛弃单步变更, 使用joint consensus"
 ---
+![](/post-res/raft-bug-cn/b69d81b1f601ce6f-raft-bug-banner-sharp-small.jpg)
 
 # 问题
 
-上次跟朋友在咖啡厅撩天的时候谈笑风生地探讨了一个 [Raft][] 在生产环境中遇到的问题:
+上次跟朋友在咖啡厅撩天的时候谈笑风生地探讨了一个 [Raft](https://Raft.github.io/) 在生产环境中遇到的问题:
 
-他们的 Raft 实现, 使用的是 [单步变更][] 算法(每次添加或删除一个节点),
+他们的 Raft 实现, 使用的是 [单步变更](https://gist.github.com/ongardie/a11f32b70581e20d6bcd) 算法(每次添加或删除一个节点),
 例如副本由 `abc` 变成 `bcd` 过程中,
 先加入 `d`, 变成 `abcd` , 再去掉 `a` 变成最终配置 `bcd`.
 
@@ -84,25 +81,24 @@ DC-1   DC-2   DC-3
 
 ---
 
-这个问题的根本原因在于, [Raft][] 单步变更算法对 quorum 定义得过于死板,
+这个问题的根本原因在于, [Raft](https://Raft.github.io/) 单步变更算法对 quorum 定义得过于死板,
 仅用了 majority.
 解决问题的关键就在于打破这个限制,
 我们将从 quorum 的视角解释为何 Raft 的单步变更是一个 **看起来很香的鸡肋**.
 然后再从工程的角度找一个简单又容易的实现方案, 也就是joint consensus.
 
 从 quorum 的视角分析系统的方法,
-可以参考我之前这篇文章: [多数派读写的少数派实现][] .
-
+可以参考我之前这篇文章: [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/) .
 
 # 分析和尝试
 
 先看看在这个问题中, 整个系统的 quorum 集合都有哪些:
 
-- 初始状态 abc 的 quorum 的集合是 abc 所有的 majority: M(abc) = {ab, ac, bc}, (abc虽然也是一个quorum, 但可用ab ∪ bc得到, 就不必列出了, 我们只需要列出 quorum 集合中无法由并集求出的那些集合);
+-   初始状态 abc 的 quorum 的集合是 abc 所有的 majority: M(abc) = {ab, ac, bc}, (abc虽然也是一个quorum, 但可用ab ∪ bc得到, 就不必列出了, 我们只需要列出 quorum 集合中无法由并集求出的那些集合);
 
-- 最终状态 bcd 的 quorum 的集合 M(bcd) = {bc, cd, bd};
+-   最终状态 bcd 的 quorum 的集合 M(bcd) = {bc, cd, bd};
 
-- 单步变更的中间状态 abcd 的 quorum 集合也是一个 majority 集合: M(abcd) = {abc, abd, acd, bcd};
+-   单步变更的中间状态 abcd 的 quorum 集合也是一个 majority 集合: M(abcd) = {abc, abd, acd, bcd};
 
 单步变更的过程是也就是 quorum 集合变化的过程:
 
@@ -129,11 +125,10 @@ Q(abcd) = M(abcd) ∪ {bc}
 另外, **如果 Raft 保证 M(abc) → M(abcd) 的单步变更正确性, 那它也可以保证 M(abc) → M(abcd) ∪ {bc} 的正确性**.
 
 > 这是因为 Raft 单步变更的正确性保证是: 两个节点集合 C₁ 到 C₂ 的变更中, C₁ 的一个 quorum 跟 C₂ 的一个 quorum 都有交集.
->
+> 
 > 同理 M(abcd) ∪ {bc} → M(bcd) 也能保证正确.
 
 这样我们就从治标的层面上解决了变更过程中的网络割裂造成的可用性问题.
-
 
 然后再深入一点, 4节点的中间状态的 majority 具有这种可用性缺陷的原因在于,
 **majority 集合 M(abcd) 不是 4节点的最大的 quorum 集合**,
@@ -141,7 +136,6 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
 而在节点数是 **偶数** 的时候, **majority 没有能力描述系统最大的 quorum 集合**.
 
 **majority 是 Raft 设计上的第一个不足**. Raft 选择 majority 的同时, 就自宫的降低了自己的可用性.
-
 
 ## 4节点系统的 majority 的缺陷
 
@@ -152,7 +146,6 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
 
 很多分布式系统的论文描述都以奇数个节点作为前提假设.
 因为奇数节点可用性的性价比更高, 而忽略了偶数节点数的情况的介绍.
-
 
 ## majority 的扩张
 
@@ -165,19 +158,19 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
     Q_{odd}(C) = M(C) = \{ q : q \subseteq C,  |q| > |C|/2 \}
     $$
 
-
 -   对偶数节点, n = 2k, **因为n/2个节点跟n/2+1个节点一定有交集**,
     我们可以向 M(C) 中加入几个大小为 n/2 的节点集合,
     再保证所有加入的 n/2 个节点的集合都有交集,
     就可以构建一个扩张的 quorum 集合了.
 
     以本文的场景为例,
+
     -   可以设置 Q' = M(abcd) ∪ {ab, bc, ca}, Q'中任意2个元素都有交集;
     -   也可以是 Q' = M(abcd) ∪ {bc, cd, bd};
     -   但不能是 Q' = M(abcd) ∪ {ab, bc, cd}, 因为 ab 和 cd 没有交集;
 
     要找到一个更好的偶节点的 quorum 集合, 一个方法是可以把偶数节点的集群看做是一个奇数节点集群加上一个节点x:
-    $$ D = C \cup \{x\} $$
+    $$D = C \cup \{x\}$$
 
     于是偶数节点的 quorum 集合就可以是 M(D) 的一个扩张:
 
@@ -193,30 +186,29 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
     因此都可以提供比 M(abcd) 更好的可用性, 在本文开始提出的问题中,
     都可以解决本文开头提到的网络割裂的问题.
 
-
 # 解决方案
 
 看了这几个例子之后, 我们发现, 成员变更的中间状态不需要必须是 majority 的 quorum 集合,
 只要满足某些变更的正确性条件, 并包含bc就可以了.
 
 例如, 在变更的中间状态,
-- 可以不选 M(abcd) ∪ {ab, bc, ac},
-- 选 {abc, abd, acd, bcd, bc} 也可以,
-- 去掉abc, 选{abd, acd, bcd, bc} 也可以.
+
+-   可以不选 M(abcd) ∪ {ab, bc, ac},
+-   选 {abc, abd, acd, bcd, bc} 也可以,
+-   去掉abc, 选{abd, acd, bcd, bc} 也可以.
 
 而且, 似乎那个看起来复杂(实则更简单的) joint consensus 也可以.
 
-
 ## 成员变更的正确性条件
 
-我们都用 quorum 集合的方式, 替代节点集合方式来描述系统. 就像 [多数派读写的少数派实现][] 中描述的.
+我们都用 quorum 集合的方式, 替代节点集合方式来描述系统. 就像 [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/) 中描述的.
 例如:
 
-- 3节点 {abc}, 选择 majority 作为 quorum 集合, 则可以定义这个系统是 Q(abc) = {ab,bc,ca}
+-   3节点 {abc}, 选择 majority 作为 quorum 集合, 则可以定义这个系统是 Q(abc) = {ab,bc,ca}
 
-- 4节点 {abcd}, 选择 majority 作为 quorum 集合, 则定义这个系统是 Q(abcd) = {abc,abd,acd,bcd},
+-   4节点 {abcd}, 选择 majority 作为 quorum 集合, 则定义这个系统是 Q(abcd) = {abc,abd,acd,bcd},
 
-- 4节点 {abcd}, 选择 majority 的一个扩张作为 quorum 集合, 可以被定义为 Q'(abcd) = {abc,abd,acd,bcd,ab,bc,ac},
+-   4节点 {abcd}, 选择 majority 的一个扩张作为 quorum 集合, 可以被定义为 Q'(abcd) = {abc,abd,acd,bcd,ab,bc,ac},
 
 要选择一个正确且高效的成员变更算法, 需要满足几个条件.
 假设系统要从 Q₁ 变更到 Q₂:
@@ -231,7 +223,6 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
 -   变更必须提交到 Q₂ 中的一个 quorum 中.
 
 > 然鹅, Raft 最初的单步变更算法没有满足上面的第1条, 后来作者做了修正, 我们最后来聊.
-
 
 ## 一定要用joint consensus
 
@@ -270,14 +261,13 @@ M(abc) x M(bcd) = {
 
 容易看出, joint consensus 不仅满足了成员变更的正确性条件, 而且刚好满足了我们的所有要求:
 
-- 容忍1个节点宕机;
-- 一定包含{bc}, 容忍`ad | bc`的网络隔离.
-- 另外, 整个变更过程, 不论有没有切换leader, 都可以通过2条日志的commit来完成.
+-   容忍1个节点宕机;
+-   一定包含{bc}, 容忍`ad | bc`的网络隔离.
+-   另外, 整个变更过程, 不论有没有切换leader, 都可以通过2条日志的commit来完成.
 
 太优秀了有木有!!!
 
 太优秀了有木有!!!
-
 
 # Raft 单步变更的bug
 
@@ -297,8 +287,8 @@ M(abc) x M(bcd) = {
 
 ```
 C₀ = {a, b, c, d}
-Cᵤ = C₁ ∪ {u}
-Cᵥ = C₁ ∪ {v}
+Cᵤ = C₀ ∪ {u}
+Cᵥ = C₀ ∪ {v}
 
 Lᵢ: Leader in term `i`
 Fᵢ: Follower in term `i`
@@ -317,14 +307,14 @@ Fᵢ: Follower in term `i`
           t₁  t₂  t₃  t₄  t₅  t₆  t₇  t₈
 ```
 
-- t₁: `abcd` 4节点在 term 0 选出leader=`a`, 和2个follower `b`, `c`;
-- t₂: `a` 广播一个变更日志`Cᵤ`, 使用新配置`Cᵤ`, 只发送到`a`和`u`, 未成功提交;
-- t₃: `a` 宕机
-- t₄: `d` 在 term 1 被选为leader, 2个follower是`b`,`c`;
-- t₅: `d` 广播另一个变更日志`Cᵥ`, 使用新配置`Cᵥ`, 成功提交到`c`,`d`,`v`;
-- t₆: `d` 宕机
-- t₇: `a` 在term 2 重新选为leader, 通过它本地看到的新配置`Cᵤ`, 和2个follower `u`, `b`;
-- t₈: `a` 同步本地的日志给所有人, 造成已提交的`Cᵥ`丢失.
+-   t₁: `abcd` 4节点在 term 0 选出leader=`a`, 和2个follower `b`, `c`;
+-   t₂: `a` 广播一个变更日志`Cᵤ`, 使用新配置`Cᵤ`, 只发送到`a`和`u`, 未成功提交;
+-   t₃: `a` 宕机
+-   t₄: `d` 在 term 1 被选为leader, 2个follower是`b`,`c`;
+-   t₅: `d` 广播另一个变更日志`Cᵥ`, 使用新配置`Cᵥ`, 成功提交到`c`,`d`,`v`;
+-   t₆: `d` 宕机
+-   t₇: `a` 在term 2 重新选为leader, 通过它本地看到的新配置`Cᵤ`, 和2个follower `u`, `b`;
+-   t₈: `a` 同步本地的日志给所有人, 造成已提交的`Cᵥ`丢失.
 
 作者给出了这个问题的修正方法,
 修正步骤很简单, 跟Raft的commit条件如出一辙: **新leader必须提交一条自己的term的日志, 才允许接变更日志**:
@@ -358,7 +348,6 @@ Fᵢ: Follower in term `i`
 单步变更必须使用跟joint consensus 几乎同样复杂的逻辑,
 实现2步变更的逻辑, 而执行效率上, 没有任何优势.
 
-
 Raft 作为 paxos 一个实现 (谁跟我杠paxos跟Raft不一样我跟谁急.
 它的term, log seq对应ballot num,
 commit 对应 accept 和 learn,
@@ -368,5 +357,19 @@ commit 对应 accept 和 learn,
 将单步变更升级为joint consensus,
 可以彻底解决单步变更带来的可用性问题以及工程实现上的麻烦.
 
-
 {% include build_ref %}
+
+
+
+Reference:
+
+- Raft : [https://Raft.github.io/](https://Raft.github.io/)
+
+- 单步变更 : [https://gist.github.com/ongardie/a11f32b70581e20d6bcd](https://gist.github.com/ongardie/a11f32b70581e20d6bcd)
+
+- 多数派读写的少数派实现 : [https://blog.openacid.com/algo/quorum/](https://blog.openacid.com/algo/quorum/)
+
+
+[Raft]: https://Raft.github.io/                          "Raft"
+[单步变更]: https://gist.github.com/ongardie/a11f32b70581e20d6bcd "单步变更"
+[多数派读写的少数派实现]: https://blog.openacid.com/algo/quorum/           "多数派读写的少数派实现"

@@ -10,17 +10,12 @@ tags:
     - raft
     - en
 
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
-
 mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
 excerpt: "Analyzes a replication session isolation bug in Raft implementations. When a node rejoins the cluster within the same term, delayed AppendEntries responses can corrupt progress tracking, causing infinite retry loops. While data safety remains intact, it creates operational issues like resource exhaustion. Uses raft-rs as a case study to examine trigger conditions and solutions."
 ---
-
 ![](/post-res/raft-rejoin-bug/1d34a13b1c0631e8-raft-rejoin-bug-banner.webp)
 
 In Raft cluster operations, there's an easily overlooked bug: when a node is removed and then re-added to the cluster within the same term, delayed AppendEntries responses from the old membership configuration can corrupt the leader's replication progress tracking for that node, causing the leader to enter an infinite retry loop.
@@ -31,134 +26,25 @@ While this creates operational challenges—continuous resource consumption and 
 
 Analyzed Raft libs:
 
-<table>
-<tr class="header">
-<th>Implementation</th>
-<th style="text-align: right;">Stars</th>
-<th>Language</th>
-<th>Status</th>
-<th>Analysis</th>
-</tr>
-<tr class="odd">
-<td>Apache Ratis</td>
-<td style="text-align: right;">1,418</td>
-<td>Java</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/apache-ratis.md">Report</a></td>
-</tr>
-<tr class="even">
-<td>NuRaft</td>
-<td style="text-align: right;">1,140</td>
-<td>C++</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/nuraft.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td>OpenRaft</td>
-<td style="text-align: right;">1,700</td>
-<td>Rust</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/openraft.md">Report</a></td>
-</tr>
-<tr class="even">
-<td>RabbitMQ Ra</td>
-<td style="text-align: right;">908</td>
-<td>Erlang</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/rabbitmq-ra.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td>braft</td>
-<td style="text-align: right;">4,174</td>
-<td>C++</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/braft.md">Report</a></td>
-</tr>
-<tr class="even">
-<td>canonical/raft</td>
-<td style="text-align: right;">954</td>
-<td>C</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/canonical-raft.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td>sofa-jraft</td>
-<td style="text-align: right;">3,762</td>
-<td>Java</td>
-<td>✓ PROTECTED</td>
-<td><a href="analysis/sofa-jraft-analysis.md">Report</a></td>
-</tr>
-<tr class="even">
-<td><strong>LogCabin</strong></td>
-<td style="text-align: right;"><strong>1,945</strong></td>
-<td><strong>C++</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/logcabin.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td><strong>PySyncObj</strong></td>
-<td style="text-align: right;"><strong>738</strong></td>
-<td><strong>Python</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/pysyncobj.md">Report</a></td>
-</tr>
-<tr class="even">
-<td><strong>dragonboat</strong></td>
-<td style="text-align: right;"><strong>5,262</strong></td>
-<td><strong>Go</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/dragonboat.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td><strong>etcd-io/raft</strong></td>
-<td style="text-align: right;"><strong>943</strong></td>
-<td><strong>Go</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/etcd-raft.md">Report</a></td>
-</tr>
-<tr class="even">
-<td><strong>hashicorp/raft</strong></td>
-<td style="text-align: right;"><strong>8,826</strong></td>
-<td><strong>Go</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/hashicorp-raft-analysis.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td><strong>raft-java</strong></td>
-<td style="text-align: right;"><strong>1,234</strong></td>
-<td><strong>Java</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/raft-java.md">Report</a></td>
-</tr>
-<tr class="even">
-<td><strong>raft-rs (TiKV)</strong></td>
-<td style="text-align: right;"><strong>3,224</strong></td>
-<td><strong>Rust</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/raft-rs.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td><strong>redisraft</strong></td>
-<td style="text-align: right;"><strong>841</strong></td>
-<td><strong>C</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/redisraft.md">Report</a></td>
-</tr>
-<tr class="even">
-<td><strong>willemt/raft</strong></td>
-<td style="text-align: right;"><strong>1,160</strong></td>
-<td><strong>C</strong></td>
-<td><strong>✗ VULNERABLE</strong></td>
-<td><a href="analysis/willemt-raft.md">Report</a></td>
-</tr>
-<tr class="odd">
-<td>eliben/raft</td>
-<td style="text-align: right;">1,232</td>
-<td>Go</td>
-<td>N/A</td>
-<td><a href="analysis/eliben-raft.md">Report</a></td>
-</tr>
-</table>
+| Implementation | Stars | Language | Status | Analysis |
+| --- | --: | --- | --- | --- |
+| Apache Ratis | 1,418 | Java | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/apache-ratis.md) |
+| NuRaft | 1,140 | C++ | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/nuraft.md) |
+| OpenRaft | 1,700 | Rust | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/openraft.md) |
+| RabbitMQ Ra | 908 | Erlang | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/rabbitmq-ra.md) |
+| braft | 4,174 | C++ | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/braft.md) |
+| canonical/raft | 954 | C | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/canonical-raft.md) |
+| sofa-jraft | 3,762 | Java | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/sofa-jraft-analysis.md) |
+| **LogCabin** | **1,945** | **C++** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/logcabin.md) |
+| **PySyncObj** | **738** | **Python** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/pysyncobj.md) |
+| **dragonboat** | **5,262** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/dragonboat.md) |
+| **etcd-io/raft** | **943** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/etcd-raft.md) |
+| **hashicorp/raft** | **8,826** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/hashicorp-raft-analysis.md) |
+| **raft-java** | **1,234** | **Java** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/raft-java.md) |
+| **raft-rs (TiKV)** | **3,224** | **Rust** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/raft-rs.md) |
+| **redisraft** | **841** | **C** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/redisraft.md) |
+| **willemt/raft** | **1,160** | **C** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/willemt-raft.md) |
+| eliben/raft | 1,232 | Go | N/A | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/eliben-raft.md) |
 
 This article uses raft-rs, the Raft implementation used by TiKV, as a case study to analyze this bug's trigger conditions, impact, and potential solutions.
 
@@ -379,7 +265,4 @@ For production Raft implementations, it's recommended to introduce explicit sess
 
 Complete analysis and survey of other Raft implementations can be found in the [Raft Rejoin Bug Survey](https://github.com/drmingdrmer/raft-rejoin-bug)
 
-
-
-Reference:
 

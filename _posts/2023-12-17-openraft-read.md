@@ -10,12 +10,8 @@ tags:
     - linearizable
     - 分布式
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/openraft-read/openraft-read.jpg
 
 mathjax: true
 toc: true
@@ -23,7 +19,6 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "Openraft 中对 linearizable read 流程的优化"
 ---
-
 # Openraft 对 ReadIndex 的优化
 
 ![](/post-res/openraft-read/2306f8dcbf959b10-openraft-banner-2x1.jpg)
@@ -99,26 +94,26 @@ excerpt: "Openraft 中对 linearizable read 流程的优化"
 
 ```go
 func releasePendingReadIndexMessages(r *raft) {
-    // ...
+	// ...
 
-    if !r.committedEntryInCurrentTerm() {
-    	return
-    }
+	if !r.committedEntryInCurrentTerm() {
+		return
+	}
 
-    msgs := r.pendingReadIndexMessages
-    r.pendingReadIndexMessages = nil
+	msgs := r.pendingReadIndexMessages
+	r.pendingReadIndexMessages = nil
 
-    for _, m := range msgs {
-    	sendMsgReadIndexResponse(r, m)
-    }
+	for _, m := range msgs {
+		sendMsgReadIndexResponse(r, m)
+	}
 }
 
 func sendMsgReadIndexResponse(r *raft, m pb.Message) {
-    switch r.readOnly.option {
-    case ReadOnlySafe:
-    	r.readOnly.addRequest(r.raftLog.committed, m)
-    	r.readOnly.recvAck(r.id, m.Entries[0].Data)
-    	r.bcastHeartbeatWithCtx(m.Entries[0].Data)
+	switch r.readOnly.option {
+	case ReadOnlySafe:
+		r.readOnly.addRequest(r.raftLog.committed, m)
+		r.readOnly.recvAck(r.id, m.Entries[0].Data)
+		r.bcastHeartbeatWithCtx(m.Entries[0].Data)
 }
 ```
 
@@ -175,7 +170,7 @@ Openraft 简化了这一流程, 具体如下：
 
 Openraft 对于 linearizable read 简单的证明在这里: [Openraft linearizable read ](https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/docs/protocol/read.md) .
 
-其中基于 Openraft 的 application 要做的只是调用 [`Raft::ensure_linearizable()`][],
+其中基于 Openraft 的 application 要做的只是调用 [`Raft::ensure_linearizable()`](https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/raft/mod.rs#L398),
 这个函数返回时表明线性读的条件已经具备, 例如在 [kv-store](https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/examples/raft-kv-memstore/src/network/api.rs#L42) 例子中实现的线性读:
 
 ```rust
@@ -257,6 +252,8 @@ Reference:
 
 - Openraft : [https://github.com/datafuselabs/openraft](https://github.com/datafuselabs/openraft)
 
+- `Raft::ensure_linearizable()` : [https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/raft/mod.rs#L398](https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/raft/mod.rs#L398)
+
 - etcd-raft-read-index : [https://github.com/etcd-io/raft/blob/4fcf99f38c20868477e01f5f5c68ef1e4377a8b1/raft.go#L2063-L2098](https://github.com/etcd-io/raft/blob/4fcf99f38c20868477e01f5f5c68ef1e4377a8b1/raft.go#L2063-L2098)
 
 - kv-store : [https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/examples/raft-kv-memstore/src/network/api.rs#L42](https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/examples/raft-kv-memstore/src/network/api.rs#L42)
@@ -267,6 +264,7 @@ Reference:
 
 
 [Openraft]:  https://github.com/datafuselabs/openraft
+[`Raft::ensure_linearizable()`]:  https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/raft/mod.rs#L398
 [etcd-raft-read-index]:  https://github.com/etcd-io/raft/blob/4fcf99f38c20868477e01f5f5c68ef1e4377a8b1/raft.go#L2063-L2098
 [kv-store]:  https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/examples/raft-kv-memstore/src/network/api.rs#L42
 [read]:  https://github.com/datafuselabs/openraft/blob/79372b4dff4312f5eb344db76d5ed1dffe69fac7/openraft/src/docs/protocol/read.md

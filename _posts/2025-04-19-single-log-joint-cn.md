@@ -11,12 +11,8 @@ tags:
     - config-change
     - joint
 
-
 refs:
     - x: y
-
-disabled_article:
-    image: /post-res/linearizable/linearizable-banner-big.png
 
 mathjax: false
 toc: true
@@ -24,7 +20,6 @@ toc_label: 本文目录
 toc_sticky: true
 excerpt: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
 ---
-
 ![](/post-res/single-log-joint-cn/c915c4fcc98591ed-single-log-joint-banner.webp)
 
 # 前言
@@ -57,15 +52,13 @@ Quorum(例如 `{x,y}`)没有交集, 就可能在同一任期(Term)内选出两�
 ![图 1：Joint Consensus 两阶段流程](/post-res/single-log-joint-cn/a7acea752fd84833-raft-joint.x.svg)
 
 1.  **第一阶段：进入 Joint state (`C_old_new`)**:
-
-Leader 收到变更请求时, 创建包含 Joint config `C_old_new` 的 log entry, 在 `C_old_new` 状态下, 任何决策都需同时获得 `C_old` 和 `C_new` 各自 Quorum 的支持.  一旦 Leader 添加 Joint config 到日志, 立即使用 `C_old_new`.
+    Leader 收到变更请求时, 创建包含 Joint config `C_old_new` 的 log entry, 在 `C_old_new` 状态下, 任何决策都需同时获得 `C_old` 和 `C_new` 各自 Quorum 的支持.  一旦 Leader 添加 Joint config 到日志, 立即使用 `C_old_new`.
 
 1.  **第二阶段：切换到 Uniform state (`C_new`)**:
-
-`C_old_new` 被提交后, Leader 创建第二个 config log entry, 仅包含新 config `C_new`.
-一旦 Leader 看到这个新的 config entry, 立即切换为开始使用 `C_new`.
-从这条日志开始, 这个 config entry 和所有后续的 log entry 只需要在 `C_new` 定义的 quorum 中提交.
-当这个包含 `C_new` 的日志条目被提交后, config change 过程正式完成.
+    `C_old_new` 被提交后, Leader 创建第二个 config log entry, 仅包含新 config `C_new`.
+    一旦 Leader 看到这个新的 config entry, 立即切换为开始使用 `C_new`.
+    从这条日志开始, 这个 config entry 和所有后续的 log entry 只需要在 `C_new` 定义的 quorum 中提交.
+    当这个包含 `C_new` 的日志条目被提交后, config change 过程正式完成.
 
 这种两阶段方法通过引入一个中间的"Joint state", 保证了在整个 config change 过程中,
 任意两个可能形成的 Quorum(无论是基于 `C_old`, `C_new` 还是
@@ -81,7 +74,7 @@ Single log entry 的 config change 的想法在社区被先后提出过很多次
 
 这里我们引入一个概念 `effective-config`: 即 Leader
 当前实际使用的、用它指定的 quorum 来判断一个 log entry 是否完成 commit 的 config.
- 这个 `effective-config` 可能跟 Leader 日志中任何一个已存储的 config log entry
+这个 `effective-config` 可能跟 Leader 日志中任何一个已存储的 config log entry
 中的 config 都不同. 它是一个动态的概念, 反映了 Leader
 在 config change 过程中的"实时"决策依据. 在下面的算法执行步骤中我们会详细介绍它.
 
@@ -212,8 +205,7 @@ Joint state 还是 Uniform config 阶段:
 
 1.  新启动的 Node 在启动后, 必须将初始的 `effective-config` 设置为由最后两条 config log entry 组成的 Joint config `C_old_new`, 并使用此 Joint config 参与选举.
 1.  只有在确认最后一个 config log entry(包含 `C_new` 的 log
-
-entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effective-config` 切换为 Uniform config `C_new`.
+    entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effective-config` 切换为 Uniform config `C_new`.
 
 **示例**: 新启动的 Node 看到最后两条 config 为 `{a,b,c}` 和 `{u,v,w}` 时, 必须先使用 Joint config `[{a,b,c}, {u,v,w}]` 作为 `effective-config`, 需要获得两个 config 各自的 Quorum 投票才能当选 Leader, 确认新 config 在 `[{a,b,c}, {u,v,w}]` 上被提交后, 才能切换到仅使用 `{u,v,w}` 的 Uniform config.
 
@@ -271,7 +263,6 @@ entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effectiv
 
 > **注意**: 这个 Barrier entry 必须在 `entry-j` commit 后再 append 到 log 中, 否则它不能作为 `entry-j` 已经完成 commit 的根据.
 
-
 这样, 新启动的 Node 如果看到这条 Barrier entry, 那么它就能确定之前的 Joint config `C_old_new` 状态已经安全结束, 可以直接使用新的 Uniform config `C_new` 来进行选举和其他操作, 而无需再尝试联系可能已经不存在的旧集群成员.
 
 例如下图中, 当 entry-3 在 `C_old_new` 下被提交后,
@@ -305,7 +296,6 @@ entry) 在 `C_old_new` 上被提交后, 该 Node 才能安全地将其 `effectiv
 > -   所以只能选择至多一次, 即 commit-index 只在 `C_new` 上 commit, 在 `C_old` 上尽量投递, 但这会导致 `C_old` 中节点可能没有收到 commit-index 更新的情况, 使它们不知道集群已经变化, 继续发起选举.
 > 
 > 所以还有几率出现 `C_old_new` 与 `C_new` 争夺 Leadership 的问题(问题-1).
-
 
 最后, **修改后的 Single log config change** 流程如下:
 
