@@ -30,23 +30,23 @@ Analyzed Raft libs:
 
 | Implementation | Stars | Language | Status | Analysis |
 |----------------|------:|----------|--------|----------|
-| Apache Ratis | 1,418 | Java | ✓ PROTECTED | [Report](analysis/apache-ratis.md) |
-| NuRaft | 1,140 | C++ | ✓ PROTECTED | [Report](analysis/nuraft.md) |
-| OpenRaft | 1,700 | Rust | ✓ PROTECTED | [Report](analysis/openraft.md) |
-| RabbitMQ Ra | 908 | Erlang | ✓ PROTECTED | [Report](analysis/rabbitmq-ra.md) |
-| braft | 4,174 | C++ | ✓ PROTECTED | [Report](analysis/braft.md) |
-| canonical/raft | 954 | C | ✓ PROTECTED | [Report](analysis/canonical-raft.md) |
-| sofa-jraft | 3,762 | Java | ✓ PROTECTED | [Report](analysis/sofa-jraft-analysis.md) |
-| **LogCabin** | **1,945** | **C++** | **✗ VULNERABLE** | [Report](analysis/logcabin.md) |
-| **PySyncObj** | **738** | **Python** | **✗ VULNERABLE** | [Report](analysis/pysyncobj.md) |
-| **dragonboat** | **5,262** | **Go** | **✗ VULNERABLE** | [Report](analysis/dragonboat.md) |
-| **etcd-io/raft** | **943** | **Go** | **✗ VULNERABLE** | [Report](analysis/etcd-raft.md) |
-| **hashicorp/raft** | **8,826** | **Go** | **✗ VULNERABLE** | [Report](analysis/hashicorp-raft-analysis.md) |
-| **raft-java** | **1,234** | **Java** | **✗ VULNERABLE** | [Report](analysis/raft-java.md) |
-| **raft-rs (TiKV)** | **3,224** | **Rust** | **✗ VULNERABLE** | [Report](analysis/raft-rs.md) |
-| **redisraft** | **841** | **C** | **✗ VULNERABLE** | [Report](analysis/redisraft.md) |
-| **willemt/raft** | **1,160** | **C** | **✗ VULNERABLE** | [Report](analysis/willemt-raft.md) |
-| eliben/raft | 1,232 | Go | N/A | [Report](analysis/eliben-raft.md) |
+| Apache Ratis | 1,418 | Java | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/apache-ratis.md) |
+| NuRaft | 1,140 | C++ | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/nuraft.md) |
+| OpenRaft | 1,700 | Rust | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/openraft.md) |
+| RabbitMQ Ra | 908 | Erlang | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/rabbitmq-ra.md) |
+| braft | 4,174 | C++ | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/braft.md) |
+| canonical/raft | 954 | C | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/canonical-raft.md) |
+| sofa-jraft | 3,762 | Java | ✓ PROTECTED | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/sofa-jraft-analysis.md) |
+| **LogCabin** | **1,945** | **C++** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/logcabin.md) |
+| **PySyncObj** | **738** | **Python** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/pysyncobj.md) |
+| **dragonboat** | **5,262** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/dragonboat.md) |
+| **etcd-io/raft** | **943** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/etcd-raft.md) |
+| **hashicorp/raft** | **8,826** | **Go** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/hashicorp-raft-analysis.md) |
+| **raft-java** | **1,234** | **Java** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/raft-java.md) |
+| **raft-rs (TiKV)** | **3,224** | **Rust** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/raft-rs.md) |
+| **redisraft** | **841** | **C** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/redisraft.md) |
+| **willemt/raft** | **1,160** | **C** | **✗ VULNERABLE** | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/willemt-raft.md) |
+| eliben/raft | 1,232 | Go | N/A | [Report](https://github.com/drmingdrmer/raft-rejoin-bug/blob/main/analysis/eliben-raft.md) |
 
 This article uses raft-rs, the Raft implementation used by TiKV, as a case study to analyze this bug's trigger conditions, impact, and potential solutions.
 
