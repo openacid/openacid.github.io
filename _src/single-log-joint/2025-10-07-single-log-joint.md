@@ -20,8 +20,6 @@ toc_sticky: true
 excerpt: "Is the single-log-entry approach to Raft configuration change simpler than the standard Joint Consensus?"
 ---
 
-![](linearizable-banner-big.png)
-
 
 ![](./single-log-joint-banner.webp)
 

@@ -18,8 +18,6 @@ toc_sticky: true
 excerpt: "分布式系统中,Linearizable事务的实现需要解决事务间先后顺序的判断问题,本文深入探讨了这一难题,分析了其中的时间一致性挑战,并提出了几种解决方案和设计思路。"
 ---
 
-![](linearizable-banner-big.png)
-
 ![](./linearizable-banner-47x20.jpg)
 
 **Linearizable 事务的定义**: 对一个分布式系统S, 如果 txn2 在 txn1 commit之后发起, 那么 txn2 一定能看到 txn1 提交的数据.

@@ -21,8 +21,6 @@ toc_sticky: true
 excerpt: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
 ---
 
-![](linearizable-banner-big.png)
-
 
 ![](./single-log-joint-banner.webp)
 
