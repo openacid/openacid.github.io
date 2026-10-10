@@ -10,10 +10,10 @@ fn="${path##*/}"
 echo "article: $path"
 
 md2zhihu \
-    --platform   minimal_mistake \
-    --refs       "$base/_data/refs.yml" \
-    --jekyll     \
-    --output-dir "$base/post-res" \
-    --md-output  "$base/_posts/$fn" \
-    --rewrite    "^../post-res/" "/post-res/" \
+    --platform         minimal_mistake \
+    --refs             "$base/_data/refs.yml" \
+    --jekyll           \
+    --asset-output-dir "$base/post-res" \
+    --md-output        "$base/_posts/$fn" \
+    --rewrite          "^../post-res/" "/post-res/" \
     $path
