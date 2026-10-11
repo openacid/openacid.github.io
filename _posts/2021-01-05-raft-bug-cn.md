@@ -33,9 +33,9 @@ excerpt: "Raft 在单步成员变更的设计上存在缺陷, 一定要抛弃单
 
 # 问题
 
-上次跟朋友在咖啡厅撩天的时候谈笑风生地探讨了一个 [Raft](https://Raft.github.io/) 在生产环境中遇到的问题:
+上次跟朋友在咖啡厅撩天的时候谈笑风生地探讨了一个 [Raft](https://Raft.github.io/ "Raft") 在生产环境中遇到的问题:
 
-他们的 Raft 实现, 使用的是 [单步变更](https://gist.github.com/ongardie/a11f32b70581e20d6bcd) 算法(每次添加或删除一个节点),
+他们的 Raft 实现, 使用的是 [单步变更](https://gist.github.com/ongardie/a11f32b70581e20d6bcd "单步变更") 算法(每次添加或删除一个节点),
 例如副本由 `abc` 变成 `bcd` 过程中,
 先加入 `d`, 变成 `abcd` , 再去掉 `a` 变成最终配置 `bcd`.
 
@@ -81,14 +81,14 @@ DC-1   DC-2   DC-3
 
 ---
 
-这个问题的根本原因在于, [Raft](https://Raft.github.io/) 单步变更算法对 quorum 定义得过于死板,
+这个问题的根本原因在于, [Raft](https://Raft.github.io/ "Raft") 单步变更算法对 quorum 定义得过于死板,
 仅用了 majority.
 解决问题的关键就在于打破这个限制,
 我们将从 quorum 的视角解释为何 Raft 的单步变更是一个 **看起来很香的鸡肋**.
 然后再从工程的角度找一个简单又容易的实现方案, 也就是joint consensus.
 
 从 quorum 的视角分析系统的方法,
-可以参考我之前这篇文章: [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/) .
+可以参考我之前这篇文章: [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现") .
 
 # 分析和尝试
 
@@ -201,7 +201,7 @@ majority 在节点数是 **奇数** 的情况下还算勉强可以用, 解决了
 
 ## 成员变更的正确性条件
 
-我们都用 quorum 集合的方式, 替代节点集合方式来描述系统. 就像 [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/) 中描述的.
+我们都用 quorum 集合的方式, 替代节点集合方式来描述系统. 就像 [多数派读写的少数派实现](https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现") 中描述的.
 例如:
 
 -   3节点 {abc}, 选择 majority 作为 quorum 集合, 则可以定义这个系统是 Q(abc) = {ab,bc,ca}
@@ -370,6 +370,6 @@ Reference:
 - 多数派读写的少数派实现 : [https://blog.openacid.com/algo/quorum/](https://blog.openacid.com/algo/quorum/)
 
 
-[Raft]: https://Raft.github.io/                          "Raft"
+[Raft]: https://Raft.github.io/ "Raft"
 [单步变更]: https://gist.github.com/ongardie/a11f32b70581e20d6bcd "单步变更"
-[多数派读写的少数派实现]: https://blog.openacid.com/algo/quorum/           "多数派读写的少数派实现"
+[多数派读写的少数派实现]: https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现"

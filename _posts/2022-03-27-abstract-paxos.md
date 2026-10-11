@@ -24,15 +24,15 @@ excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 
 
 # 前言(客套话, 但会增加仪式感)
 
-之前写了一篇 [paxos的直观解释](https://blog.openacid.com/algo/paxos/) , 用简单的语言描述了 paxos 的工作原理, 看过的朋友说是看过的最易懂的paxos介绍, 同时也问我是否也写一篇 raft 的. 但 raft 介绍文章已经很多很优质了, 感觉没什么可写的, 就一直拖着.
+之前写了一篇 [paxos的直观解释](https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释") , 用简单的语言描述了 paxos 的工作原理, 看过的朋友说是看过的最易懂的paxos介绍, 同时也问我是否也写一篇 raft 的. 但 raft 介绍文章已经很多很优质了, 感觉没什么可写的, 就一直拖着.
 
-后来想起来, 在分布式岗的面试中, 会经常被问到 raft 和 paxos 有什么区别, 虽然可能会惹恼面试官, 但我会说: 没区别. 今天介绍一个把 paxos 和 raft 等统一到一起的分布式一致性算法 [abstract-paxos](https://github.com/openacid/abstract-paxos), 解释各种分布式一致性算法从 0 到 1 的推导过程. 算是填了 raft 的坑, 同时在更抽象的视角看 raft, 也可以很容易看出它设计上的不足和几个优化的方法.
+后来想起来, 在分布式岗的面试中, 会经常被问到 raft 和 paxos 有什么区别, 虽然可能会惹恼面试官, 但我会说: 没区别. 今天介绍一个把 paxos 和 raft 等统一到一起的分布式一致性算法 [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos"), 解释各种分布式一致性算法从 0 到 1 的推导过程. 算是填了 raft 的坑, 同时在更抽象的视角看 raft, 也可以很容易看出它设计上的不足和几个优化的方法.
 
 为了清楚的展现分布式一致性协议要解决的问题, 我们将从 0 开始, 即从 2 个基本需求: ~~技术爆炸和猜疑链~~ **信息确定** 和 **分布式** 开始, 推导出所有的分布式强一致协议的统一形式, 然后再把它特例化为 raft 或 paxos.
 
 本文的整个推导过程顺着以下过程, 从 assumption 开始, 最终达到 protocol:
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-2e5711a278397120.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-87e41a611fc1becf.jpg)
 
 # 本文结构
 
@@ -169,7 +169,7 @@ N3: [z]                   | [z]
 常见的 State 定义是: **一个 Cmd 为元素的, 只允许 append 的 list**: `Vec<Cmd>`.
 
 这也就是一个记录变更操作(Cmd)的日志(log), 或称为 write-ahead-log(WAL). 而系统的 State 也由 WAL 唯一定义的.
-在一个典型的 WAL + State Machine 的系统中(例如 [leveldb](https://github.com/google/leveldb) ), WAL 决定了系统状态(State), 如这3条log: `[set x=1, set x=2, set y=3]`. 而平常人们口中的 State Machine, 仅仅是负责最终将整个系统的状态呈现为一个 application 方便使用的形式, 即一般的HashMap的形式: `{x=2, y=3}`.
+在一个典型的 WAL + State Machine 的系统中(例如 [leveldb](https://github.com/google/leveldb "leveldb") ), WAL 决定了系统状态(State), 如这3条log: `[set x=1, set x=2, set y=3]`. 而平常人们口中的 State Machine, 仅仅是负责最终将整个系统的状态呈现为一个 application 方便使用的形式, 即一般的HashMap的形式: `{x=2, y=3}`.
 
 所以在本文中, WAL 是真实的 State,
 我们这里说的不能修改, 只能追加, 就是指 WAL 不能修改, 只能追加. 本文中我们不讨论 State Machine 的实现.
@@ -217,7 +217,7 @@ log 中的每个 entry 是一个改变系统状态的命令(Cmd).
 # State 的全序关系
 
 State 的 **全序关系** 来表示 commit 的有效性,
-但到目前为止, State 本身是一个操作日志, 也就是一个 list, list 之间只有一个**[偏序关系](https://zh.wikipedia.org/wiki/偏序关系)**,
+但到目前为止, State 本身是一个操作日志, 也就是一个 list, list 之间只有一个**[偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系")**,
 即包含关系. 互不包含的2个 list 无法确定大小关系.
 
 > 例如, 如果在2个节点上分别读到2个log: `[x, y, z]` 和 `[x, y, w]`, 无法确认哪个是可能 commit 的, 哪个是一定没有 commit 的:
@@ -259,7 +259,7 @@ N3: [[y]₅,z,w]₇
 
 为了实现上述逻辑, 一个简单的实现是 **让最后一个 log 节点决定2个 State 之间的大小关系**.
 
-于是我们可以对 State 的每个 log 节点都需要加入一个 [偏序关系](https://zh.wikipedia.org/wiki/偏序关系) 的属性 `commit_index` (本文为了简化描述, 使用一个整数)来确定 State 的全序关系:
+于是我们可以对 State 的每个 log 节点都需要加入一个 [偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系") 的属性 `commit_index` (本文为了简化描述, 使用一个整数)来确定 State 的全序关系:
 
 ```rust
 struct State {
@@ -315,19 +315,19 @@ writer 通过 quorum-write 写入一个足够大的 State, 就能保证一定被
 
 两个 State 的顺序关系: 通过 `commit_index`和 log 长度确定, 即 比较2个 State 的: `(s.commit_index(), s.log.len())`.
 
-> 上面提到, `commit_index` 是一个具有偏序关系的值, 不同类型的 `commit_index` 会将 [abstract-paxos](https://github.com/openacid/abstract-paxos) 具体化为某种协议或协议族, 例如:
+> 上面提到, `commit_index` 是一个具有偏序关系的值, 不同类型的 `commit_index` 会将 [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 具体化为某种协议或协议族, 例如:
 > 
 > -   如果 `commit_index` 是一个整数, 那就是类似 paxos 的 rnd.
 > -   而 raft 中, 与 `commit_index` 对应的概念是 `[term, Option<NodeId>]`, 它是一个偏序关系的值, 也是它造成了 raft 中选举容易出现冲突.
 > 
-> > 关于 [abstract-paxos](https://github.com/openacid/abstract-paxos) 如何映射为 paxos 或 raft, 在本文的最后讨论.
+> > 关于 [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 如何映射为 paxos 或 raft, 在本文的最后讨论.
 > 
 > 另一方面, 从 writer 的角度来说:
 > 
-> -   如果一个 writer 可以生成一个 `commit_index` 使之大于任何一个已知的 `commit_index`, 那么这时 [abstract-paxos](https://github.com/openacid/abstract-paxos) 就是一个**活锁**的系统: 它永远不会阻塞, 但有可能永远都不会成功提交. 例如 paxos 或 raft
-> -   如果一个 writer 无法生成任意大的 `commit_index`, 那么它就是一个 **死锁** 的系统, 例如 [2pc](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
+> -   如果一个 writer 可以生成一个 `commit_index` 使之大于任何一个已知的 `commit_index`, 那么这时 [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 就是一个**活锁**的系统: 它永远不会阻塞, 但有可能永远都不会成功提交. 例如 paxos 或 raft
+> -   如果一个 writer 无法生成任意大的 `commit_index`, 那么它就是一个 **死锁** 的系统, 例如 [2pc](https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit")
 > 
-> 当然也可以构造 `commit_index` 使 [abstract-paxos](https://github.com/openacid/abstract-paxos) 既活锁又死锁, 那么可以认为它是一个结合了 paxos 和 2pc 的协议.
+> 当然也可以构造 `commit_index` 使 [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 既活锁又死锁, 那么可以认为它是一个结合了 paxos 和 2pc 的协议.
 
 有了 State 之间的全序关系,
 然后再让 writer 保证 **phase-2** 写到 quorum 里的 State 一定是最大的,
@@ -489,11 +489,11 @@ struct P1Reply {
 
 ### Phase-1: Req
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-18ca46f99a680d80.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-5689fc38b9e0d2cb.jpg)
 
 ### Phase-1: Reply
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-7a1d201f2e3d1eb1.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-8f226d4d8e6009d2.jpg)
 
 ### Phase-1: Handler
 
@@ -585,11 +585,11 @@ struct P2Reply {
 
 ### Phase-2: Req
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-5af8e9ac6106a313.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-a5fb02c2207465f6.jpg)
 
 ### Phase-2: Reply
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-85d0166435658147.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=500nodeshape=-2a1ec07588150de4.jpg)
 
 ### Phase-2: Handler
 
@@ -610,7 +610,7 @@ impl Node {
 
 也就是说 **phase-2** 不止可能修改 `Node.state`, 同时也会修改 `Node.commit_index`.
 
-> 这里也是一个学习分布式容易产生误解的地方, 例如很多人曾经以为的一个paxos的bug: [paxos-bug](https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple).
+> 这里也是一个学习分布式容易产生误解的地方, 例如很多人曾经以为的一个paxos的bug: [paxos-bug](https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos").
 
 这里也很容易看出为何在 raft 中必须当前 term 复制到 quorum 才认为是 commit 了.
 
@@ -797,7 +797,7 @@ $$
     -   `cᵢ` : `{a, b, c}`;
     -   `cᵢcⱼ`:  `[{a, b, c}, {x, y, z}]`.
 
--   [abstract-paxos](https://github.com/openacid/abstract-paxos) 可以支持更灵活的变更:
+-   [abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 可以支持更灵活的变更:
 
     `c1` → `c1c2c3` → `c3c4` → `c4`.
 
@@ -809,11 +809,11 @@ $$
 
 下面的图示中简单列出了至多2个配置的 joint config 跟 uniform config 之间可转换的关系:
 
-![](/post-res/abstract-paxos/digraphxsize=55dpi=100nodeshape=-49e5b047d4205482.jpg)
+![](/post-res/abstract-paxos/digraphxsize=55dpi=100nodeshape=-40d62b74acc7b063.jpg)
 
 # Variants
 
-以上为 [abastract-paxos](https://github.com/openacid/abstract-paxos) 的算法描述部分. 接下来我们将看它是如何通过增加一些限制条件, [absract-paxos](https://github.com/openacid/abstract-paxos) 将其变成 classic-paxos 或 raft 的.
+以上为 [abastract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 的算法描述部分. 接下来我们将看它是如何通过增加一些限制条件, [absract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 将其变成 classic-paxos 或 raft 的.
 
 ## 秒变 Paxos
 
@@ -833,7 +833,7 @@ $$
 
 Raft为了简化实现(而不是证明), 有一些刻意的阉割:
 
-`commit_index` 在 raft 里是 一个 [偏序关系](https://zh.wikipedia.org/wiki/偏序关系) 的 tuple, 包括:
+`commit_index` 在 raft 里是 一个 [偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系") 的 tuple, 包括:
 
 -   term
 -   和是否投票给了某个 Candidate:
@@ -909,13 +909,13 @@ struct RaftState {
 
 ### Raft 的优化
 
-[abstract-paxos](https://github.com/openacid/abstract-paxos) 通过推导的方式, 得出的一致性算法可以说是最抽象最通用的. 不像 raft 那样先给出设计再进行证明, 现在从上向下看 raft 的设计, 就很容易看出 raft 丢弃了哪些东西和给自己设置了哪些限制, 也就是 raft 可能的优化的点:
+[abstract-paxos](https://github.com/openacid/abstract-paxos "abstract-paxos") 通过推导的方式, 得出的一致性算法可以说是最抽象最通用的. 不像 raft 那样先给出设计再进行证明, 现在从上向下看 raft 的设计, 就很容易看出 raft 丢弃了哪些东西和给自己设置了哪些限制, 也就是 raft 可能的优化的点:
 
--   1, **一个term允许选出多个 leader**: 将 `commit_index` 改为 [字典序](https://zh.wikipedia.org/wiki/字典序), 允许一个 term 中先后选出多个 leader.
+-   1, **一个term允许选出多个 leader**: 将 `commit_index` 改为 [字典序](https://zh.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F "字典序"), 允许一个 term 中先后选出多个 leader.
 -   2, **提前commit**: raft 中 commit 的标准是复制本 term 的一条日志到 quorum. 这样在新 leader 刚刚选出后可能会延后 commit 的确认, 如果有较多的较小 term 的日志需要复制的话. 因此一个可以较快 commit 的做法是复制一段 State 时(raft 的 log), 也带上 writer 的 `commit_index` 信息(即 raft leader 的 `term`) 到每个 node, 同时, 对 State 的比较(即raft 的 log 的比较) 改为比较 `[writer.commit_index, last_log_commit_index, log.len()]`, 在raft 中, 对应的是比较 `[leader_term, last_log_term, log.len()]`.
 -   3, **成员变更允许更灵活的变化**: 例如 `c0c1 -> c1c2`.
 
-其中1,3已经在 [openraft](https://github.com/databendlabs/openraft) 中实现(朋友说它是披着raft皮的paxos`/:-)`).
+其中1,3已经在 [openraft](https://github.com/databendlabs/openraft "openraft") 中实现(朋友说它是披着raft皮的paxos`/:-)`).
 
 
 
@@ -933,9 +933,9 @@ Reference:
 
 - Two phase commit : [https://en.wikipedia.org/wiki/Two-phase_commit_protocol](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
 
-- 偏序关系 : [https://zh.wikipedia.org/wiki/偏序关系](https://zh.wikipedia.org/wiki/偏序关系)
+- 偏序关系 : [https://zh.wikipedia.org/wiki/偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB)
 
-- 字典序 : [https://zh.wikipedia.org/wiki/字典序](https://zh.wikipedia.org/wiki/字典序)
+- 字典序 : [https://zh.wikipedia.org/wiki/字典序](https://zh.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F)
 
 
 [post-paxos]: https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"
@@ -944,5 +944,5 @@ Reference:
 [repo-leveldb]: https://github.com/google/leveldb "leveldb"
 [repo-openraft]: https://github.com/databendlabs/openraft "openraft"
 [wiki-2pc]: https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit"
-[wiki-偏序关系]: https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
-[wiki-字典序]: https://zh.wikipedia.org/wiki/字典序 "字典序"
+[wiki-偏序关系]: https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系"
+[wiki-字典序]: https://zh.wikipedia.org/wiki/%E5%AD%97%E5%85%B8%E5%BA%8F "字典序"

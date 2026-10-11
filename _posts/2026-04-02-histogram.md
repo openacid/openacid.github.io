@@ -376,20 +376,20 @@ Reference:
 - uniform distribution : [https://en.wikipedia.org/wiki/Continuous_uniform_distribution](https://en.wikipedia.org/wiki/Continuous_uniform_distribution)
 
 
-[Databend]:               https://github.com/databendlabs/databend
-[MSB]:                    https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit
-[OpenRaft]:               https://github.com/databendlabs/openraft
-[Pareto distribution]:    https://en.wikipedia.org/wiki/Pareto_distribution
-[base2histogram]:         https://github.com/drmingdrmer/base2histogram
-[bimodal distribution]:   https://en.wikipedia.org/wiki/Multimodal_distribution
-[exponential distribution]:  https://en.wikipedia.org/wiki/Exponential_distribution
-[floating-point number]:  https://en.wikipedia.org/wiki/Floating-point_arithmetic
-[histogram]:              https://en.wikipedia.org/wiki/Histogram
-[iopsystems/histogram]:   https://github.com/iopsystems/histogram
-[leading zero counting]:  https://en.wikipedia.org/wiki/Find_first_set#CLZ
-[log scale]:              https://en.wikipedia.org/wiki/Logarithmic_scale
-[log-normal distribution]:  https://en.wikipedia.org/wiki/Log-normal_distribution
-[long tail]:              https://en.wikipedia.org/wiki/Long_tail
-[normal distribution]:    https://en.wikipedia.org/wiki/Normal_distribution
-[percentile]:             https://en.wikipedia.org/wiki/Percentile
-[uniform distribution]:   https://en.wikipedia.org/wiki/Continuous_uniform_distribution
+[Databend]: https://github.com/databendlabs/databend
+[MSB]: https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit
+[OpenRaft]: https://github.com/databendlabs/openraft
+[Pareto distribution]: https://en.wikipedia.org/wiki/Pareto_distribution
+[base2histogram]: https://github.com/drmingdrmer/base2histogram
+[bimodal distribution]: https://en.wikipedia.org/wiki/Multimodal_distribution
+[exponential distribution]: https://en.wikipedia.org/wiki/Exponential_distribution
+[floating-point number]: https://en.wikipedia.org/wiki/Floating-point_arithmetic
+[histogram]: https://en.wikipedia.org/wiki/Histogram
+[iopsystems/histogram]: https://github.com/iopsystems/histogram
+[leading zero counting]: https://en.wikipedia.org/wiki/Find_first_set#CLZ
+[log scale]: https://en.wikipedia.org/wiki/Logarithmic_scale
+[log-normal distribution]: https://en.wikipedia.org/wiki/Log-normal_distribution
+[long tail]: https://en.wikipedia.org/wiki/Long_tail
+[normal distribution]: https://en.wikipedia.org/wiki/Normal_distribution
+[percentile]: https://en.wikipedia.org/wiki/Percentile
+[uniform distribution]: https://en.wikipedia.org/wiki/Continuous_uniform_distribution

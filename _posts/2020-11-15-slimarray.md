@@ -31,31 +31,31 @@ excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip
 # 场景和问题
 
 在时序数据库, 或列存储为基础的系统中, 很常见的形式就是存储一个整数数组,
-例如 [slim](https://github.com/openacid/slim) 这个项目按天统计的 star 数:
+例如 [slim](https://github.com/openacid/slim "slim") 这个项目按天统计的 star 数:
 
 [![Stargazers over time](/post-res/slimarray/18b61671112f3aeb-slim.jpg)](https://starchart.cc/openacid/slim)
 
 这类数据有有很明显的统一的变化趋势, 对这类数据的存储,
 我们可以利用数据分布的特点, 将整体数据的大小压缩到**几分之一**.
-这就是 [slimarray](https://github.com/openacid/slimarray) 要做的事情.
+这就是 [slimarray](https://github.com/openacid/slimarray "slimarray") 要做的事情.
 
-使用 [slimarray](https://github.com/openacid/slimarray), 可以将数据容量减小到gzip差不多的大小,
+使用 [slimarray](https://github.com/openacid/slimarray "slimarray"), 可以将数据容量减小到gzip差不多的大小,
 同时还能允许直接访问这些数据!
-测试中我们选择了2组随机数, 以及现实中的2份数据, 一个ipv4的数据库, 一个 [slim](https://github.com/openacid/slim) 的star变化数据, 服用 [slimarray](https://github.com/openacid/slimarray) 后效果如下:
+测试中我们选择了2组随机数, 以及现实中的2份数据, 一个ipv4的数据库, 一个 [slim](https://github.com/openacid/slim "slim") 的star变化数据, 服用 [slimarray](https://github.com/openacid/slimarray "slimarray") 后效果如下:
 
 | Data size | Data Set | gzip size | slimarry size | avg size | ratio |
 | --: | :-- | --: | :-- | --: | --: |
 | 1,000 | rand u32: [0, 1000] | x | 824 byte | 6 bit/elt | 18% |
 | 1,000,000 | rand u32: [0, 1000,000] | x | 702 KB | 5 bit/elt | 15% |
 | 1,000,000 | IPv4 DB | 2 MB | 2 MB | 16 bit/elt | 50% |
-| 600 | [slim](https://github.com/openacid/slim) star count | 602 byte | 832 byte | 10 bit/elt | 26% |
+| 600 | [slim](https://github.com/openacid/slim "slim") star count | 602 byte | 832 byte | 10 bit/elt | 26% |
 
 在达到gzip同等压缩率的前提下, 构建 slimarray 和 访问的性能也非常高:
 
 -   构建 slimarray 时, 平均每秒可压缩 6百万 个数组元素;
 -   读取一个数组元素平均花费 7 ns/op.
 
-本文手把手的介绍 [slimarray](https://github.com/openacid/slimarray) 的原理, 实现:
+本文手把手的介绍 [slimarray](https://github.com/openacid/slimarray "slimarray") 的原理, 实现:
 
 # 初步想法: 前缀压缩
 
@@ -176,7 +176,7 @@ num[3] = y(3) + 1 = 1010
 # 找到趋势函数
 
 寻找这样一条曲线就使用线性回归,
-例如在 [slimarray](https://github.com/openacid/slimarray) 中使用2次曲线 `f(x) = β₁ + β₂x + β₃x²`, 所要做的就是确定每个βᵢ的值,
+例如在 [slimarray](https://github.com/openacid/slimarray "slimarray") 中使用2次曲线 `f(x) = β₁ + β₂x + β₃x²`, 所要做的就是确定每个βᵢ的值,
 以使得`f(xⱼ) - yⱼ`的均方差最小. xⱼ是数组下标0, 1, 2...; yⱼ是数组中每个元素的值.
 
 $$

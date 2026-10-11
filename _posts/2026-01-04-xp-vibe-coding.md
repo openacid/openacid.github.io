@@ -173,11 +173,11 @@ Reference:
 - 闪电说 : [https://shandianshuo.cn/](https://shandianshuo.cn/)
 
 
-[Claude Code]:  https://github.com/anthropics/claude-code
-[GLM 4.7]:  https://open.bigmodel.cn/
-[Rust Rover]:  https://www.jetbrains.com/rust/
-[tig]:  https://github.com/jonas/tig
-[智谱 AI]:  https://www.zhipuai.cn/
-[智谱语音输入法]:  https://autoglm.zhipuai.cn/autotyper/
-[豆包]:  https://www.doubao.com/
-[闪电说]:  https://shandianshuo.cn/
+[Claude Code]: https://github.com/anthropics/claude-code
+[GLM 4.7]: https://open.bigmodel.cn/
+[Rust Rover]: https://www.jetbrains.com/rust/
+[tig]: https://github.com/jonas/tig
+[智谱 AI]: https://www.zhipuai.cn/
+[智谱语音输入法]: https://autoglm.zhipuai.cn/autotyper/
+[豆包]: https://www.doubao.com/
+[闪电说]: https://shandianshuo.cn/

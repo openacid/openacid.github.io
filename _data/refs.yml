@@ -64,7 +64,7 @@ universal:
   - "post-linearizable": https://blog.openacid.com/algo/linearizable/ "分布式系统中的 Linearizable 事务"
   - "post-openraft-read": https://blog.openacid.com/algo/openraft-read/ "Openraft 对 ReadIndex 的优化"
 
-  - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
+  - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 "paxos的读者答疑"
 
   # People
   - "people-ma-jianjiang": https://weibo.com/u/1516609505 "马健将"

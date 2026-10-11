@@ -20,7 +20,7 @@ excerpt: "本文探讨 Paxos 协议中 Ballot number 的重用机制，分析何
 ---
 ![](/post-res/paxos-same-ballot/f3c38ebb6fbef4c9-paxos-same-ballot-banner.webp)
 
-欢迎各位读者探讨 Paxos 的深层机制。在我此前发表的 [Paxos 的直观解释](https://blog.openacid.com/algo/paxos/) 文章后，它作为一个完整的介绍 Paxos 文章, 收到了不少读者提出的深入问题，这些问题我已在 [Paxos 的读者答疑](https://github.com/openacid/openacid.github.io/discussions/31) 中详细回应。考虑到分布式共识算法的复杂性，我决定通过一系列 回答 Paxos 的特定问题 形式的文章来作为补充，本文是该系列的第一篇。希望这些分析能帮助你解决疑惑，从不同角度理解 Paxos，帮助自己在分布式系统领域构建更加完整的思维框架。
+欢迎各位读者探讨 Paxos 的深层机制。在我此前发表的 [Paxos 的直观解释](https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释") 文章后，它作为一个完整的介绍 Paxos 文章, 收到了不少读者提出的深入问题，这些问题我已在 [Paxos 的读者答疑](https://github.com/openacid/openacid.github.io/discussions/31 "paxos的读者答疑") 中详细回应。考虑到分布式共识算法的复杂性，我决定通过一系列 回答 Paxos 的特定问题 形式的文章来作为补充，本文是该系列的第一篇。希望这些分析能帮助你解决疑惑，从不同角度理解 Paxos，帮助自己在分布式系统领域构建更加完整的思维框架。
 
 ## 问：是否可以用同样的 Ballot number（rnd）运行 Paxos？
 
@@ -113,5 +113,5 @@ Reference:
 - 可靠分布式系统-paxos的直观解释 : [https://blog.openacid.com/algo/paxos/](https://blog.openacid.com/algo/paxos/)
 
 
-[discuss-paxos]: https://github.com/openacid/openacid.github.io/discussions/31 paxos的读者答疑
+[discuss-paxos]: https://github.com/openacid/openacid.github.io/discussions/31 "paxos的读者答疑"
 [post-paxos]: https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"

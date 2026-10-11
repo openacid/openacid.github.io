@@ -24,7 +24,7 @@ excerpt: "raf is an experimental Raft variant that does not persist currentTerm 
 
 > Note: The idea in this article came from Zhang Yanpo. The code was implemented by Zhang Yanpo by hand. This article was drafted and refined with Codex.
 
-Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1) (`v0.1.1`).
+Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf") (`v0.1.1`).
 
 ## Introduction
 
@@ -406,7 +406,7 @@ During election, a candidate chooses `terms.len()` as its term. After it becomes
 
 That is the core of this experimental implementation: keep Raft's logical time model, but change where that logical time comes from in persistent state.
 
-Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1) (`v0.1.1`).
+Repository: [raf](https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf") (`v0.1.1`).
 
 
 
@@ -415,4 +415,4 @@ Reference:
 - raf : [https://github.com/drmingdrmer/raf/tree/v0.1.1](https://github.com/drmingdrmer/raf/tree/v0.1.1)
 
 
-[raf]:  https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
+[raf]: https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"

@@ -63,7 +63,7 @@ excerpt: "来自一个莫得感情的coding万年户"
     让他滚一边去.
 
 > 原文链接:
-> [What are some things that only someone who has been programming 20-50 years would know](https://www.quora.com/What-are-some-things-that-only-someone-who-has-been-programming-20-50-years-would-know/answer/John-Byrd-2?share=bf7b4448&srid=uJiB)
+> [What are some things that only someone who has been programming 20-50 years would know](https://www.quora.com/What-are-some-things-that-only-someone-who-has-been-programming-20-50-years-would-know/answer/John-Byrd-2?share=bf7b4448&srid=uJiB "x")
 
 {% include build_ref %}
 

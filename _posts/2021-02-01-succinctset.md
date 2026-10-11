@@ -40,9 +40,9 @@ excerpt: "压缩前缀树, 减少50%存储空间, 支持创建和查询, 只需1
 ---
 ![](/post-res/succinctset/3cadf29333159eef-succinctset-wechat-banner-small.jpg)
 
-这文介绍一个压缩前缀树实现的sorted set(github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100)), 区区95行代码, 包含了一组完整的功能:
+这文介绍一个压缩前缀树实现的sorted set(github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100 "succinct.Set")), 区区95行代码, 包含了一组完整的功能:
 
--   用 [前缀树](https://en.wikipedia.org/wiki/Trie) 存储一个排序数组, 去掉指针, 压缩掉50%的空间;
+-   用 [前缀树](https://en.wikipedia.org/wiki/Trie "trie") 存储一个排序数组, 去掉指针, 压缩掉50%的空间;
     例如在本文的例子中, 存储2.4MB的200万个单词, 只需要1.2MB.
 
 -   创建: 从key列表创建一个压缩的前缀树;
@@ -54,7 +54,7 @@ excerpt: "压缩前缀树, 减少50%存储空间, 支持创建和查询, 只需1
 `loc100` 分支是本文中使用的最简实现, 没有任何外部依赖,
 main分支中的实现面向生产环境, 要快4倍左右.
 
-**如果要生产环境使用, 移步 [slim](https://github.com/openacid/slim)**.
+**如果要生产环境使用, 移步 [slim](https://github.com/openacid/slim "slim")**.
 
 用20万个网上词汇来测试本文实现的succinctSet:
 
@@ -63,7 +63,7 @@ main分支中的实现面向生产环境, 要快4倍左右.
 
 原始数据大小: 2204 KB
 
-跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree) 的对比:
+跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree "btree") 的对比:
 
 | Data | Engine | Size(KB) | Size/original | ns/op |
 | :-- | :-- | --: | --: | --: |
@@ -91,7 +91,7 @@ rocksdb的一个sstable.
 
 # 思路: 前缀树
 
-[前缀树](https://en.wikipedia.org/wiki/Trie), 或字典树, prefix tree,  trie, 是解决这类问题的一个典型思路.
+[前缀树](https://en.wikipedia.org/wiki/Trie "trie"), 或字典树, prefix tree,  trie, 是解决这类问题的一个典型思路.
 例如要存储5个key: [ab, abc, abcd, axy, buv]
 可以建立下面这样一个前缀树, 省去大量重复的前缀,
 其中`^` 是root节点(也记做0), 1, 2, 3...是trie节点, `$`标记一个叶子节点,
@@ -289,7 +289,7 @@ leaves 的检查在查询的最后一步, 如果一个要查询的 key 匹配到
 第一个是找出一个 bitmap 中第`i`个bit之前有多少个`1`(或多少个`0`).
 对定长整数, 例如一个uint64, 它的有O(1)的实现, 例如
 
--   在cpp里叫做 [popcount](https://en.cppreference.com/w/cpp/numeric/popcount), i.e., count of population of ones;
+-   在cpp里叫做 [popcount](https://en.cppreference.com/w/cpp/numeric/popcount "popcount"), i.e., count of population of ones;
 -   在go里面它被封装在`bits.OnesCount64()`这个函数, 数数一个uint64里有多少个1;
 -   一般的, 叫做rank1(i), 如果要计算一个bitmap里有多少个0, 则是rank0(i).
 
@@ -542,8 +542,8 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 # 性能分析
 
 我们用网上搜集到的数据集做了下测试.
-测试中使用的负载模型都是 [zipf](https://blog.openacid.com/tech/zipf/), 比较符合互联网的真实场景, zipf 的参数 s 取 1.5,
-细节参考 [report](https://github.com/openacid/succinct/blob/v0.1.0/report/main.go) 的代码, 结果如下:
+测试中使用的负载模型都是 [zipf](https://blog.openacid.com/tech/zipf/ "zipf"), 比较符合互联网的真实场景, zipf 的参数 s 取 1.5,
+细节参考 [report](https://github.com/openacid/succinct/blob/v0.1.0/report/main.go "report") 的代码, 结果如下:
 
 -   20万个网上词汇:
 
@@ -552,7 +552,7 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 
     原始数据大小: 2204 KB
 
-    跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree) 的对比:
+    跟 string 数组的 bsearch, 以及 [google-btree](https://github.com/google/btree "btree") 的对比:
 
     | Data | Engine | Size(KB) | Size/original | ns/op |
     | :-- | :-- | --: | --: | --: |
@@ -580,7 +580,7 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 -   go中的string有2个字段: 到string内容的指针, 以及一个length,
     所以每条记录开销会多16字节.
 
--   [google-btree](https://github.com/google/btree) 内部因为还有interface, 额外存储开销更大.
+-   [google-btree](https://github.com/google/btree "btree") 内部因为还有interface, 额外存储开销更大.
 
 对查询性能:
 
@@ -592,7 +592,7 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 
 -   btree的时间开销更大, 可能由于间接访问比较多, 导致btree的优势没有发挥出来.
 
-github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100)
+github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100 "succinct.Set")
 
 {% include build_ref %}
 

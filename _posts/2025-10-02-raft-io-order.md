@@ -196,7 +196,7 @@ Reference:
 - tikv/tikv : [https://github.com/tikv/tikv](https://github.com/tikv/tikv)
 
 
-[OpenRaft docs: io-ordering]:  https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
-[hashicorp/raft]:  https://github.com/hashicorp/raft
-[sofastack/sofa-jraft]:  https://github.com/sofastack/sofa-jraft
-[tikv/tikv]:  https://github.com/tikv/tikv
+[OpenRaft docs: io-ordering]: https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
+[hashicorp/raft]: https://github.com/hashicorp/raft
+[sofastack/sofa-jraft]: https://github.com/sofastack/sofa-jraft
+[tikv/tikv]: https://github.com/tikv/tikv

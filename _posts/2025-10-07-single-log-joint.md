@@ -201,7 +201,7 @@ Now when all nodes restart, there's no regression. Nodes `x` and `y` see the bar
 
 > **Alternative: Persisting commit-index**
 > 
-> Instead of a barrier entry, we could persist the commit-index—an idea from [Ma Jianjiang](https://weibo.com/u/1516609505).
+> Instead of a barrier entry, we could persist the commit-index—an idea from [Ma Jianjiang](https://weibo.com/u/1516609505 "马健将").
 > 
 > The rule: joint consensus ends when commit-index reaches a quorum of `C_new`. To make this work, we'd need to persist commit-index (standard Raft doesn't require this).
 > 

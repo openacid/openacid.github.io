@@ -277,7 +277,7 @@ Joint state 还是 Uniform config 阶段:
 ![图 8：Barrier 条目重启后示意](/post-res/single-log-joint-cn/431e950cac307092-barrier-restart.x.svg)
 
 > **Plan-B**: 如果不用 log entry 做屏障, 另一个选择是 **记录 commit-index**,
-> 这个方案最初由 [马健将](https://weibo.com/u/1516609505) 提出.
+> 这个方案最初由 [马健将](https://weibo.com/u/1516609505 "马健将") 提出.
 > 
 > 这个方案中, 要求 Joint Consensus 结束的标准为：commit-index 同步到一个 `C_new` 的 quorum,
 > 并且要求 Raft 的实现 **持久化 commit-index 的值**.
