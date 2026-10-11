@@ -53,7 +53,6 @@ Paxos 算法要求当我们用相同的 Ballot number 发起提案时，其流�
 > -   `phase` 可以是 P 或 A:
 >     -   **P** 表示 Prepare 阶段（phase-1），
 >     -   **A** 表示 Accept 阶段（phase-2），
-> 
 > -   `ballot_number` 表示投票轮次（也有些文章中使用 round number），
 > -   `value` 表示在 Accept 阶段要提交的值（例如 `X`、`Y`）。但是他只对 A 表示的 accept 的 phase 有效
 > 

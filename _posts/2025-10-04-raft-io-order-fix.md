@@ -114,11 +114,9 @@ Here's the sequence of events:
     -   N3 receives `appendEntries(term=5, entries=[E5-1])`
     -   N3 must persist both term=5 and entry E5-1
     -   N3 responds "success" only after both IOs complete
-
 -   **t6**: Leader L5 sends a second entry E5-2 to N3 ← *This is the critical moment*
     -   N3 might still be waiting for t5's IOs to complete
     -   Whether IO reordering can occur makes all the difference
-
 -   **t7**: The old leader L1 (term=1) attempts to replicate E1-1 to N3
 
 The bug manifests in what happens at **t6**—when the second AppendEntries arrives while the first one's IOs are still in flight. Let's zoom into N3's internal state at each step.

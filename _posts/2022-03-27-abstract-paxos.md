@@ -40,7 +40,6 @@ excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 
 -   协议推导
     -   定义 commit
     -   定义 系统状态(State)
-
 -   协议描述
 -   工程实践
 -   成员变更
@@ -217,7 +216,7 @@ log 中的每个 entry 是一个改变系统状态的命令(Cmd).
 # State 的全序关系
 
 State 的 **全序关系** 来表示 commit 的有效性,
-但到目前为止, State 本身是一个操作日志, 也就是一个 list, list 之间只有一个**[偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系")**,
+但到目前为止, State 本身是一个操作日志, 也就是一个 list, list 之间只有一个 **[偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB "偏序关系")**,
 即包含关系. 互不包含的2个 list 无法确定大小关系.
 
 > 例如, 如果在2个节点上分别读到2个log: `[x, y, z]` 和 `[x, y, w]`, 无法确认哪个是可能 commit 的, 哪个是一定没有 commit 的:

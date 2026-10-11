@@ -75,11 +75,9 @@ N1 |  V1  L1                            E1-1
 -   **t5**: L5 复制 E5-1 到 N3（N3 的 `current_term=1 < req.term=5`）
     -   N3 需要执行两个 IO：持久化 term=5 和 E5-1
     -   等待两个 IO 完成才返回成功
-
 -   **t6**: L5 复制 E5-2 到 N3（关键时刻）
     -   N3 可能还在处理 t5 的 IO
     -   这时是否存在 IO-reorder 至关重要
-
 -   t7: L1 尝试复制 E1-1（term=1, index=1）
 
 **关键在于 t6 时刻的第二个 AppendEntries 请求**。让我们看看 N3 的内部状态变化。
