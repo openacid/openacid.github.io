@@ -6,6 +6,12 @@ in this dir:
 ./build.sh crc/2025-08-27-crc.md
 ```
 
+Rebuild it each time the source changes:
+
+```
+./watch.sh crc/2025-08-27-crc.md
+```
+
 
 publish to wechat platform:
 
