@@ -83,5 +83,3 @@ excerpt: "来自一个莫得感情的coding万年户"
 
 > 原文链接:
 > [What are some things that only someone who has been programming 20-50 years would know]
-
-{% include build_ref %}

@@ -598,5 +598,3 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 
 
 github: [succinct.Set][]
-
-{% include build_ref %}

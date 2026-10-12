@@ -365,6 +365,3 @@ commit 对应 accept 和 learn,
 
 将单步变更升级为joint consensus,
 可以彻底解决单步变更带来的可用性问题以及工程实现上的麻烦.
-
-
-{% include build_ref %}

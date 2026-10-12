@@ -594,8 +594,6 @@ func selectIthOne(bm []uint64, ranks, selects []int32, i int) int {
 
 github: [succinct.Set](https://github.com/openacid/succinct/tree/loc100 "succinct.Set")
 
-{% include build_ref %}
-
 
 
 Reference:
