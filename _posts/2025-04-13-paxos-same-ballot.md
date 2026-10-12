@@ -1,5 +1,6 @@
 ---
 title:      "Paxos 中 Ballot number 的重用机制"
+permalink:  /algo/paxos-same-ballot/
 authors:
     - xp
 categories:

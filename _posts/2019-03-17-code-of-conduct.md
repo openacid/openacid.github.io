@@ -1,5 +1,6 @@
 ---
 title:      "OpenACID's Code of Conduct"
+permalink:  /culture/code-of-conduct/
 authors:
     - xp
 categories:

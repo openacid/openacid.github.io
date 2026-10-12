@@ -1,5 +1,6 @@
 ---
 title:      "SlimTrie: 单机百亿文件的极致索引-设计篇"
+permalink:  /tech/algorithm/slimtrie-design/
 authors:
     - wenbo
     - pengsven

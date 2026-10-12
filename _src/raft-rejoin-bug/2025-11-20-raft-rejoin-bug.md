@@ -1,5 +1,6 @@
 ---
 title:      "Raft Node Rejoin Bug"
+permalink:  /algo/raft-rejoin-bug/
 authors:
     - xp
 categories:

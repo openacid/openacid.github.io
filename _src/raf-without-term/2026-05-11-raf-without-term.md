@@ -1,5 +1,6 @@
 ---
 title:      "Do Not Read: Raf Is a Useless and Valueless Failed Experiment"
+permalink:  /algo/raf-without-term/
 authors:
     - xp
 categories:

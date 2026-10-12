@@ -1,5 +1,6 @@
 ---
 title:      "Raft Configuration Change with Single Log Entry"
+permalink:  /algo/single-log-joint/
 authors:
     - xp
 categories:

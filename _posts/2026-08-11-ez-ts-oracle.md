@@ -1,5 +1,6 @@
 ---
 title: "Build a Distributed Timestamp Oracle with EzRaft"
+permalink:  /algo/ez-ts-oracle/
 authors:
     - xp
 categories:

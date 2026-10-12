@@ -1,5 +1,6 @@
 ---
 title:      "几个无理取闹的coding心得"
+permalink:  /tech/bla/programmer-should-know/
 authors:
     - xp
 categories:

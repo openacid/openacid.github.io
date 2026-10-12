@@ -1,5 +1,6 @@
 ---
 title:      "The Hidden Danger in Raft: Why IO Ordering Matters"
+permalink:  /algo/raft-io-order/
 authors:
     - xp
 categories:

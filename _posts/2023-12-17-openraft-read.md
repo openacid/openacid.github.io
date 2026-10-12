@@ -1,5 +1,6 @@
 ---
 title:      "Openraft 对 ReadIndex 的优化"
+permalink:  /algo/openraft-read/
 authors:
     - xp
 categories:

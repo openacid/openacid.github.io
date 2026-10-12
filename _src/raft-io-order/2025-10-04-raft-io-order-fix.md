@@ -1,5 +1,6 @@
 ---
 title:      "Raft IO Execution Order (Revised)"
+permalink:  /algo/raft-io-order-fix/
 authors:
     - xp
 categories:

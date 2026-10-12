@@ -1,5 +1,6 @@
 ---
 title:      "slimarray: gzip的压缩率, 即时访问"
+permalink:  /algo/slimarray/
 authors:
     - xp
 categories:

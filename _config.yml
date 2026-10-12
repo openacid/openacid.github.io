@@ -54,7 +54,7 @@ comments:
     repo_id              : "MDEwOlJlcG9zaXRvcnkxNjc1MTA3ODk="
     category_name        : "General"
     category_id          : "DIC_kwDOCfwDBc4CBFUx"
-    discussion_term      : "title"
+    discussion_term      : "pathname"
     reactions_enabled    : '1'
     theme                : 'light'
   staticman:

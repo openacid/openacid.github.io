@@ -1,5 +1,6 @@
 ---
 title:      "Single log entry 实现的 Raft 配置变更"
+permalink:  /algo/single-log-joint-cn/
 authors:
     - xp
 categories:

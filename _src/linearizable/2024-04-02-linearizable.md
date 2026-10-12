@@ -1,5 +1,6 @@
 ---
 title:      "分布式系统中的Linearizable事务:时间、通信与一致性"
+permalink:  /algo/linearizable/
 authors:
     - xp
 categories:

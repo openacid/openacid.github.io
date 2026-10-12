@@ -1,5 +1,6 @@
 ---
 title:      "xp 的 AI 工作流"
+permalink:  /life/xp-vibe-coding/
 authors:
     - xp
 categories:

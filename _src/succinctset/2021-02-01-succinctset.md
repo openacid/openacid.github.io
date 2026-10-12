@@ -1,5 +1,6 @@
 ---
 title:      "100行代码的压缩前缀树: 50% smaller"
+permalink:  /algo/succinctset/
 authors:
     - xp
 categories:

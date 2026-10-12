@@ -1,5 +1,6 @@
 ---
 title:      "将 paxos 和 raft 统一到一个协议下: abstract-paxos"
+permalink:  /algo/abstract-paxos/
 authors:
     - xp
 categories:

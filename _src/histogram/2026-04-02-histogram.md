@@ -1,5 +1,6 @@
 ---
 title:      "Histogram Done Right: 2KB Memory, 0.2% Error"
+permalink:  /algo/histogram/
 authors:
     - xp
 categories:

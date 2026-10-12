@@ -1,5 +1,6 @@
 ---
 title:      "Raft 成员变更上踩的坑"
+permalink:  /distributed/raft-bug-cn/
 authors:
     - xp
 categories:

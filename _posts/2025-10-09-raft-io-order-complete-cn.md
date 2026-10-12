@@ -1,5 +1,6 @@
 ---
 title:      "Raft 中的 IO 执行顺序：内存状态与持久化状态的陷阱"
+permalink:  /algo/raft-io-order-complete-cn/
 authors:
     - xp
 categories:
