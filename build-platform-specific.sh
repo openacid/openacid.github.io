@@ -86,7 +86,7 @@ build()
     md2zhihu \
         --platform         $platform \
         --code-width       600 \
-        --refs             _data/refs.yml \
+        --refs             _src/refs.yml \
         --output-dir       ./md2-local \
         --asset-output-dir ./md2-local/ \
         --md-output        ./md2-local/$name-$platform.md \
@@ -96,7 +96,7 @@ build()
     md2zhihu \
         --platform         $platform \
         --code-width       600 \
-        --refs             _data/refs.yml \
+        --refs             _src/refs.yml \
         --output-dir       ./md2-local \
         --asset-output-dir ./md2-local/ \
         --md-output        ./md2-local/$name-$platform-remote.md \

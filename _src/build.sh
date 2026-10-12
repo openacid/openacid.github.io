@@ -11,7 +11,7 @@ echo "article: $path"
 
 md2zhihu \
     --platform         minimal_mistake \
-    --refs             "$base/_data/refs.yml" \
+    --refs             "$base/_src/refs.yml" \
     --jekyll           \
     --asset-output-dir "$base/post-res" \
     --md-output        "$base/_posts/$fn" \

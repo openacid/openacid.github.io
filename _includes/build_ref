@@ -1,8 +1,3 @@
-{% for ref in site.data.refs.universal %}
-{% for link in ref %}
-
-{% endfor %}
-{%endfor%}
 
 {% for ref in page.refs %}
 {% for link in ref %}
