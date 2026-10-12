@@ -327,19 +327,19 @@ That split is the whole service. EzRaft handles replication, election, and failo
 
 Reference:
 
-- Reserve / Interval / TimeState / impl EzApp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112)
+- Reserve / Interval / TimeState / impl EzApp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L66-L112](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112)
 
 - EzRaft::linearizable : [https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365](https://github.com/drmingdrmer/ezraft/blob/main/src/raft.rs#L343-L365)
 
-- TimeService::leader_term : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210)
+- TimeService::leader\_term : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L207-L210](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L207-L210)
 
-- TimeService::next_timestamp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168)
+- TimeService::next\_timestamp : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L162-L168](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L162-L168)
 
-- TimeService::refill : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L188-L205](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L188-L205)
+- TimeService::refill : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L188-L205](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L188-L205)
 
-- TimeService::run_reserver : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L170-L186](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L170-L186)
+- TimeService::run\_reserver : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L170-L186](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L170-L186)
 
-- Reserved::take : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L124-L133](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L124-L133)
+- Reserved::take : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs#L124-L133](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L124-L133)
 
 - ezraft on crates.io : [https://crates.io/crates/ezraft](https://crates.io/crates/ezraft)
 
@@ -349,7 +349,7 @@ Reference:
 
 - EzApp : [https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html](https://docs.rs/ezraft/latest/ezraft/app/trait.EzApp.html)
 
-- Raft::ensure_linearizable : [https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable)
+- Raft::ensure\_linearizable : [https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure\_linearizable](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/struct.Raft.html#method.ensure_linearizable)
 
 - OpenRaft ReadPolicy : [https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/enum.ReadPolicy.html](https://docs.rs/openraft/0.10.0-alpha.33/openraft/raft/enum.ReadPolicy.html)
 
@@ -363,11 +363,11 @@ Reference:
 
 - Raft : [https://raft.github.io/](https://raft.github.io/)
 
-- Large-scale Incremental Processing Using Distributed Transactions and Notifications : [https://www.usenix.org/legacy/event/osdi10/tech/full_papers/Peng.pdf](https://www.usenix.org/legacy/event/osdi10/tech/full_papers/Peng.pdf)
+- Large-scale Incremental Processing Using Distributed Transactions and Notifications : [https://www.usenix.org/legacy/event/osdi10/tech/full\_papers/Peng.pdf](https://www.usenix.org/legacy/event/osdi10/tech/full_papers/Peng.pdf)
 
 - ezraft : [https://github.com/drmingdrmer/ezraft](https://github.com/drmingdrmer/ezraft)
 
-- ezraft timestamp_oracle example : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs)
+- ezraft timestamp\_oracle example : [https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp\_oracle.rs](https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs)
 
 - OpenRaft : [https://github.com/databendlabs/openraft](https://github.com/databendlabs/openraft)
 
@@ -375,7 +375,7 @@ Reference:
 
 - Rust : [https://www.rust-lang.org/](https://www.rust-lang.org/)
 
-- Multiversion concurrency control : [https://en.wikipedia.org/wiki/Multiversion_concurrency_control](https://en.wikipedia.org/wiki/Multiversion_concurrency_control)
+- Multiversion concurrency control : [https://en.wikipedia.org/wiki/Multiversion\_concurrency\_control](https://en.wikipedia.org/wiki/Multiversion_concurrency_control)
 
 
 [code-ezapp]: https://github.com/drmingdrmer/ezraft/blob/main/examples/timestamp_oracle.rs#L66-L112 "Reserve / Interval / TimeState / impl EzApp"

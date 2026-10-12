@@ -930,7 +930,7 @@ Reference:
 
 - openraft : [https://github.com/databendlabs/openraft](https://github.com/databendlabs/openraft)
 
-- Two phase commit : [https://en.wikipedia.org/wiki/Two-phase_commit_protocol](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
+- Two phase commit : [https://en.wikipedia.org/wiki/Two-phase\_commit\_protocol](https://en.wikipedia.org/wiki/Two-phase_commit_protocol)
 
 - 偏序关系 : [https://zh.wikipedia.org/wiki/偏序关系](https://zh.wikipedia.org/wiki/%E5%81%8F%E5%BA%8F%E5%85%B3%E7%B3%BB)
 

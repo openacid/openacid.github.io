@@ -187,7 +187,7 @@ When IO lets term roll back, you're letting time itself rewind. But here's the p
 
 Reference:
 
-- OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
+- OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io\_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 
 - hashicorp/raft : [https://github.com/hashicorp/raft](https://github.com/hashicorp/raft)
 

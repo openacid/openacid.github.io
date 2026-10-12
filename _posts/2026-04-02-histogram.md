@@ -343,37 +343,37 @@ Reference:
 
 - Databend : [https://github.com/databendlabs/databend](https://github.com/databendlabs/databend)
 
-- MSB : [https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit](https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit)
+- MSB : [https://en.wikipedia.org/wiki/Bit\_numbering#Most\_significant\_bit](https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit)
 
 - OpenRaft : [https://github.com/databendlabs/openraft](https://github.com/databendlabs/openraft)
 
-- Pareto distribution : [https://en.wikipedia.org/wiki/Pareto_distribution](https://en.wikipedia.org/wiki/Pareto_distribution)
+- Pareto distribution : [https://en.wikipedia.org/wiki/Pareto\_distribution](https://en.wikipedia.org/wiki/Pareto_distribution)
 
 - base2histogram : [https://github.com/drmingdrmer/base2histogram](https://github.com/drmingdrmer/base2histogram)
 
-- bimodal distribution : [https://en.wikipedia.org/wiki/Multimodal_distribution](https://en.wikipedia.org/wiki/Multimodal_distribution)
+- bimodal distribution : [https://en.wikipedia.org/wiki/Multimodal\_distribution](https://en.wikipedia.org/wiki/Multimodal_distribution)
 
-- exponential distribution : [https://en.wikipedia.org/wiki/Exponential_distribution](https://en.wikipedia.org/wiki/Exponential_distribution)
+- exponential distribution : [https://en.wikipedia.org/wiki/Exponential\_distribution](https://en.wikipedia.org/wiki/Exponential_distribution)
 
-- floating-point number : [https://en.wikipedia.org/wiki/Floating-point_arithmetic](https://en.wikipedia.org/wiki/Floating-point_arithmetic)
+- floating-point number : [https://en.wikipedia.org/wiki/Floating-point\_arithmetic](https://en.wikipedia.org/wiki/Floating-point_arithmetic)
 
 - histogram : [https://en.wikipedia.org/wiki/Histogram](https://en.wikipedia.org/wiki/Histogram)
 
 - iopsystems/histogram : [https://github.com/iopsystems/histogram](https://github.com/iopsystems/histogram)
 
-- leading zero counting : [https://en.wikipedia.org/wiki/Find_first_set#CLZ](https://en.wikipedia.org/wiki/Find_first_set#CLZ)
+- leading zero counting : [https://en.wikipedia.org/wiki/Find\_first\_set#CLZ](https://en.wikipedia.org/wiki/Find_first_set#CLZ)
 
-- log scale : [https://en.wikipedia.org/wiki/Logarithmic_scale](https://en.wikipedia.org/wiki/Logarithmic_scale)
+- log scale : [https://en.wikipedia.org/wiki/Logarithmic\_scale](https://en.wikipedia.org/wiki/Logarithmic_scale)
 
-- log-normal distribution : [https://en.wikipedia.org/wiki/Log-normal_distribution](https://en.wikipedia.org/wiki/Log-normal_distribution)
+- log-normal distribution : [https://en.wikipedia.org/wiki/Log-normal\_distribution](https://en.wikipedia.org/wiki/Log-normal_distribution)
 
-- long tail : [https://en.wikipedia.org/wiki/Long_tail](https://en.wikipedia.org/wiki/Long_tail)
+- long tail : [https://en.wikipedia.org/wiki/Long\_tail](https://en.wikipedia.org/wiki/Long_tail)
 
-- normal distribution : [https://en.wikipedia.org/wiki/Normal_distribution](https://en.wikipedia.org/wiki/Normal_distribution)
+- normal distribution : [https://en.wikipedia.org/wiki/Normal\_distribution](https://en.wikipedia.org/wiki/Normal_distribution)
 
 - percentile : [https://en.wikipedia.org/wiki/Percentile](https://en.wikipedia.org/wiki/Percentile)
 
-- uniform distribution : [https://en.wikipedia.org/wiki/Continuous_uniform_distribution](https://en.wikipedia.org/wiki/Continuous_uniform_distribution)
+- uniform distribution : [https://en.wikipedia.org/wiki/Continuous\_uniform\_distribution](https://en.wikipedia.org/wiki/Continuous_uniform_distribution)
 
 
 [Databend]: https://github.com/databendlabs/databend

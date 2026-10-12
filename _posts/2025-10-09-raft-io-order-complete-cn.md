@@ -223,7 +223,7 @@ Raft 论文的抽象模型（只关注持久化状态）和实际实现（内存
 
 Reference:
 
-- OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
+- OpenRaft docs: io-ordering : [https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io\_ordering.md](https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md)
 
 - hashicorp/raft : [https://github.com/hashicorp/raft](https://github.com/hashicorp/raft)
 
