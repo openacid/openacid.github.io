@@ -1,0 +1,83 @@
+universal:
+
+  # globally unique
+
+  - "Leslie Lamport":    http://www.lamport.org/ "Leslie Lamport"
+  - "protobuf": https://developers.google.com/protocol-buffers
+  # - "install-protoc": https://grpc.io/docs/protoc-installation/
+  - "grpc":     https://grpc.io/
+
+  - "raft-website": https://raft.github.io/ "Raft"
+  - "rust-lang": https://www.rust-lang.org/ "Rust"
+  - "serde": https://serde.rs/ "serde"
+  - "zookeeper": https://zookeeper.apache.org/ "Apache ZooKeeper"
+  - "etcd": https://etcd.io/ "etcd"
+
+  - "ref-classic-paxos": http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple "classic paxos"
+
+  # wiki
+  - "wiki-2pc":  https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit"
+  - "wiki-dict-order":  https://en.wikipedia.org/wiki/Lexicographic_order "Dictionary order"
+  - "wiki-partial-order": https://en.wikipedia.org/wiki/Partially_ordered_set "Partial Order"
+  - "wiki-succinct": https://en.wikipedia.org/wiki/Succinct_data_structure "Succinct data structure"
+  - "wiki-trie": https://en.wikipedia.org/wiki/Trie "trie"
+
+  - "wiki-偏序关系":  https://zh.wikipedia.org/wiki/偏序关系 "偏序关系"
+  - "wiki-前缀树": https://en.wikipedia.org/wiki/Trie "trie"
+  - "wiki-字典序":  https://zh.wikipedia.org/wiki/字典序 "字典序"
+
+  # ref and doc
+  - "ref-cpp-popcount":  https://en.cppreference.com/w/cpp/numeric/popcount "popcount"
+  - "failure-rate": https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/ "Backblaze 硬盘故障率统计 2016 Q1"
+  - "rust-btreemap": https://doc.rust-lang.org/std/collections/struct.BTreeMap.html "BTreeMap"
+
+  # repo
+  - "repo-abstract-paxos": https://github.com/openacid/abstract-paxos "abstract-paxos"
+  - "repo-slim": https://github.com/openacid/slim "slim"
+  - "repo-succinct.Set": https://github.com/openacid/succinct/tree/loc100 "succinct.Set"
+  - "repo-mmp3": https://github.com/openacid/mmp3 "multi-master-paxos-3"
+  - "repo-paxoskv": https://github.com/openacid/paxoskv/tree/naive "paxoskv"
+  # datafuselabs 已改名为 databendlabs, 后续统一用新地址
+  - "repo-openraft": https://github.com/databendlabs/openraft "openraft"
+  - "repo-ezraft": https://github.com/drmingdrmer/ezraft "ezraft"
+  - "repo-ezraft-kvstore": https://github.com/drmingdrmer/ezraft/blob/main/examples/kvstore.rs "ezraft kvstore example"
+  - "crates-ezraft": https://crates.io/crates/ezraft "ezraft on crates.io"
+  - "docs-ezraft": https://docs.rs/ezraft "ezraft docs"
+  - "repo-leveldb": https://github.com/google/leveldb "leveldb"
+  - "repo-consensus-bug-paxos": https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
+
+  # data structure impl
+  - "impl-google-btree": https://github.com/google/btree "btree"
+
+  # my articles
+  - "post-zipf": https://blog.openacid.com/tech/zipf/  "互联网中对象访问频率的91分布"
+  - "post-paxos":  https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"
+  - "post-paxoskv": https://blog.openacid.com/algo/paxoskv/ "200行代码实现基于paxos的kv存储"
+  - "post-quorum": https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现"
+  - "post-raft-bug": https://blog.openacid.com/distributed/raft-bug/ "Raft 成员变更上踩的坑"
+  - "post-mmp3": https://blog.openacid.com/algo/mmp3/ "Multi-Master-Paxos 3"
+  - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
+  - "post-raft-io-order": https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
+  - "post-raft-io-order-cn": https://blog.openacid.com/algo/raft-io-order-complete-cn/ "Raft 中的 IO 执行顺序"
+  - "post-raft-rejoin-bug": https://blog.openacid.com/algo/raft-rejoin-bug/ "Raft Node Rejoin Bug"
+  # 中文版发布后再补 "post-raft-rejoin-bug-cn", 目前只有英文版
+  - "post-linearizable": https://blog.openacid.com/algo/linearizable/ "分布式系统中的 Linearizable 事务"
+  - "post-openraft-read": https://blog.openacid.com/algo/openraft-read/ "Openraft 对 ReadIndex 的优化"
+
+  - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 "paxos的读者答疑"
+
+  # People
+  - "people-ma-jianjiang": https://weibo.com/u/1516609505 "马健将"
+
+
+zhihu:
+  # my articles
+  - "post-zipf":    https://zhuanlan.zhihu.com/p/94525243  "互联网中对象访问频率的91分布"
+  - "post-paxos":   https://zhuanlan.zhihu.com/p/145044486 "可靠分布式系统-paxos的直观解释"
+  - "post-paxoskv": https://zhuanlan.zhihu.com/p/275710507 "200行代码实现基于paxos的kv存储"
+  - "post-quorum": https://zhuanlan.zhihu.com/p/267559303 "多数派读写的少数派实现"
+  - "post-raft-bug": https://zhuanlan.zhihu.com/p/342319702 "Raft 成员变更上踩的坑"
+
+wechat:
+  - "post-paxos": https://mp.weixin.qq.com/s/3OZgqEWQcEf6V9v6eoSUUA "可靠分布式系统-paxos的直观解释"
+  - "post-paxoskv": https://mp.weixin.qq.com/s/_Iu6ITtXx4MVnKam3Q2ZTA "200行代码实现基于paxos的kv存储"

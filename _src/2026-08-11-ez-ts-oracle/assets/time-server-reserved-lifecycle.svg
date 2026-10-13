@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="svg.css"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 820" role="img" aria-labelledby="title desc">
+  <title id="title">The same node can lead again under a different term</title>
+  <desc id="desc">Node A leads in term 1, follows while Node B leads term 2, and leads again in term 3. Its term 1 Reserved cache is stale in term 3, so refill installs a new cache tagged with term 3 before the next get-timestamp request.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#627fa6"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#5b8b83"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#b28a55"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#9ba5b3"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" x="10" y="10" width="1480" height="800" rx="28"/>
+  <text class="title" x="60" y="62">The same node can lead again under a different term</text>
+  <text class="body" x="60" y="90">The term stored in Reserved prevents Node A from reusing an old range.</text>
+
+  <rect x="170" y="112" width="410" height="624" rx="20" fill="#edf2f7" fill-opacity="0.68" stroke="#d6dbe3"/>
+  <rect x="580" y="112" width="420" height="624" fill="#edf5f3" fill-opacity="0.68" stroke="#d6dbe3"/>
+  <rect x="1000" y="112" width="450" height="624" rx="20" fill="#efedf3" fill-opacity="0.62" stroke="#d6dbe3"/>
+
+  <rect class="badge-blue" x="225" y="124" width="300" height="46" rx="23"/>
+  <text class="label blue-text" x="375" y="155" text-anchor="middle">term 1 · Node A leads</text>
+  <rect class="badge-teal" x="635" y="124" width="310" height="46" rx="23"/>
+  <text class="label teal-text" x="790" y="155" text-anchor="middle">term 2 · Node B leads</text>
+  <rect class="badge-purple" x="1040" y="124" width="370" height="46" rx="23"/>
+  <text class="label purple-text" x="1225" y="155" text-anchor="middle">term 3 · Node A leads again</text>
+
+  <g transform="translate(270 190)">
+    <rect class="panel" width="210" height="68" rx="18"/>
+    <text class="label" x="105" y="28" text-anchor="middle">Client 1</text>
+    <text class="small" x="105" y="55" text-anchor="middle">get-timestamp request</text>
+  </g>
+  <path class="arrow-local" d="M375 258V320"/>
+
+  <g transform="translate(1225 190)">
+    <rect class="panel" width="210" height="68" rx="18"/>
+    <text class="label" x="105" y="28" text-anchor="middle">Client 2</text>
+    <text class="small" x="105" y="55" text-anchor="middle">get-timestamp request</text>
+  </g>
+  <path class="arrow-local" d="M1330 258V292H1332V320"/>
+  <text class="small blue-text" x="1420" y="286" text-anchor="end">after refill</text>
+
+  <g transform="translate(205 320)">
+    <rect class="cache-box" width="340" height="96" rx="18"/>
+    <text class="label amber-text" x="20" y="31">Node A · Reserved</text>
+    <text class="mono" x="20" y="65">term: 1</text>
+    <text class="mono muted-text" x="140" y="65">next: a</text>
+    <text class="mono muted-text" x="250" y="65">end: b</text>
+  </g>
+
+  <g transform="translate(1005 320)">
+    <rect class="invalid" width="175" height="96" rx="18"/>
+    <text class="label muted-text" x="87.5" y="30" text-anchor="middle">Old Reserved</text>
+    <text class="mono muted-text" x="87.5" y="57" text-anchor="middle">term: 1</text>
+    <text class="small reject-text" x="87.5" y="81" text-anchor="middle">stale in term 3</text>
+  </g>
+  <path class="arrow-raft" d="M1180 368H1225"/>
+  <text class="tiny teal-text" x="1202.5" y="350" text-anchor="middle">refill</text>
+  <g transform="translate(1225 320)">
+    <rect class="cache-box" width="215" height="96" rx="18"/>
+    <text class="label amber-text" x="107.5" y="30" text-anchor="middle">New Reserved</text>
+    <text class="mono" x="20" y="62">term: 3</text>
+    <text class="mono muted-text" x="120" y="62">next: e</text>
+    <text class="mono muted-text" x="120" y="83">end: f</text>
+  </g>
+
+  <path class="arrow-muted" d="M545 400C700 470 920 470 1045 416"/>
+  <rect class="badge-muted" x="605" y="430" width="390" height="36" rx="18"/>
+  <text class="small muted-text" x="800" y="452" text-anchor="middle">Node A keeps this cache while following</text>
+
+  <text class="label" x="138" y="533" text-anchor="end">Node A</text>
+  <text class="label" x="138" y="613" text-anchor="end">Node B</text>
+  <text class="label" x="138" y="693" text-anchor="end">Node C</text>
+
+  <rect class="available" x="180" y="500" width="400" height="56" rx="14"/>
+  <text class="label blue-text" x="380" y="534" text-anchor="middle">Leader · term 1</text>
+  <rect class="badge-muted" x="580" y="500" width="420" height="56"/>
+  <text class="small muted-text" x="790" y="534" text-anchor="middle">Follower</text>
+  <rect class="available" x="1000" y="500" width="440" height="56" rx="14"/>
+  <text class="label purple-text" x="1220" y="534" text-anchor="middle">Leader again · term 3</text>
+
+  <rect class="badge-muted" x="180" y="580" width="400" height="56" rx="14"/>
+  <text class="small muted-text" x="380" y="614" text-anchor="middle">Follower</text>
+  <rect class="reserved-new" x="580" y="580" width="420" height="56"/>
+  <text class="label teal-text" x="790" y="614" text-anchor="middle">Leader · term 2</text>
+  <rect class="badge-muted" x="1000" y="580" width="440" height="56" rx="14"/>
+  <text class="small muted-text" x="1220" y="614" text-anchor="middle">Follower</text>
+
+  <rect class="badge-muted" x="180" y="660" width="1260" height="56" rx="14"/>
+  <text class="small muted-text" x="810" y="694" text-anchor="middle">Follower throughout</text>
+
+  <line class="guide" x1="580" y1="112" x2="580" y2="750"/>
+  <line class="guide" x1="1000" y1="112" x2="1000" y2="750"/>
+  <line class="axis" x1="180" y1="750" x2="1450" y2="750"/>
+  <text class="small" x="580" y="776" text-anchor="middle">term changes</text>
+  <text class="small" x="1000" y="776" text-anchor="middle">term changes</text>
+  <text class="label" x="1450" y="776" text-anchor="end">time</text>
+</svg>

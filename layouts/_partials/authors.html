@@ -1,0 +1,8 @@
+{{- range $index, $id := . -}}
+  {{- if $index }}, {{ end -}}
+  {{- with index hugo.Data.authors $id -}}
+    {{ .name }}
+  {{- else -}}
+    {{ errorf "author %q is not in data/authors.yaml" $id }}
+  {{- end -}}
+{{- end -}}

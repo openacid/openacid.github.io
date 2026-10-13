@@ -1,0 +1,31 @@
+xp:
+  name: Zhang Yanpo (drdr.xp)
+  bio: I write codes, by hands
+  avatar: /assets/images/author/xp.jpg
+  links:
+    - label: personal blog
+      url: https://drmingdrmer.github.io/
+    - label: GitHub
+      url: https://github.com/drmingdrmer
+    - label: Weibo
+      url: https://www.weibo.com/drdrxp
+
+pengsven:
+  name: 吴义谱(pengsven)
+  bio: 新晋奶爸的程序猿
+  avatar: /assets/images/author/pengsven.jpg
+  links:
+    - label: 微博
+      url: https://weibo.com/u/5253355875
+    - label: GitHub
+      url: https://github.com/pengsven
+
+wenbo:
+  name: 李文博(wenbo)
+  bio: 萌新码农
+  avatar: /assets/images/author/wenbo.jpg
+  links:
+    - label: 微博
+      url: https://weibo.com/wenbobuaa
+    - label: GitHub
+      url: https://github.com/wenbobuaa

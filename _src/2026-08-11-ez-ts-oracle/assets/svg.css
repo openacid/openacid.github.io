@@ -1,0 +1,270 @@
+svg {
+  background: #f7f8fa;
+  color: #263247;
+  font-family:
+    Inter,
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  text-rendering: geometricPrecision;
+}
+
+.canvas {
+  fill: #f7f8fa;
+  stroke: #d6dbe3;
+  stroke-width: 1.5;
+}
+
+.title {
+  fill: #263247;
+  font-size: 38px;
+  font-weight: 750;
+}
+
+.panel-title {
+  fill: #263247;
+  font-size: 28px;
+  font-weight: 750;
+}
+
+.label {
+  fill: #263247;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.body {
+  fill: #566174;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.small {
+  fill: #6f7988;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.tiny {
+  fill: #6f7988;
+  font-size: 16px;
+  font-weight: 550;
+}
+
+.mono {
+  fill: #263247;
+  font-family:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
+  font-size: 20px;
+  font-weight: 650;
+}
+
+.white-text {
+  fill: #ffffff;
+}
+
+.blue-text {
+  fill: #49688f;
+}
+
+.teal-text {
+  fill: #47746d;
+}
+
+.amber-text {
+  fill: #7d613b;
+}
+
+.purple-text {
+  fill: #675b7b;
+}
+
+.muted-text {
+  fill: #6f7988;
+}
+
+.panel {
+  fill: #ffffff;
+  stroke: #d6dbe3;
+  stroke-width: 1.5;
+}
+
+.leader-frame {
+  fill: #ffffff;
+  stroke: #627fa6;
+  stroke-width: 2;
+}
+
+.follower-frame {
+  fill: #edf5f3;
+  stroke: #5b8b83;
+  stroke-width: 1.75;
+}
+
+.handler-box {
+  fill: #edf2f7;
+  stroke: #627fa6;
+  stroke-width: 1.75;
+}
+
+.cache-box {
+  fill: #faf6ee;
+  stroke: #b28a55;
+  stroke-width: 1.75;
+}
+
+.task-box {
+  fill: #e9f3f0;
+  stroke: #5b8b83;
+  stroke-width: 1.75;
+}
+
+.raft-box {
+  fill: #28354c;
+  stroke: #28354c;
+  stroke-width: 2;
+}
+
+.badge-blue {
+  fill: #e3ebf4;
+  stroke: #627fa6;
+  stroke-width: 1;
+}
+
+.badge-teal {
+  fill: #dcece8;
+  stroke: #5b8b83;
+  stroke-width: 1;
+}
+
+.badge-amber {
+  fill: #f3eadb;
+  stroke: #b28a55;
+  stroke-width: 1;
+}
+
+.badge-purple {
+  fill: #efedf3;
+  stroke: #81739a;
+  stroke-width: 1;
+}
+
+.badge-muted {
+  fill: #f1f3f6;
+  stroke: #d0d6de;
+  stroke-width: 1;
+}
+
+.badge-reject {
+  fill: #f3e8e8;
+  stroke: #a9787b;
+  stroke-width: 1;
+}
+
+.reject-text {
+  fill: #835b60;
+}
+
+.issued {
+  fill: #cddbeb;
+  stroke: #627fa6;
+  stroke-width: 1.5;
+}
+
+.available {
+  fill: #e3ebf4;
+  stroke: #627fa6;
+  stroke-width: 1.5;
+}
+
+.reserved-new {
+  fill: #dcece8;
+  stroke: #5b8b83;
+  stroke-width: 1.5;
+}
+
+.invalid {
+  fill: #f1f3f6;
+  stroke: #9ba5b3;
+  stroke-dasharray: 6 5;
+  stroke-width: 1.5;
+}
+
+.axis {
+  fill: none;
+  stroke: #738094;
+  stroke-width: 2;
+  marker-end: url("#arrow-slate");
+}
+
+.guide {
+  fill: none;
+  stroke: #d0d6de;
+  stroke-dasharray: 5 6;
+  stroke-width: 1.5;
+}
+
+.arrow-local {
+  fill: none;
+  stroke: #627fa6;
+  stroke-width: 2.5;
+  marker-end: url("#arrow-blue");
+}
+
+.arrow-local-dashed {
+  fill: none;
+  stroke: #627fa6;
+  stroke-dasharray: 8 6;
+  stroke-width: 2.5;
+  marker-end: url("#arrow-blue");
+}
+
+.arrow-raft {
+  fill: none;
+  stroke: #5b8b83;
+  stroke-width: 2.5;
+  marker-end: url("#arrow-teal");
+}
+
+.arrow-cache {
+  fill: none;
+  stroke: #b28a55;
+  stroke-width: 2.5;
+  marker-end: url("#arrow-amber");
+}
+
+.arrow-muted {
+  fill: none;
+  stroke: #9ba5b3;
+  stroke-width: 2;
+  marker-end: url("#arrow-slate");
+}
+
+.heartbeat-ok {
+  fill: none;
+  stroke: #5b8b83;
+  stroke-width: 2;
+  marker-end: url("#arrow-teal");
+}
+
+.heartbeat-missed {
+  fill: none;
+  stroke: #9ba5b3;
+  stroke-dasharray: 7 5;
+  stroke-width: 2;
+  marker-end: url("#arrow-slate");
+}
+
+.tick-strong {
+  stroke: #263247;
+  stroke-width: 2.5;
+}
+
+.conclusion {
+  fill: #28354c;
+}

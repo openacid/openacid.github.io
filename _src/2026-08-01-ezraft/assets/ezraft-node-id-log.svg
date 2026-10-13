@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 720" role="img" aria-labelledby="title desc">
+  <title id="title">How node IDs 0, 2, and 6 relate to Raft log indexes</title>
+  <desc id="desc">Index 0 stores the initial membership. Each join writes a blank log whose index becomes node ID 2 or 6. The logs between them add learners and perform two-phase membership changes.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#64748b"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      text:not([fill]) { fill: #0f1b3d; }
+      .title { font-size: 30px; font-weight: 750; }
+      .index { font-family: "SFMono-Regular", Consolas, monospace; font-size: 20px; font-weight: 750; }
+      .cell-title { font-size: 15px; font-weight: 750; }
+      .cell-body { font-size: 13px; }
+      .cell-body:not([fill]) { fill: #475569; }
+      .label { font-size: 16px; font-weight: 700; }
+      .small { font-size: 14px; }
+      .small:not([fill]) { fill: #64748b; }
+      .mono { font-family: "SFMono-Regular", Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect x="10" y="10" width="1480" height="700" rx="28" fill="#f8fafc" stroke="#dbe4ee"/>
+  <text x="60" y="66" class="title">Node IDs Come from Raft Log Indexes</text>
+
+  <g transform="translate(858 42)">
+    <rect width="18" height="18" rx="5" fill="#fef3c7" stroke="#f59e0b"/>
+    <text x="27" y="15" class="small">Assign node ID</text>
+    <rect x="144" width="18" height="18" rx="5" fill="#ccfbf1" stroke="#0f8f87"/>
+    <text x="171" y="15" class="small">add learner</text>
+    <rect x="298" width="18" height="18" rx="5" fill="#ede9fe" stroke="#7c3aed"/>
+    <text x="325" y="15" class="small">membership change</text>
+  </g>
+
+  <path d="M568 136v-18h113v18" fill="none" stroke="#7c3aed" stroke-width="2"/>
+  <text x="624" y="107" text-anchor="middle" class="small" style="fill:#6d28d9;font-weight:700">One promotion: joint → uniform</text>
+  <path d="M1020 136v-18h113v18" fill="none" stroke="#7c3aed" stroke-width="2"/>
+  <text x="1076" y="107" text-anchor="middle" class="small" style="fill:#6d28d9;font-weight:700">One promotion: joint → uniform</text>
+
+  <g transform="translate(64 150)">
+    <rect width="104" height="236" rx="14" fill="#e0f2fe" stroke="#2498c7" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#2498c7"/>
+    <path d="M0 34h104v14H0z" fill="#2498c7"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">0</text>
+    <text x="52" y="88" text-anchor="middle" class="cell-title">Initial</text>
+    <text x="52" y="109" text-anchor="middle" class="cell-title">membership</text>
+    <line x1="18" y1="126" x2="86" y2="126" stroke="#bae6fd"/>
+    <text x="52" y="151" text-anchor="middle" class="cell-body">create()</text>
+    <text x="52" y="174" text-anchor="middle" class="cell-body">First node</text>
+    <rect x="15" y="194" width="74" height="26" rx="13" fill="#2498c7"/>
+    <text x="52" y="212" text-anchor="middle" fill="#ffffff" class="cell-title">ID = 0</text>
+  </g>
+
+  <g transform="translate(177 150)">
+    <rect width="104" height="236" rx="14" fill="#f1f5f9" stroke="#94a3b8"/>
+    <rect width="104" height="48" rx="14" fill="#64748b"/>
+    <path d="M0 34h104v14H0z" fill="#64748b"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">1</text>
+    <text x="52" y="93" text-anchor="middle" class="cell-title">leader</text>
+    <text x="52" y="116" text-anchor="middle" class="cell-title">blank</text>
+    <line x1="18" y1="133" x2="86" y2="133" stroke="#cbd5e1"/>
+    <text x="52" y="161" text-anchor="middle" class="cell-body">New term</text>
+    <text x="52" y="183" text-anchor="middle" class="cell-body">Establish leader</text>
+  </g>
+
+  <g transform="translate(290 150)">
+    <rect width="104" height="236" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect width="104" height="48" rx="14" fill="#f59e0b"/>
+    <path d="M0 34h104v14H0z" fill="#f59e0b"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">2</text>
+    <text x="52" y="93" text-anchor="middle" class="cell-title">join blank</text>
+    <text x="52" y="119" text-anchor="middle" class="cell-body">Node B joins</text>
+    <line x1="18" y1="136" x2="86" y2="136" stroke="#fde68a"/>
+    <path d="M52 151v23" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="15" y="188" width="74" height="28" rx="14" fill="#f59e0b"/>
+    <text x="52" y="207" text-anchor="middle" fill="#ffffff" class="cell-title">ID = 2</text>
+  </g>
+
+  <g transform="translate(403 150)">
+    <rect width="104" height="236" rx="14" fill="#f0fdfa" stroke="#0f8f87" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#0f8f87"/>
+    <path d="M0 34h104v14H0z" fill="#0f8f87"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">3</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">add</text>
+    <text x="52" y="113" text-anchor="middle" class="cell-title">learner 2</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#99e6d7"/>
+    <text x="52" y="159" text-anchor="middle" class="cell-body">Replicate</text>
+    <text x="52" y="181" text-anchor="middle" class="cell-body">No vote</text>
+  </g>
+
+  <g transform="translate(516 150)">
+    <rect width="104" height="236" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#7c3aed"/>
+    <path d="M0 34h104v14H0z" fill="#7c3aed"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">4</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">promote 2</text>
+    <text x="52" y="114" text-anchor="middle" class="cell-body">joint config</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#ddd6fe"/>
+    <text x="52" y="159" text-anchor="middle" class="cell-body">{0}</text>
+    <text x="52" y="181" text-anchor="middle" class="cell-body">→ {0, 2}</text>
+  </g>
+
+  <g transform="translate(629 150)">
+    <rect width="104" height="236" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#7c3aed"/>
+    <path d="M0 34h104v14H0z" fill="#7c3aed"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">5</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">promote 2</text>
+    <text x="52" y="114" text-anchor="middle" class="cell-body">uniform config</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#ddd6fe"/>
+    <text x="52" y="171" text-anchor="middle" class="cell-body">voters</text>
+    <text x="52" y="194" text-anchor="middle" class="cell-title">{0, 2}</text>
+  </g>
+
+  <g transform="translate(742 150)">
+    <rect width="104" height="236" rx="14" fill="#fffbeb" stroke="#f59e0b" stroke-width="2.5"/>
+    <rect width="104" height="48" rx="14" fill="#f59e0b"/>
+    <path d="M0 34h104v14H0z" fill="#f59e0b"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">6</text>
+    <text x="52" y="93" text-anchor="middle" class="cell-title">join blank</text>
+    <text x="52" y="119" text-anchor="middle" class="cell-body">Node C joins</text>
+    <line x1="18" y1="136" x2="86" y2="136" stroke="#fde68a"/>
+    <path d="M52 151v23" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="15" y="188" width="74" height="28" rx="14" fill="#f59e0b"/>
+    <text x="52" y="207" text-anchor="middle" fill="#ffffff" class="cell-title">ID = 6</text>
+  </g>
+
+  <g transform="translate(855 150)">
+    <rect width="104" height="236" rx="14" fill="#f0fdfa" stroke="#0f8f87" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#0f8f87"/>
+    <path d="M0 34h104v14H0z" fill="#0f8f87"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">7</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">add</text>
+    <text x="52" y="113" text-anchor="middle" class="cell-title">learner 6</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#99e6d7"/>
+    <text x="52" y="159" text-anchor="middle" class="cell-body">Replicate</text>
+    <text x="52" y="181" text-anchor="middle" class="cell-body">No vote</text>
+  </g>
+
+  <g transform="translate(968 150)">
+    <rect width="104" height="236" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#7c3aed"/>
+    <path d="M0 34h104v14H0z" fill="#7c3aed"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">8</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">promote 6</text>
+    <text x="52" y="114" text-anchor="middle" class="cell-body">joint config</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#ddd6fe"/>
+    <text x="52" y="159" text-anchor="middle" class="cell-body">{0, 2}</text>
+    <text x="52" y="181" text-anchor="middle" class="cell-body">→ {0, 2, 6}</text>
+  </g>
+
+  <g transform="translate(1081 150)">
+    <rect width="104" height="236" rx="14" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#7c3aed"/>
+    <path d="M0 34h104v14H0z" fill="#7c3aed"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">9</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">promote 6</text>
+    <text x="52" y="114" text-anchor="middle" class="cell-body">uniform config</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#ddd6fe"/>
+    <text x="52" y="171" text-anchor="middle" class="cell-body">voters</text>
+    <text x="52" y="194" text-anchor="middle" class="cell-title">{0, 2, 6}</text>
+  </g>
+
+  <g transform="translate(1194 150)">
+    <rect width="104" height="236" rx="14" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+    <rect width="104" height="48" rx="14" fill="#10b981"/>
+    <path d="M0 34h104v14H0z" fill="#10b981"/>
+    <text x="52" y="32" text-anchor="middle" fill="#ffffff" class="index">10</text>
+    <text x="52" y="91" text-anchor="middle" class="cell-title">client</text>
+    <text x="52" y="114" text-anchor="middle" class="cell-title">write</text>
+    <line x1="18" y1="132" x2="86" y2="132" stroke="#a7f3d0"/>
+    <text x="52" y="159" text-anchor="middle" class="cell-body">App request</text>
+    <text x="52" y="181" text-anchor="middle" class="cell-body">Apply to state</text>
+  </g>
+
+  <line x1="64" y1="414" x2="1298" y2="414" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="681" y="442" text-anchor="middle" class="small">Raft log index increases</text>
+
+  <g transform="translate(110 482)">
+    <rect width="1280" height="174" rx="22" fill="#ffffff" stroke="#dbe4ee"/>
+    <text x="40" y="44" class="label">Why 0, 2, and 6 instead of 0, 1, and 2?</text>
+    <circle cx="52" cy="84" r="18" fill="#2498c7"/>
+    <text x="52" y="90" text-anchor="middle" fill="#ffffff" class="label">0</text>
+    <text x="82" y="90" class="small">create writes the initial membership at index 0; the first node also uses ID 0.</text>
+    <circle cx="52" cy="126" r="18" fill="#f59e0b"/>
+    <text x="52" y="132" text-anchor="middle" fill="#ffffff" class="label">2</text>
+    <text x="82" y="132" class="small">and</text>
+    <circle cx="122" cy="126" r="18" fill="#f59e0b"/>
+    <text x="122" y="132" text-anchor="middle" fill="#ffffff" class="label">6</text>
+    <text x="152" y="132" class="small">are blank-log indexes written by two joins, so they are naturally unique.</text>
+    <rect x="770" y="48" width="470" height="86" rx="16" fill="#f5f3ff"/>
+    <text x="1005" y="78" text-anchor="middle" class="label" style="fill:#6d28d9">The gaps between IDs are useful</text>
+    <text x="1005" y="104" text-anchor="middle" class="small">They record learner admission and the joint / uniform</text>
+    <text x="1005" y="126" text-anchor="middle" class="small">membership logs required to promote each voter.</text>
+  </g>
+</svg>

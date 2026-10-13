@@ -1,0 +1,6 @@
+{{- /* Write the math as kramdown writes it for MathJax. */ -}}
+{{- if eq .Type "block" -}}
+\[{{ strings.TrimSpace .Inner }}\]
+{{ else -}}
+\({{ strings.TrimSpace .Inner }}\)
+{{- end -}}

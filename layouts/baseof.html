@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{/* Jekyll renders the title and the description as markdown, then strips the HTML. */}}
+  {{ $title := site.Title }}
+  {{ if not .IsHome }}
+    {{ $title = .Title | markdownify | plainify | htmlUnescape }}
+  {{ end }}
+  {{ $description := .Description | default site.Params.description | markdownify | plainify | htmlUnescape }}
+  <title>{{ $title }}{{ if not .IsHome }} - {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ $description }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  <meta property="og:title" content="{{ $title }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:description" content="{{ $description }}">
+  {{ if .IsPage }}
+    <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
+    {{ with index .Params.authors 0 }}
+      <meta name="author" content="{{ (index hugo.Data.authors .).name }}">
+    {{ end }}
+  {{ end }}
+  {{ with site.Home.OutputFormats.Get "atom" }}
+    <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }} Feed">
+  {{ end }}
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/images/favicon/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  {{ with resources.Get "css/main.css" }}
+    {{ $style := . | minify | fingerprint "sha256" }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+  {{ end }}
+  {{ if .Params.mathjax }}
+    {{ partialCached "math.html" . }}
+  {{ end }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="site-title" href="{{ site.Home.RelPermalink }}">
+      <img src="{{ site.Params.logo }}" alt="">{{ site.Title }}
+    </a>
+    <nav aria-label="Main">
+      {{ range site.Menus.main }}
+        <a href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
+  </header>
+  <main id="main" class="site-main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    <small>
+      {{ with site.Home.OutputFormats.Get "atom" }}<a href="{{ .RelPermalink }}">Feed</a> · {{ end }}
+      &copy; {{ now.Year }} {{ site.Params.name }}
+    </small>
+  </footer>
+</body>
+</html>

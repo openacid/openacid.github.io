@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="40 15 680 277">
+  <defs>
+    <pattern id="dotpat" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.4" fill="#555" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect x="40" y="15" width="680" height="277" fill="#0F1419" rx="6"/>
+  <rect x="40" y="15" width="680" height="277" fill="url(#dotpat)" rx="6"/>
+
+  <text x="380.0" y="44" text-anchor="middle" font-size="12" fill="#B0BEC5" font-family="'SF Mono', monospace">value = 42    →    bucket index = ?</text>
+
+  <text x="680" y="110.0" text-anchor="end" font-size="10" fill="#607D8B" font-family="'SF Mono', monospace">WIDTH = 3</text>
+
+  <rect x="209.0" y="80" width="52" height="52" fill="#26A69A" stroke="#4DB6AC" stroke-width="1.5" rx="4"/>
+  <text x="235.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">1</text>
+  <text x="235.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 5</text>
+  <rect x="267.0" y="80" width="52" height="52" fill="#F9A825" stroke="#FDD835" stroke-width="1.5" rx="4"/>
+  <text x="293.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">0</text>
+  <text x="293.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 4</text>
+  <rect x="325.0" y="80" width="52" height="52" fill="#F9A825" stroke="#FDD835" stroke-width="1.5" rx="4"/>
+  <text x="351.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">1</text>
+  <text x="351.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 3</text>
+  <rect x="383.0" y="80" width="52" height="52" fill="#37474F" stroke="#546E7A" stroke-width="1.5" rx="4"/>
+  <text x="409.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">0</text>
+  <text x="409.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 2</text>
+  <rect x="441.0" y="80" width="52" height="52" fill="#37474F" stroke="#546E7A" stroke-width="1.5" rx="4"/>
+  <text x="467.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">1</text>
+  <text x="467.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 1</text>
+  <rect x="499.0" y="80" width="52" height="52" fill="#37474F" stroke="#546E7A" stroke-width="1.5" rx="4"/>
+  <text x="525.0" y="114.0" text-anchor="middle" font-size="28" fill="white" font-family="'SF Mono', monospace" font-weight="bold">0</text>
+  <text x="525.0" y="74" text-anchor="middle" font-size="9" fill="#78909C" font-family="'SF Mono', monospace">bit 0</text>
+  <line x1="209.0" y1="144" x2="261.0" y2="144" stroke="#4DB6AC" stroke-width="1.5"/>
+  <line x1="209.0" y1="140" x2="209.0" y2="144" stroke="#4DB6AC" stroke-width="1.5"/>
+  <line x1="261.0" y1="140" x2="261.0" y2="144" stroke="#4DB6AC" stroke-width="1.5"/>
+  <text x="235.0" y="158" text-anchor="middle" font-size="10" fill="#4DB6AC" font-family="'SF Mono', monospace">implicit 1</text>
+  <text x="235.0" y="170" text-anchor="middle" font-size="9" fill="#4DB6AC" font-family="'SF Mono', monospace">MSB pos = 5</text>
+  <line x1="267.0" y1="144" x2="377.0" y2="144" stroke="#FDD835" stroke-width="1.5"/>
+  <line x1="267.0" y1="140" x2="267.0" y2="144" stroke="#FDD835" stroke-width="1.5"/>
+  <line x1="377.0" y1="140" x2="377.0" y2="144" stroke="#FDD835" stroke-width="1.5"/>
+  <text x="322.0" y="158" text-anchor="middle" font-size="10" fill="#FDD835" font-family="'SF Mono', monospace">offset bits = 01</text>
+  <text x="322.0" y="170" text-anchor="middle" font-size="9" fill="#FDD835" font-family="'SF Mono', monospace">offset = 1</text>
+  <line x1="383.0" y1="144" x2="551.0" y2="144" stroke="#546E7A" stroke-width="1.5"/>
+  <line x1="383.0" y1="140" x2="383.0" y2="144" stroke="#546E7A" stroke-width="1.5"/>
+  <line x1="551.0" y1="140" x2="551.0" y2="144" stroke="#546E7A" stroke-width="1.5"/>
+  <text x="467.0" y="158" text-anchor="middle" font-size="10" fill="#546E7A" font-family="'SF Mono', monospace">remaining bits</text>
+
+  <text x="100" y="194" font-size="11" fill="#B0BEC5" font-family="'SF Mono', monospace">42  =  0b<tspan fill="#4DB6AC">1</tspan><tspan fill="#FDD835">01</tspan><tspan fill="#546E7A">010</tspan></text>
+  <text x="100" y="216" font-size="11" fill="#4DB6AC" font-family="'SF Mono', monospace">group  =  MSB_pos - WIDTH + 1  =  5 - 3 + 1  =  <tspan font-weight="bold">3</tspan></text>
+  <text x="100" y="238" font-size="11" fill="#FDD835" font-family="'SF Mono', monospace">offset  =  bits[4:3]  =  01  =  <tspan font-weight="bold">1</tspan></text>
+  <text x="100" y="260" font-size="11" fill="#B0BEC5" font-family="'SF Mono', monospace">bucket  =  4 + (3 × 4) + 1  =  <tspan font-weight="bold" font-size="13">17</tspan></text>
+
+</svg>

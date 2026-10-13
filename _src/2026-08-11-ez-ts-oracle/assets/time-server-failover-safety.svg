@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="svg.css"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Replicate and preserve state across a Leader change</title>
+  <desc id="desc">Three horizontal node timelines show Node A committing a reservation in term 7, replicating it to Nodes B and C, and both followers replaying it into their state machines. Node B is then elected Leader in term 8 with the same reserved_end, so its next range starts at end1.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#627fa6"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#5b8b83"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#b28a55"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#738094"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" x="10" y="10" width="1580" height="880" rx="32"/>
+  <text class="title" x="60" y="68">Replicate and preserve state across a Leader change</text>
+  <text class="body" x="60" y="104">Each row follows one node from term 7 into term 8.</text>
+
+  <rect class="badge-blue" x="280" y="138" width="300" height="42" rx="21"/>
+  <text class="label blue-text" x="430" y="167" text-anchor="middle">1 · Commit in term 7</text>
+  <rect class="badge-teal" x="740" y="138" width="310" height="42" rx="21"/>
+  <text class="label teal-text" x="895" y="167" text-anchor="middle">2 · Replicate + replay</text>
+  <rect class="badge-purple" x="1170" y="138" width="300" height="42" rx="21"/>
+  <text class="label purple-text" x="1320" y="167" text-anchor="middle">3 · Election · term 8</text>
+
+  <text class="label" x="185" y="278" text-anchor="end">Node A</text>
+  <text class="small blue-text" x="185" y="306" text-anchor="end">Old Leader</text>
+  <text class="label" x="185" y="468" text-anchor="end">Node B</text>
+  <text class="small purple-text" x="185" y="496" text-anchor="end">New Leader</text>
+  <text class="label" x="185" y="658" text-anchor="end">Node C</text>
+  <text class="small" x="185" y="686" text-anchor="end">Follower</text>
+
+  <line class="guide" x1="690" y1="128" x2="690" y2="820"/>
+  <line class="guide" x1="1110" y1="128" x2="1110" y2="820"/>
+
+  <g>
+    <rect class="available" x="230" y="215" width="420" height="135" rx="20"/>
+    <text class="label blue-text" x="440" y="252" text-anchor="middle">Leader · term 7</text>
+    <text class="small blue-text" x="440" y="286" text-anchor="middle">commit Reserve(end₁)</text>
+    <text class="mono" x="440" y="322" text-anchor="middle">reserved_end = end₁</text>
+
+    <rect class="cache-box" x="730" y="215" width="350" height="135" rx="20"/>
+    <text class="label amber-text" x="905" y="267" text-anchor="middle">Committed state</text>
+    <text class="mono" x="905" y="309" text-anchor="middle">reserved_end = end₁</text>
+
+    <rect class="badge-muted" x="1140" y="215" width="380" height="135" rx="20"/>
+    <text class="label muted-text" x="1330" y="267" text-anchor="middle">Follower · term 8</text>
+    <text class="mono muted-text" x="1330" y="309" text-anchor="middle">reserved_end = end₁</text>
+  </g>
+
+  <g>
+    <rect class="badge-muted" x="230" y="405" width="420" height="135" rx="20"/>
+    <text class="label muted-text" x="440" y="482" text-anchor="middle">Follower · term 7</text>
+
+    <rect class="reserved-new" x="730" y="405" width="350" height="135" rx="20"/>
+    <text class="label teal-text" x="905" y="444" text-anchor="middle">Raft log received</text>
+    <text class="small teal-text" x="905" y="479" text-anchor="middle">state machine replay</text>
+    <text class="mono" x="905" y="515" text-anchor="middle">reserved_end = end₁</text>
+
+    <rect class="badge-purple" x="1140" y="405" width="380" height="135" rx="20"/>
+    <text class="label purple-text" x="1330" y="444" text-anchor="middle">Leader · term 8</text>
+    <text class="small purple-text" x="1330" y="479" text-anchor="middle">next range starts at end₁</text>
+    <text class="mono" x="1330" y="515" text-anchor="middle">reserved_end = end₁</text>
+  </g>
+
+  <g>
+    <rect class="badge-muted" x="230" y="595" width="420" height="135" rx="20"/>
+    <text class="label muted-text" x="440" y="672" text-anchor="middle">Follower · term 7</text>
+
+    <rect class="reserved-new" x="730" y="595" width="350" height="135" rx="20"/>
+    <text class="label teal-text" x="905" y="634" text-anchor="middle">Raft log received</text>
+    <text class="small teal-text" x="905" y="669" text-anchor="middle">state machine replay</text>
+    <text class="mono" x="905" y="705" text-anchor="middle">reserved_end = end₁</text>
+
+    <rect class="badge-muted" x="1140" y="595" width="380" height="135" rx="20"/>
+    <text class="label muted-text" x="1330" y="647" text-anchor="middle">Follower · term 8</text>
+    <text class="mono muted-text" x="1330" y="689" text-anchor="middle">reserved_end = end₁</text>
+  </g>
+
+  <circle cx="650" cy="282" r="7" fill="#5b8b83"/>
+  <path class="arrow-raft" d="M650 282H690V472H730"/>
+  <path class="arrow-raft" d="M650 282H690V662H730"/>
+  <rect class="badge-teal" x="560" y="365" width="260" height="36" rx="18"/>
+  <text class="small teal-text" x="690" y="390" text-anchor="middle">Raft log replication</text>
+
+  <g transform="translate(400 755)">
+    <rect class="conclusion" width="850" height="48" rx="20"/>
+    <text class="label white-text" x="425" y="32" text-anchor="middle">Every node has end₁ before Node B serves term 8</text>
+  </g>
+
+  <line class="axis" x1="230" y1="830" x2="1540" y2="830"/>
+  <text class="small" x="690" y="861" text-anchor="middle">reservation replicated</text>
+  <text class="small" x="1110" y="861" text-anchor="middle">Leader changes</text>
+  <text class="label" x="1540" y="861" text-anchor="end">time</text>
+</svg>

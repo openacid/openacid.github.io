@@ -1,0 +1,9 @@
+<div class="post-list">
+  {{ range . }}
+    <article>
+      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle | markdownify }}</a></h2>
+      {{ partial "post-meta.html" . }}
+      {{ with .Description }}<p>{{ . | markdownify }}</p>{{ end }}
+    </article>
+  {{ end }}
+</div>

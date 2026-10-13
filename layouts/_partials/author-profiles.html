@@ -1,0 +1,12 @@
+{{ range . }}
+  {{ with index hugo.Data.authors . }}
+    <section class="author">
+      <img src="{{ .avatar }}" alt="{{ .name }}">
+      <div>
+        <strong>{{ .name }}</strong>
+        <p>{{ .bio }}</p>
+        <p>{{ range .links }}<a href="{{ .url }}">{{ .label }}</a>{{ end }}</p>
+      </div>
+    </section>
+  {{ end }}
+{{ end }}

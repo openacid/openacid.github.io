@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <header class="list-header">
+    <h1>{{ .Title | strings.FirstUpper }}</h1>
+  </header>
+  <ul class="taxonomy-list">
+    {{ range .Data.Terms.ByCount }}
+      <li>
+        <a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a>
+        <span>{{ .Count }}</span>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

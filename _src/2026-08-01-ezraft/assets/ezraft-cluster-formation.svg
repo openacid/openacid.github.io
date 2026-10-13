@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">How three EzRaft nodes form a cluster</title>
+  <desc id="desc">The first node creates a single-node cluster. Two more nodes join through the seed, receive node IDs, catch up as learners, and are promoted to voters.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" fill="#0f8f87"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      text:not([fill]) { fill: #0f1b3d; }
+      .title { font-size: 30px; font-weight: 750; }
+      .actor { font-size: 20px; font-weight: 750; }
+      .addr { font-family: "SFMono-Regular", Consolas, monospace; font-size: 14px; }
+      .addr:not([fill]) { fill: #64748b; }
+      .msg { font-size: 16px; font-weight: 650; }
+      .note { font-size: 14px; }
+      .note:not([fill]) { fill: #64748b; }
+      .step { font-size: 15px; font-weight: 750; }
+    </style>
+  </defs>
+
+  <rect x="10" y="10" width="1380" height="880" rx="28" fill="#f8fafc" stroke="#dbe4ee"/>
+  <text x="60" y="66" class="title">One create, two joins: a three-node cluster forms automatically</text>
+
+  <g transform="translate(110 98)">
+    <rect width="260" height="76" rx="18" fill="#e0f2fe" stroke="#2498c7" stroke-width="2"/>
+    <circle cx="38" cy="38" r="18" fill="#2498c7"/>
+    <text x="38" y="44" text-anchor="middle" fill="#ffffff" class="actor" style="font-size:16px">A</text>
+    <text x="68" y="34" class="actor">Node A</text>
+    <text x="68" y="57" class="addr">127.0.0.1:8080</text>
+  </g>
+  <g transform="translate(570 98)">
+    <rect width="260" height="76" rx="18" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <circle cx="38" cy="38" r="18" fill="#2563eb"/>
+    <text x="38" y="44" text-anchor="middle" fill="#ffffff" class="actor" style="font-size:16px">B</text>
+    <text x="68" y="34" class="actor">Node B</text>
+    <text x="68" y="57" class="addr">127.0.0.1:8081</text>
+  </g>
+  <g transform="translate(1030 98)">
+    <rect width="260" height="76" rx="18" fill="#f0fdfa" stroke="#0f8f87" stroke-width="2"/>
+    <circle cx="38" cy="38" r="18" fill="#0f8f87"/>
+    <text x="38" y="44" text-anchor="middle" fill="#ffffff" class="actor" style="font-size:16px">C</text>
+    <text x="68" y="34" class="actor">Node C</text>
+    <text x="68" y="57" class="addr">127.0.0.1:8082</text>
+  </g>
+
+  <line x1="240" y1="174" x2="240" y2="806" stroke="#94a3b8" stroke-dasharray="6 8"/>
+  <line x1="700" y1="174" x2="700" y2="806" stroke="#94a3b8" stroke-dasharray="6 8"/>
+  <line x1="1160" y1="174" x2="1160" y2="806" stroke="#94a3b8" stroke-dasharray="6 8"/>
+
+  <g transform="translate(54 205)">
+    <rect width="54" height="28" rx="14" fill="#dbeafe"/>
+    <text x="27" y="20" text-anchor="middle" fill="#1d4ed8" class="step">1</text>
+  </g>
+  <path d="M240 212h110v54H250" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <text x="368" y="228" class="msg">create()</text>
+  <text x="368" y="251" class="note">Initialize membership; node ID = 0</text>
+  <rect x="150" y="275" width="180" height="34" rx="17" fill="#2498c7"/>
+  <text x="240" y="298" text-anchor="middle" fill="#ffffff" class="msg">leader · voter {0}</text>
+
+  <g transform="translate(54 337)">
+    <rect width="54" height="28" rx="14" fill="#dbeafe"/>
+    <text x="27" y="20" text-anchor="middle" fill="#1d4ed8" class="step">2</text>
+  </g>
+  <line x1="700" y1="346" x2="246" y2="346" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <text x="473" y="335" text-anchor="middle" class="msg">join(seed = A)</text>
+
+  <path d="M240 370h110v48H250" fill="none" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <text x="368" y="388" class="msg">Write a blank log; assign ID = 2</text>
+  <text x="368" y="410" class="note">Add node 2 to membership as a learner</text>
+
+  <line x1="246" y1="438" x2="694" y2="438" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <text x="470" y="428" text-anchor="middle" class="msg">Return ID = 2</text>
+  <rect x="625" y="452" width="150" height="32" rx="16" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="700" y="474" text-anchor="middle" fill="#92400e" class="msg">learner</text>
+
+  <line x1="246" y1="504" x2="694" y2="504" stroke="#0f8f87" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <text x="470" y="494" text-anchor="middle" class="msg" style="fill:#0f766e">Replicate existing logs / snapshot</text>
+  <text x="470" y="526" text-anchor="middle" class="note">Catch up to the leader's last_log_index</text>
+  <rect x="625" y="540" width="150" height="32" rx="16" fill="#ccfbf1" stroke="#0f8f87"/>
+  <text x="700" y="562" text-anchor="middle" fill="#0f766e" class="msg">Promote to voter</text>
+
+  <g transform="translate(54 593)">
+    <rect width="54" height="28" rx="14" fill="#ccfbf1"/>
+    <text x="27" y="20" text-anchor="middle" fill="#0f766e" class="step">3</text>
+  </g>
+  <line x1="1160" y1="602" x2="246" y2="602" stroke="#0f8f87" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <text x="703" y="591" text-anchor="middle" class="msg">join(seed = A)</text>
+
+  <path d="M240 626h110v48H250" fill="none" stroke="#0f8f87" stroke-width="2.5" marker-end="url(#arrow-teal)"/>
+  <text x="368" y="644" class="msg">Same flow: assign ID = 6</text>
+  <text x="368" y="666" class="note">Register learner → sync logs → promote</text>
+
+  <line x1="246" y1="694" x2="1154" y2="694" stroke="#0f8f87" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <text x="700" y="684" text-anchor="middle" class="msg" style="fill:#0f766e">Return ID; sync to the latest log</text>
+  <rect x="1085" y="710" width="150" height="32" rx="16" fill="#ccfbf1" stroke="#0f8f87"/>
+  <text x="1160" y="732" text-anchor="middle" fill="#0f766e" class="msg">Promote to voter</text>
+
+  <g transform="translate(110 778)">
+    <rect width="1180" height="70" rx="20" fill="#0f1b3d"/>
+    <text x="590" y="30" text-anchor="middle" fill="#ffffff" class="actor">3 voters</text>
+    <text x="590" y="52" text-anchor="middle" fill="#b9c7e8" class="note">Any 2 form a quorum</text>
+  </g>
+</svg>

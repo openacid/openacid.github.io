@@ -1,0 +1,9 @@
+- - a
+  - x: {}
+    y:
+      z: {}
+- - b
+  - x:
+      z: {}
+    y: {}
+- with_product: False

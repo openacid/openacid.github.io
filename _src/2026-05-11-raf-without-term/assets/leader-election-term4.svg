@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 250" role="img" aria-label="Leader election: candidate takes term=4">
+  <style>
+    svg { background: #f8fafc; color: #172033;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .canvas { fill: #f8fafc; }
+    .title { fill: #172033; font-size: 18px; font-weight: 700; }
+    .label { fill: #172033; font-size: 13px; font-weight: 650; }
+    .small { fill: #667085; font-size: 12px; font-weight: 500; }
+    .code { fill: #172033; font-family: "SFMono-Regular", Consolas,
+      "Liberation Mono", Menlo, monospace; font-size: 18px; }
+    .entry { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.25; }
+    .entry-term { fill: #fef3c7; stroke: #f59e0b; stroke-width: 1.25; }
+    .entry-term-new { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2.5; }
+    .entry-cmd { fill: #d1fae5; stroke: #10b981; stroke-width: 1.25; }
+    .arrow { fill: none; stroke: #667085; stroke-width: 2;
+      marker-end: url("#arrowhead"); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#667085"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" width="600" height="250"/>
+
+  <text class="title" x="20" y="26">Leader election</text>
+
+  <!-- Annotation labels -->
+  <text class="label" x="250" y="56">last log id = (2,3)</text>
+  <text class="label" x="300" y="84">new term = 4</text>
+
+  <!-- Annotation stems -->
+  <line class="arrow" x1="242" y1="62" x2="242" y2="108"/>
+  <line class="arrow" x1="292" y1="90" x2="292" y2="108"/>
+
+  <!-- Terms row -->
+  <text class="label" x="62" y="134" text-anchor="end">terms</text>
+  <g>
+    <rect class="entry-term" x="70"  y="112" width="44" height="32" rx="3"/>
+    <text class="code" x="92"  y="135" text-anchor="middle">0</text>
+    <rect class="entry-term" x="120" y="112" width="44" height="32" rx="3"/>
+    <text class="code" x="142" y="135" text-anchor="middle">1</text>
+    <rect class="entry-term" x="170" y="112" width="44" height="32" rx="3"/>
+    <text class="code" x="192" y="135" text-anchor="middle">2</text>
+    <rect class="entry-term" x="220" y="112" width="44" height="32" rx="3"/>
+    <text class="code" x="242" y="135" text-anchor="middle">2</text>
+    <rect class="entry-term-new" x="270" y="112" width="44" height="32" rx="3"/>
+    <text class="code" x="292" y="135" text-anchor="middle">4</text>
+  </g>
+
+  <!-- Cmds row -->
+  <text class="label" x="62" y="178" text-anchor="end">cmds</text>
+  <g>
+    <rect class="entry" x="70"  y="156" width="44" height="32" rx="3"/>
+    <text class="code" x="92"  y="179" text-anchor="middle">ø</text>
+    <rect class="entry" x="120" y="156" width="44" height="32" rx="3"/>
+    <text class="code" x="142" y="179" text-anchor="middle">ø</text>
+    <rect class="entry" x="170" y="156" width="44" height="32" rx="3"/>
+    <text class="code" x="192" y="179" text-anchor="middle">ø</text>
+    <rect class="entry-cmd" x="220" y="156" width="44" height="32" rx="3"/>
+    <text class="code" x="242" y="179" text-anchor="middle">c3</text>
+  </g>
+
+  <!-- Index axis -->
+  <line class="arrow" x1="55" y1="210" x2="580" y2="210"/>
+
+  <!-- Index labels -->
+  <text class="label" x="62" y="232" text-anchor="end">index</text>
+  <g>
+    <text class="small" x="92"  y="232" text-anchor="middle">0</text>
+    <text class="small" x="142" y="232" text-anchor="middle">1</text>
+    <text class="small" x="192" y="232" text-anchor="middle">2</text>
+    <text class="small" x="242" y="232" text-anchor="middle">3</text>
+    <text class="small" x="292" y="232" text-anchor="middle">4</text>
+    <text class="small" x="342" y="232" text-anchor="middle">5</text>
+    <text class="small" x="392" y="232" text-anchor="middle">6</text>
+    <text class="small" x="442" y="232" text-anchor="middle">7</text>
+    <text class="small" x="492" y="232" text-anchor="middle">8</text>
+    <text class="small" x="542" y="232" text-anchor="middle">9</text>
+  </g>
+</svg>

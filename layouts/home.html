@@ -1,0 +1,10 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1>{{ site.Title }}</h1>
+    <p>{{ site.Params.description }}</p>
+  </section>
+  <section aria-labelledby="recent-posts">
+    <h2 id="recent-posts">Recent posts</h2>
+    {{ partial "post-list.html" site.RegularPages.ByDate.Reverse }}
+  </section>
+{{ end }}

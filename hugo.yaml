@@ -1,0 +1,90 @@
+baseURL: https://blog.openacid.com/
+locale: en-US
+title: OpenACID Blog
+enableRobotsTXT: true
+capitalizeListTitles: false
+
+# The home page lists every post, so the posts section needs no page of its own.
+disableKinds:
+  - section
+
+taxonomies:
+  category: categories
+  tag: tags
+
+# build-content.sh writes each post and its images into .build/<name>/.
+# The images are served at /post-res/<name>/, as on the Jekyll site.
+module:
+  mounts:
+    - source: content
+      target: content
+    - source: .build
+      target: content/posts
+      files: ['**/*.md']
+    - source: static
+      target: static
+    - source: .build
+      target: static/post-res
+      files: ['! **/*.md']
+
+# The feed stays at /feed.xml in Atom, as jekyll-feed served it.
+mediaTypes:
+  application/atom+xml:
+    suffixes:
+      - xml
+
+outputFormats:
+  atom:
+    mediaType: application/atom+xml
+    baseName: feed
+    rel: alternate
+
+outputs:
+  home:
+    - html
+    - atom
+  taxonomy:
+    - html
+  term:
+    - html
+
+menus:
+  main:
+    - name: About Us
+      url: https://github.com/orgs/openacid/people
+
+params:
+  name: OpenACID - Distributed Systems Research
+  description: Distributed systems research notes.
+  logo: /assets/images/logo/icon-lemon-margin.png
+  giscus:
+    repo: openacid/openacid.github.io
+    repo_id: MDEwOlJlcG9zaXRvcnkxNjc1MTA3ODk=
+    category_name: General
+    category_id: DIC_kwDOCfwDBc4CBFUx
+    discussion_term: pathname
+    reactions_enabled: '1'
+    theme: light
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      # kramdown leaves a bare URL as text.
+      linkify: false
+      # to-hugo.py writes each block math between \[ and \]; the other $$...$$ are inline.
+      passthrough:
+        enable: true
+        delimiters:
+          block:
+            - ['\[', '\]']
+          inline:
+            - ['$$', '$$']
+  highlight:
+    lineNos: false
+    noClasses: true
+    style: github
+  tableOfContents:
+    startLevel: 1
+    endLevel: 6

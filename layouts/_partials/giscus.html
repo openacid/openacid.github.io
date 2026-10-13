@@ -1,0 +1,15 @@
+{{ with site.Params.giscus }}
+  <section class="comments">
+    <h2>Leave a comment</h2>
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ .repo }}"
+            data-repo-id="{{ .repo_id }}"
+            data-category="{{ .category_name }}"
+            data-category-id="{{ .category_id }}"
+            data-mapping="{{ .discussion_term }}"
+            data-reactions-enabled="{{ .reactions_enabled }}"
+            data-theme="{{ .theme }}"
+            crossorigin="anonymous"
+            async></script>
+  </section>
+{{ end }}

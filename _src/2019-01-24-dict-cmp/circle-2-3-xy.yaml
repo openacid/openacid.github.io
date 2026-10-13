@@ -1,0 +1,12 @@
+- - a
+  - &a0
+    x:
+      x: *a0
+    y: {}
+- - b
+  - &b0
+    x:
+      x:
+        x: *b0
+    y: {}
+- with_product: True

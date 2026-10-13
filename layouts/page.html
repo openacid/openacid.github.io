@@ -1,0 +1,53 @@
+{{ define "main" }}
+  <article class="post">
+    <header class="post-header">
+      <h1>{{ .Title | markdownify }}</h1>
+      {{ partial "post-meta.html" . }}
+    </header>
+    <div class="post-layout">
+      <div class="prose">
+        {{ partial "article-link.html" . }}
+        {{ .Content }}
+        {{ partial "article-link.html" . }}
+        <p><img src="/assets/images/qrcode-hori.jpg" alt="openacid"></p>
+      </div>
+      {{ if .Params.toc }}
+        {{ $label := .Params.toc_label | default "On this page" }}
+        <aside class="toc" aria-label="{{ $label }}">
+          <h2>{{ $label }}</h2>
+          {{ .TableOfContents }}
+        </aside>
+      {{ end }}
+    </div>
+    <footer class="post-footer">
+      {{ partial "author-profiles.html" .Params.authors }}
+      <div class="post-taxonomies">
+        {{ with .GetTerms "tags" }}
+          <div>Tags:{{ range . }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}</div>
+        {{ end }}
+        {{ with .GetTerms "categories" }}
+          <div>Categories:{{ range . }}<a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}</div>
+        {{ end }}
+      </div>
+      {{/* The escaper sits in each href: an escaped value in a variable would be escaped again there. */}}
+      <div class="share">
+        Share on:
+        <a href="https://twitter.com/intent/tweet?text={{ .Title | urlquery }}%20{{ .Permalink | urlquery }}" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink | urlquery }}" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .Permalink | urlquery }}" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      {{/* .Prev is the older post, and .Next is the newer one. */}}
+      <nav class="pager" aria-label="Posts">
+        {{ with .Prev }}<a href="{{ .RelPermalink }}" title="{{ .Title }}">Previous</a>{{ end }}
+        {{ with .Next }}<a href="{{ .RelPermalink }}" title="{{ .Title }}">Next</a>{{ end }}
+      </nav>
+    </footer>
+    {{ partial "giscus.html" . }}
+  </article>
+  {{/* The Jekyll site showed the 4 newest other posts, not posts on the same topic. */}}
+  {{ $others := where site.RegularPages.ByDate.Reverse "Permalink" "ne" .Permalink }}
+  <section class="related" aria-labelledby="related-posts">
+    <h2 id="related-posts">You may also enjoy</h2>
+    {{ partial "post-list.html" (first 4 $others) }}
+  </section>
+{{ end }}

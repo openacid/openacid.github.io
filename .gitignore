@@ -1,0 +1,6 @@
+.DS_Store
+/.hugo_build.lock
+/public/
+/resources/
+/.build/
+/md2-local/

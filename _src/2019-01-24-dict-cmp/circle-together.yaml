@@ -1,0 +1,8 @@
+- - a
+  - &a0
+    x: &b0
+      x:
+        x: *a0
+- - b
+  - *b0
+- with_product: False

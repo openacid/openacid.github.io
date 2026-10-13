@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 770" role="img" aria-label="RequestVote scenarios: candidate sends request, three voter outcomes">
+  <style>
+    svg { background: #f8fafc; color: #172033;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .canvas { fill: #f8fafc; }
+    .title { fill: #172033; font-size: 18px; font-weight: 700; }
+    .label { fill: #172033; font-size: 13px; font-weight: 650; }
+    .node-label { fill: #667085; font-size: 12px; font-weight: 600; }
+    .small { fill: #667085; font-size: 12px; font-weight: 500; }
+    .code { fill: #172033; font-family: "SFMono-Regular", Consolas,
+      "Liberation Mono", Menlo, monospace; font-size: 18px; }
+    .label-granted { fill: #16a34a; font-size: 14px; font-weight: 700; }
+    .label-rejected { fill: #dc2626; font-size: 14px; font-weight: 700; }
+    .entry { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.25; }
+    .entry-term { fill: #fef3c7; stroke: #f59e0b; stroke-width: 1.25; }
+    .entry-term-new { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2.5; }
+    .entry-cmd { fill: #d1fae5; stroke: #10b981; stroke-width: 1.25; }
+    .entry-match { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .entry-conflict { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; }
+    .arrow { fill: none; stroke: #667085; stroke-width: 2;
+      marker-end: url("#arrowhead"); }
+    .spine { fill: none; stroke: #94a3b8; stroke-width: 2; }
+    .change-box { fill: none; stroke: #2563eb; stroke-width: 1.5;
+      stroke-dasharray: 5 4; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#667085"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" width="700" height="770"/>
+
+  <text class="title" x="20" y="26">RequestVote</text>
+
+  <!-- ============ Node 1: candidate ============ -->
+  <text class="label" x="250" y="56">last log id = (2,3)</text>
+  <text class="label" x="350" y="84">new term = 5</text>
+  <line class="arrow" x1="242" y1="62" x2="242" y2="108"/>
+  <line class="arrow" x1="342" y1="90" x2="342" y2="108"/>
+
+  <text class="label" x="62" y="134" text-anchor="end">terms</text>
+  <rect class="entry-term" x="70"  y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="92"  y="135" text-anchor="middle">0</text>
+  <rect class="entry-term" x="120" y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="142" y="135" text-anchor="middle">1</text>
+  <rect class="entry-term" x="170" y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="192" y="135" text-anchor="middle">2</text>
+  <rect class="entry-term" x="220" y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="242" y="135" text-anchor="middle">2</text>
+  <rect class="entry-term" x="270" y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="292" y="135" text-anchor="middle">4</text>
+  <rect class="entry-term-new" x="320" y="112" width="44" height="32" rx="3"/>
+  <text class="code" x="342" y="135" text-anchor="middle">5</text>
+
+  <text class="label" x="62" y="178" text-anchor="end">cmds</text>
+  <rect class="entry" x="70"  y="156" width="44" height="32" rx="3"/>
+  <text class="code" x="92"  y="179" text-anchor="middle">ø</text>
+  <rect class="entry" x="120" y="156" width="44" height="32" rx="3"/>
+  <text class="code" x="142" y="179" text-anchor="middle">ø</text>
+  <rect class="entry" x="170" y="156" width="44" height="32" rx="3"/>
+  <text class="code" x="192" y="179" text-anchor="middle">ø</text>
+  <rect class="entry-cmd" x="220" y="156" width="44" height="32" rx="3"/>
+  <text class="code" x="242" y="179" text-anchor="middle">c3</text>
+
+  <line class="arrow" x1="55" y1="208" x2="540" y2="208"/>
+  <text class="node-label" x="548" y="212">Node 1 (candidate)</text>
+
+  <text class="label" x="62" y="230" text-anchor="end">index</text>
+  <text class="small" x="92"  y="230" text-anchor="middle">0</text>
+  <text class="small" x="142" y="230" text-anchor="middle">1</text>
+  <text class="small" x="192" y="230" text-anchor="middle">2</text>
+  <text class="small" x="242" y="230" text-anchor="middle">3</text>
+  <text class="small" x="292" y="230" text-anchor="middle">4</text>
+  <text class="small" x="342" y="230" text-anchor="middle">5</text>
+  <text class="small" x="392" y="230" text-anchor="middle">6</text>
+  <text class="small" x="442" y="230" text-anchor="middle">7</text>
+  <text class="small" x="492" y="230" text-anchor="middle">8</text>
+  <text class="small" x="542" y="230" text-anchor="middle">9</text>
+
+  <!-- Spine from candidate, branching to each voter -->
+  <line class="spine" x1="80" y1="234" x2="80" y2="624"/>
+  <line class="arrow" x1="80" y1="282" x2="125" y2="282"/>
+  <line class="arrow" x1="80" y1="452" x2="125" y2="452"/>
+  <line class="arrow" x1="80" y1="622" x2="125" y2="622"/>
+
+  <!-- ============ Node 2: granted (indented right) ============ -->
+  <text class="label-granted" x="130" y="274">granted</text>
+
+  <text class="label" x="152" y="306" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="307" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="307" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="307" text-anchor="middle">2</text>
+  <rect class="entry-term" x="310" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="307" text-anchor="middle">2</text>
+  <rect class="entry-match" x="360" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="307" text-anchor="middle">4</text>
+  <rect class="entry-term-new" x="410" y="284" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="307" text-anchor="middle">5</text>
+
+  <!-- Dashed box around [4, 5]: the change to terms -->
+  <rect class="change-box" x="356" y="280" width="102" height="40" rx="4"/>
+  <text class="small" x="407" y="338" text-anchor="middle">newly added by vote</text>
+
+  <text class="label" x="152" y="362" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="340" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="363" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="340" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="363" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="340" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="363" text-anchor="middle">ø</text>
+  <rect class="entry" x="310" y="340" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="363" text-anchor="middle">*</text>
+
+  <line class="arrow" x1="145" y1="392" x2="625" y2="392"/>
+  <text class="node-label" x="632" y="396">Node 2</text>
+
+  <text class="label" x="152" y="414" text-anchor="end">index</text>
+  <text class="small" x="182" y="414" text-anchor="middle">0</text>
+  <text class="small" x="232" y="414" text-anchor="middle">1</text>
+  <text class="small" x="282" y="414" text-anchor="middle">2</text>
+  <text class="small" x="332" y="414" text-anchor="middle">3</text>
+  <text class="small" x="382" y="414" text-anchor="middle">4</text>
+  <text class="small" x="432" y="414" text-anchor="middle">5</text>
+  <text class="small" x="482" y="414" text-anchor="middle">6</text>
+  <text class="small" x="532" y="414" text-anchor="middle">7</text>
+  <text class="small" x="582" y="414" text-anchor="middle">8</text>
+  <text class="small" x="632" y="414" text-anchor="middle">9</text>
+
+  <!-- ============ Node 3: rejected, term=7 ============ -->
+  <text class="label-rejected" x="130" y="444">rejected: term=7</text>
+
+  <text class="label" x="152" y="476" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="477" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="477" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="477" text-anchor="middle">2</text>
+  <rect class="entry-term" x="310" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="477" text-anchor="middle">2</text>
+  <rect class="entry-term" x="360" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="477" text-anchor="middle">4</text>
+  <rect class="entry-term" x="410" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="432" y="477" text-anchor="middle">5</text>
+  <rect class="entry-term" x="460" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="482" y="477" text-anchor="middle">6</text>
+  <rect class="entry-conflict" x="510" y="454" width="44" height="32" rx="3"/>
+  <text class="code" x="532" y="477" text-anchor="middle">7</text>
+
+  <text class="label" x="152" y="520" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="498" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="521" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="498" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="521" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="498" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="521" text-anchor="middle">ø</text>
+  <rect class="entry-cmd" x="310" y="498" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="521" text-anchor="middle">c3</text>
+
+  <line class="arrow" x1="145" y1="550" x2="625" y2="550"/>
+  <text class="node-label" x="632" y="554">Node 3</text>
+
+  <text class="label" x="152" y="572" text-anchor="end">index</text>
+  <text class="small" x="182" y="572" text-anchor="middle">0</text>
+  <text class="small" x="232" y="572" text-anchor="middle">1</text>
+  <text class="small" x="282" y="572" text-anchor="middle">2</text>
+  <text class="small" x="332" y="572" text-anchor="middle">3</text>
+  <text class="small" x="382" y="572" text-anchor="middle">4</text>
+  <text class="small" x="432" y="572" text-anchor="middle">5</text>
+  <text class="small" x="482" y="572" text-anchor="middle">6</text>
+  <text class="small" x="532" y="572" text-anchor="middle">7</text>
+  <text class="small" x="582" y="572" text-anchor="middle">8</text>
+  <text class="small" x="632" y="572" text-anchor="middle">9</text>
+
+  <!-- ============ Node 4: rejected, last log id=(4,4) ============ -->
+  <text class="label-rejected" x="130" y="614">rejected: last log id = (4,4)</text>
+
+  <text class="label" x="152" y="646" text-anchor="end">terms</text>
+  <rect class="entry-term" x="160" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="647" text-anchor="middle">0</text>
+  <rect class="entry-term" x="210" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="647" text-anchor="middle">1</text>
+  <rect class="entry-term" x="260" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="647" text-anchor="middle">2</text>
+  <rect class="entry-term" x="310" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="647" text-anchor="middle">2</text>
+  <rect class="entry-conflict" x="360" y="624" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="647" text-anchor="middle">4</text>
+
+  <text class="label" x="152" y="690" text-anchor="end">cmds</text>
+  <rect class="entry" x="160" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="182" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="210" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="232" y="691" text-anchor="middle">ø</text>
+  <rect class="entry" x="260" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="282" y="691" text-anchor="middle">ø</text>
+  <rect class="entry-cmd" x="310" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="332" y="691" text-anchor="middle">c3</text>
+  <rect class="entry-conflict" x="360" y="668" width="44" height="32" rx="3"/>
+  <text class="code" x="382" y="691" text-anchor="middle">ø</text>
+
+  <line class="arrow" x1="145" y1="720" x2="625" y2="720"/>
+  <text class="node-label" x="632" y="724">Node 4</text>
+
+  <text class="label" x="152" y="742" text-anchor="end">index</text>
+  <text class="small" x="182" y="742" text-anchor="middle">0</text>
+  <text class="small" x="232" y="742" text-anchor="middle">1</text>
+  <text class="small" x="282" y="742" text-anchor="middle">2</text>
+  <text class="small" x="332" y="742" text-anchor="middle">3</text>
+  <text class="small" x="382" y="742" text-anchor="middle">4</text>
+  <text class="small" x="432" y="742" text-anchor="middle">5</text>
+  <text class="small" x="482" y="742" text-anchor="middle">6</text>
+  <text class="small" x="532" y="742" text-anchor="middle">7</text>
+  <text class="small" x="582" y="742" text-anchor="middle">8</text>
+  <text class="small" x="632" y="742" text-anchor="middle">9</text>
+</svg>

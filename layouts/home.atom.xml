@@ -1,0 +1,33 @@
+{{- /* The entries match jekyll-feed, so feed readers see no new entries after the switch. */ -}}
+{{- $feed := .OutputFormats.Get "atom" -}}
+{{- $time := "2006-01-02T15:04:05-07:00" -}}
+{{- printf "<?xml version=%q encoding=%q?>" "1.0" "utf-8" | safeHTML }}
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <link href="{{ $feed.Permalink }}" rel="self" type="application/atom+xml"/>
+  <link href="{{ .Permalink }}" rel="alternate" type="text/html"/>
+  <updated>{{ now.UTC.Format $time }}</updated>
+  <id>{{ $feed.Permalink }}</id>
+  <title type="html">{{ site.Title }}</title>
+  <subtitle>{{ site.Params.description }}</subtitle>
+  <author><name>OpenACID</name></author>
+  {{- range first 10 site.RegularPages.ByDate.Reverse }}
+  <entry>
+    <title type="html">{{ .Title | markdownify | plainify | htmlUnescape }}</title>
+    <link href="{{ .Permalink }}" rel="alternate" type="text/html" title="{{ .Title }}"/>
+    <published>{{ .Date.Format $time }}</published>
+    <updated>{{ .Lastmod.Format $time }}</updated>
+    <id>{{ strings.TrimSuffix "/" .Permalink }}</id>
+    <content type="html" xml:base="{{ .Permalink }}">{{ .Content | transform.XMLEscape | safeHTML }}</content>
+    {{- with index .Params.authors 0 }}
+    <author><name>{{ (index hugo.Data.authors .).name }}</name></author>
+    {{- end }}
+    {{- range .Params.categories }}
+    <category term="{{ . }}"/>
+    {{- end }}
+    {{- range .Params.tags }}
+    <category term="{{ . }}"/>
+    {{- end }}
+    <summary type="html">{{ .Description }}</summary>
+  </entry>
+  {{- end }}
+</feed>
