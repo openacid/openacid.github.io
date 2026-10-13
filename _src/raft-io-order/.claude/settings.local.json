@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/drdrxp/.claude/**)",
+      "Read(//Users/drdrxp/xp/vcs/github.com/openacid/openacid.github.io/_src/single-log-joint/**)",
+      "Read(//Users/drdrxp/xp/vcs/github.com/tikv/raft-rs/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
