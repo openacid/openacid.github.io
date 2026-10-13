@@ -2,7 +2,7 @@
 
 用 [Hugo](https://gohugo.io/) 生成 [blog.openacid.com](https://blog.openacid.com/)。不用第三方 theme，模板和 CSS 都在本仓库。
 
-这是切换前的测试仓库：线上站点仍由 [openacid.github.io](https://github.com/openacid/openacid.github.io) 的 Jekyll 生成，本仓库的 `_src/` 是从那里复制的原稿。
+推送到 `main` 后，`.github/workflows/pages.yml` 构建网站，并发布到 GitHub Pages。为此，仓库设置中 Pages 的 Source 要选 GitHub Actions。原来的 Jekyll 站点保存在 tag `v1-jekyll`。
 
 ## 构建
 

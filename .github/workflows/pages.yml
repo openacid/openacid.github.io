@@ -1,0 +1,57 @@
+# Build the site and publish it to GitHub Pages.
+# The repo setting Pages > Source must be "GitHub Actions".
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # The version README.md names, so CI builds the site as a local build does.
+      HUGO_VERSION: 0.164.0
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Hugo
+        run: |
+          cd "$RUNNER_TEMP"
+          base="https://github.com/gohugoio/hugo/releases/download/v$HUGO_VERSION"
+          curl -fsSLO "$base/hugo_${HUGO_VERSION}_linux-amd64.tar.gz"
+          curl -fsSLO "$base/hugo_${HUGO_VERSION}_checksums.txt"
+          sha256sum --check --ignore-missing "hugo_${HUGO_VERSION}_checksums.txt"
+          tar -xzf "hugo_${HUGO_VERSION}_linux-amd64.tar.gz" hugo
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      - name: Convert the posts in _src/
+        run: ./build-content.sh
+
+      - name: Build the site
+        run: hugo
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
