@@ -1,6 +1,7 @@
 ---
 title:      "Single log entry 实现的 Raft 配置变更"
-permalink:  /algo/single-log-joint-cn/
+date:       2025-04-19
+url:        /algo/single-log-joint-cn/
 authors:
     - xp
 categories:
@@ -19,7 +20,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
+description: "单条日志实现Raft配置变更的方法，对比标准的Joint Consensus更简洁吗？"
 ---
 
 

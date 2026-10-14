@@ -1,6 +1,7 @@
 ---
 title:      "Erasure-Code-擦除码-3-极限篇"
-permalink:  /storage/ec-3/
+date:       2020-02-07
+url:        /storage/ec-3/
 authors:
     - xp
 categories:
@@ -61,7 +62,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑"
+description: "没有人比我更懂EC(特辣脯口气): 从指令集和算法两个方向对擦除码实现深度优化, 硬核但不烧脑"
 ---
 
 ![](trump-xp-4.png)

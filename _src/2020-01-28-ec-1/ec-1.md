@@ -1,6 +1,7 @@
 ---
 title:      "Erasure-Code-擦除码-1-原理篇"
-permalink:  /storage/ec-1/
+date:       2020-01-28
+url:        /storage/ec-1/
 authors:
     - xp
 categories:
@@ -42,7 +43,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "擦除码(EC)通过增加校验块来保证分布式存储的可靠性，允许一定数量的数据块丢失也能恢复。文章以RAID-5、RAID-6为例，解释了k+1、k+2校验策略，并推广到更通用的k+m策略，将其类比为用k个系数定义曲线，并通过曲线上点坐标实现数据冗余"
+description: "擦除码(EC)通过增加校验块来保证分布式存储的可靠性，允许一定数量的数据块丢失也能恢复。文章以RAID-5、RAID-6为例，解释了k+1、k+2校验策略，并推广到更通用的k+m策略，将其类比为用k个系数定义曲线，并通过曲线上点坐标实现数据冗余"
 ---
 
 ![](ec-1-banner.png)

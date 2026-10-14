@@ -1,6 +1,7 @@
 ---
 title:      "将 paxos 和 raft 统一到一个协议下: abstract-paxos"
-permalink:  /algo/abstract-paxos/
+date:       2022-03-27
+url:        /algo/abstract-paxos/
 authors:
     - xp
 categories:
@@ -19,7 +20,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 我用了整整三十天的时间, 将两招绝学并成了一整招, 看好了: abstract-paxos"
+description: "从古至今, 武林中有两招绝学, paxos 和 raft, 三十天了, 我用了整整三十天的时间, 将两招绝学并成了一整招, 看好了: abstract-paxos"
 ---
 
 ![](abstract-paxos-banner-small.png)

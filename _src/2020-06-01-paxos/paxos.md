@@ -1,6 +1,7 @@
 ---
 title:      "可靠分布式系统-paxos的直观解释"
-permalink:  /algo/paxos/
+date:       2020-06-01
+url:        /algo/paxos/
 authors:
     - xp
 categories:
@@ -34,7 +35,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了"
+description: "没有paxos的一堆机器, 只能叫做分布式; 有paxos协同才叫分布式系统. 咱得把paxos聊开了聊透了"
 ---
 
 ![](paxos-trump-knows-small.png)

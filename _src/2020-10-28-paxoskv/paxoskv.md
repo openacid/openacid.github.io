@@ -1,6 +1,7 @@
 ---
 title:      "200行代码实现基于paxos的kv存储"
-permalink:  /algo/paxoskv/
+date:       2020-10-28
+url:        /algo/paxoskv/
 authors:
     - xp
 categories:
@@ -51,7 +52,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分"
+description: "用200行代码实现一个基于paxos的kv存储, 以最简洁的形式展示paxos如何运行, 作为 paxos的直观解释 这篇教程中的代码示例部分"
 ---
 
 ![](paxoskv-banner-small.png)

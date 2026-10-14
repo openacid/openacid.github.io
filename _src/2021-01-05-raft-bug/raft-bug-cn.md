@@ -1,6 +1,7 @@
 ---
 title:      "Raft 成员变更上踩的坑"
-permalink:  /distributed/raft-bug-cn/
+date:       2021-01-05
+url:        /distributed/raft-bug-cn/
 authors:
     - xp
 categories:
@@ -28,7 +29,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "Raft 在单步成员变更的设计上存在缺陷, 一定要抛弃单步变更, 使用joint consensus"
+description: "Raft 在单步成员变更的设计上存在缺陷, 一定要抛弃单步变更, 使用joint consensus"
 ---
 
 ![](raft-bug-banner-sharp-small.jpg)

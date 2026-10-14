@@ -1,6 +1,7 @@
 ---
 title:      "Multi-Master-Paxos: 3"
-permalink:  /algo/mmp3/
+date:       2021-06-14
+url:        /algo/mmp3/
 authors:
     - xp
 categories:
@@ -23,7 +24,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "小孩子才选master, 成年人只用multi-master"
+description: "小孩子才选master, 成年人只用multi-master"
 ---
 
 ![](mmp3-banner-big.png)

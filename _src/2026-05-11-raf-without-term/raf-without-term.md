@@ -1,6 +1,7 @@
 ---
 title:      "Do Not Read: Raf Is a Useless and Valueless Failed Experiment"
-permalink:  /algo/raf-without-term/
+date:       2026-05-11
+url:        /algo/raf-without-term/
 authors:
     - xp
 categories:
@@ -15,7 +16,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "raf is an experimental Raft variant that does not persist currentTerm as a separate field. Instead, each election reserves a log index, and that index becomes the leader term."
+description: "raf is an experimental Raft variant that does not persist currentTerm as a separate field. Instead, each election reserves a log index, and that index becomes the leader term."
 ---
 
 ![](raf-banner-small.png)

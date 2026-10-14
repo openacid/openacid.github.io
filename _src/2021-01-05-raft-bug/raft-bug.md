@@ -1,7 +1,7 @@
 ---
 title:      "The Pitfalls of Raft Membership Change"
 date:       2026-08-27
-permalink:  /distributed/raft-bug/
+url:        /distributed/raft-bug/
 authors:
     - xp
 categories:
@@ -18,7 +18,7 @@ mathjax: true
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "Raft's single-server membership change carries two problems: its middle state can turn one datacenter into a single point of failure, and the original algorithm could lose a committed entry. Let us look at membership change through quorum sets, and see why joint consensus is the answer."
+description: "Raft's single-server membership change carries two problems: its middle state can turn one datacenter into a single point of failure, and the original algorithm could lose a committed entry. Let us look at membership change through quorum sets, and see why joint consensus is the answer."
 ---
 
 ![](raft-bug-en-banner-small.webp)

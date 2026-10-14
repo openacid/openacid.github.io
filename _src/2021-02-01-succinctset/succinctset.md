@@ -1,6 +1,7 @@
 ---
 title:      "100行代码的压缩前缀树: 50% smaller"
-permalink:  /algo/succinctset/
+date:       2021-02-01
+url:        /algo/succinctset/
 authors:
     - xp
 categories:
@@ -37,7 +38,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "压缩前缀树, 减少50%存储空间, 支持创建和查询, 只需100行代码"
+description: "压缩前缀树, 减少50%存储空间, 支持创建和查询, 只需100行代码"
 ---
 
 ![](succinctset-wechat-banner-small.jpg)

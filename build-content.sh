@@ -1,6 +1,6 @@
 #!/bin/sh
 # Build the Hugo input in .build/ from the published posts in _src/.
-# A source is published when its front matter sets permalink:.
+# A source is published when its front matter sets url:.
 # Each post goes into .build/<name>/ with its images.
 #
 # The script runs itself in the md2zhihu image, which has md2zhihu
@@ -18,7 +18,7 @@ fi
 
 rm -rf .build
 
-for path in $(grep -l '^permalink:' _src/*/*.md); do
+for path in $(grep -l '^url:' _src/*/*.md); do
     fn="${path##*/}"
     # md2zhihu names the image dir of a post by its file name.
     name="${fn%.md}"
@@ -35,6 +35,6 @@ for path in $(grep -l '^permalink:' _src/*/*.md); do
         --rewrite          "^" "/post-res/$name/" \
         "$path"
 
-    python3 to-hugo.py "$path" < "$out" > "$out.tmp"
+    python3 to-hugo.py < "$out" > "$out.tmp"
     mv "$out.tmp" "$out"
 done

@@ -1,7 +1,7 @@
 ---
 title:      "Raft IO Execution Order (Revised)"
 date:       2025-10-04
-permalink:  /algo/raft-io-order-fix/
+url:        /algo/raft-io-order-fix/
 authors:
     - xp
 categories:
@@ -18,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: Table of Content
 toc_sticky: true
-excerpt: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into in-memory and persisted state. Here's what actually happens."
+description: "I got it wrong in my previous article. The IO ordering bug in Raft isn't about the protocol design—it's about the subtle trap that emerges when implementations split state into in-memory and persisted state. Here's what actually happens."
 ---
 
 

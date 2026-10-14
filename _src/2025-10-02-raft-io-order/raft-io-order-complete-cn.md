@@ -1,7 +1,7 @@
 ---
 title:      "Raft 中的 IO 执行顺序：内存状态与持久化状态的陷阱"
 date:       2025-10-09
-permalink:  /algo/raft-io-order-complete-cn/
+url:        /algo/raft-io-order-complete-cn/
 authors:
     - xp
 categories:
@@ -19,7 +19,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "深入分析 Raft 实现中 IO 重排序导致数据丢失的问题。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
+description: "深入分析 Raft 实现中 IO 重排序导致数据丢失的问题。问题不在 Raft 的设计，而在于实现中内存状态与持久化状态的区分导致的陷阱"
 ---
 
 

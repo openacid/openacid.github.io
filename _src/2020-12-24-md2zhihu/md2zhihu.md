@@ -1,6 +1,7 @@
 ---
 title:      "用markdown写知乎文章的完美解决方案"
-permalink:  /toolkit/md2zhihu/
+date:       2020-12-24
+url:        /toolkit/md2zhihu/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "用 markdown 写知乎文章的完美解决放哪"
+description: "用 markdown 写知乎文章的完美解决放哪"
 ---
 
 ![](cool.jpg)

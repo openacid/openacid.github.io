@@ -1,6 +1,7 @@
 ---
 title: "Build a Distributed Timestamp Oracle with EzRaft"
-permalink:  /algo/ez-ts-oracle/
+date:       2026-08-11
+url:        /algo/ez-ts-oracle/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "`timestamp_oracle` is a 200-line timestamp service on EzRaft. A background task reserves ranges through Raft; `next_timestamp` allocates from memory. Leader leases and term-scoped caches keep the sequence strictly increasing across failovers, with no Raft write on the request path."
+description: "`timestamp_oracle` is a 200-line timestamp service on EzRaft. A background task reserves ranges through Raft; `next_timestamp` allocates from memory. Leader leases and term-scoped caches keep the sequence strictly increasing across failovers, with no Raft write on the request path."
 ---
 
 ![](ez-time-server-banner.png)

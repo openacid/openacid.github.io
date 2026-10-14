@@ -1,6 +1,7 @@
 ---
 title:      "slimarray: gzip的压缩率, 即时访问"
-permalink:  /algo/slimarray/
+date:       2020-11-15
+url:        /algo/slimarray/
 authors:
     - xp
 categories:
@@ -21,7 +22,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用"
+description: "slimarray 是一个静态整数压缩数组, 现实数据达到和gzip相当的压缩率, 无需解压就可以直接使用"
 ---
 
 ![](slimarray-banner-small.jpg)

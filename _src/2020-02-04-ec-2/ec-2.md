@@ -1,6 +1,7 @@
 ---
 title:      "Erasure-Code-擦除码-2-实现篇"
-permalink:  /storage/ec-2/
+date:       2020-02-04
+url:        /storage/ec-2/
 authors:
     - xp
 categories:
@@ -45,7 +46,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "本文介绍了如何在计算机有限的数字精度内实现高效的擦除码算法，并通过引入伽罗华域及模运算，详细阐述了从GF(2)扩展到GF(2⁸)并实现EC编码、解码的过程，最后还讨论了不同矩阵的适用性"
+description: "本文介绍了如何在计算机有限的数字精度内实现高效的擦除码算法，并通过引入伽罗华域及模运算，详细阐述了从GF(2)扩展到GF(2⁸)并实现EC编码、解码的过程，最后还讨论了不同矩阵的适用性"
 ---
 
 ![](ec-2-banner.png)

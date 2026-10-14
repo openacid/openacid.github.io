@@ -1,6 +1,7 @@
 ---
 title:      "The Hidden Danger in Raft: Why IO Ordering Matters"
-permalink:  /algo/raft-io-order/
+date:       2025-10-02
+url:        /algo/raft-io-order/
 authors:
     - xp
 categories:
@@ -15,7 +16,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "Writing logs before persisting term in Raft can silently destroy committed data. Here's why production systems like TiKV and HashiCorp Raft carefully control IO order—and three battle-tested solutions."
+description: "Writing logs before persisting term in Raft can silently destroy committed data. Here's why production systems like TiKV and HashiCorp Raft carefully control IO order—and three battle-tested solutions."
 ---
 
 

@@ -1,6 +1,7 @@
 ---
 title:      "Openraft 对 ReadIndex 的优化"
-permalink:  /algo/openraft-read/
+date:       2023-12-17
+url:        /algo/openraft-read/
 authors:
     - xp
 categories:
@@ -18,7 +19,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "Openraft 中对 linearizable read 流程的优化"
+description: "Openraft 中对 linearizable read 流程的优化"
 ---
 
 # Openraft 对 ReadIndex 的优化

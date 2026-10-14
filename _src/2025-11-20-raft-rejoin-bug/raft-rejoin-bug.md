@@ -1,6 +1,7 @@
 ---
 title:      "Raft Node Rejoin Bug"
-permalink:  /algo/raft-rejoin-bug/
+date:       2025-11-20
+url:        /algo/raft-rejoin-bug/
 authors:
     - xp
 categories:
@@ -15,7 +16,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "Analyzes a replication session isolation bug in Raft implementations. When a node rejoins the cluster within the same term, delayed AppendEntries responses can corrupt progress tracking, causing infinite retry loops. While data safety remains intact, it creates operational issues like resource exhaustion. Uses raft-rs as a case study to examine trigger conditions and solutions."
+description: "Analyzes a replication session isolation bug in Raft implementations. When a node rejoins the cluster within the same term, delayed AppendEntries responses can corrupt progress tracking, causing infinite retry loops. While data safety remains intact, it creates operational issues like resource exhaustion. Uses raft-rs as a case study to examine trigger conditions and solutions."
 ---
 
 ![](./raft-rejoin-bug-banner.webp)

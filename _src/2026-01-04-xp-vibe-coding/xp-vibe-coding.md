@@ -1,6 +1,7 @@
 ---
 title:      "xp 的 AI 工作流"
-permalink:  /life/xp-vibe-coding/
+date:       2026-01-04
+url:        /life/xp-vibe-coding/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "xp 的 AI 开发工作流"
+description: "xp 的 AI 开发工作流"
 ---
 
 目前我的日常开发基本只需要"动嘴"就能完成。这篇文章分享我在用的工具组合。

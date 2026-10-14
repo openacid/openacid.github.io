@@ -1,6 +1,7 @@
 ---
 title:      "Paxos 中 Ballot number 的重用机制"
-permalink:  /algo/paxos-same-ballot/
+date:       2025-04-13
+url:        /algo/paxos-same-ballot/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "本文探讨 Paxos 协议中 Ballot number 的重用机制，分析何时可重复使用，以及为何只能使用系统中已存在的值而非提议新值"
+description: "本文探讨 Paxos 协议中 Ballot number 的重用机制，分析何时可重复使用，以及为何只能使用系统中已存在的值而非提议新值"
 ---
 
 ![](./paxos-same-ballot-banner.webp)

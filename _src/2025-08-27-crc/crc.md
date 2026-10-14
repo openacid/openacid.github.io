@@ -1,6 +1,7 @@
 ---
 title:      "CRC32 九浅一深: 自包含退化 现象分析"
-permalink:  /algo/crc/
+date:       2025-08-27
+url:        /algo/crc/
 authors:
     - xp
 categories:
@@ -18,7 +19,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "LevelDB 中 CRC 时额外做一个 mask 操作的原因。深入解析 CRC 原理，揭示 自包含退化 现象的数学本质"
+description: "LevelDB 中 CRC 时额外做一个 mask 操作的原因。深入解析 CRC 原理，揭示 自包含退化 现象的数学本质"
 ---
 
 ![](./crc-banner.webp)

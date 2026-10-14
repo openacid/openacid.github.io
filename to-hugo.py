@@ -1,15 +1,7 @@
 #!/usr/bin/env python3
 """Turn a post that md2zhihu wrote for Jekyll into a post for Hugo.
 
-usage: to-hugo.py <source> < <md2zhihu output> > <hugo input>
-
-<source> is the path of the post in _src/.
-
-- It renames the front matter keys that Jekyll and Hugo name differently.
-
-- It adds date: to the front matter, unless the post sets it.
-  The date is the date prefix of the source folder,
-  such as 2020-06-01 for _src/2020-06-01-paxos/paxos.md.
+usage: to-hugo.py < <md2zhihu output> > <hugo input>
 
 - It rewrites the math, so that Hugo's passthrough reads it as kramdown does.
   The passthrough copies the blockquote markers of each line into the math,
@@ -20,18 +12,8 @@ usage: to-hugo.py <source> < <md2zhihu output> > <hugo input>
   This script writes each block math between \\[ and \\],
   which hugo.yaml sets as the block math delimiters.
 """
-import os
 import re
 import sys
-
-# A Jekyll front matter key, and the Hugo key of the same meaning.
-KEYS = {
-    "permalink": "url",
-    "excerpt": "description",
-}
-
-# The date prefix of a source folder, such as 2020-06-01 in 2020-06-01-paxos.
-FOLDER_DATE = re.compile(r"\d{4}-\d{2}-\d{2}(?=-)")
 
 # The blockquote markers and the indent that start a line.
 CONTAINER = re.compile(r"[ \t>]*")
@@ -43,32 +25,12 @@ ONE_MATH = re.compile(r"\$\$((?:(?!\$\$).)*)\$\$")
 LIST_ITEM_MATH = re.compile(r"[ \t>]*([-*+]|\d+[.)])[ \t]+\$\$((?!\$\$).)*\$\$[ \t]*")
 
 
-def rename_keys(lines):
-    """Rename the front matter keys in place, and return the index of the first body line."""
+def body_start(lines):
+    """Return the index of the first body line, after the front matter."""
     if lines[0] != "---":
         raise ValueError("the post has no front matter")
     end = lines.index("---", 1)
-    for i in range(1, end):
-        key, colon, value = lines[i].partition(":")
-        if colon and key in KEYS:
-            lines[i] = KEYS[key] + colon + value
     return end + 1
-
-
-def add_date(lines, start, src_path):
-    """Add date: before the front matter end at line start - 1, unless the post sets it.
-
-    Return the index of the first body line.
-    """
-    for line in lines[1 : start - 1]:
-        if line.startswith("date:"):
-            return start
-    folder = os.path.basename(os.path.dirname(src_path))
-    m = FOLDER_DATE.match(folder)
-    if m is None:
-        raise ValueError(f"the folder of {src_path} has no date prefix")
-    lines.insert(start - 1, "date: " + m.group(0))
-    return start + 1
 
 
 def container(line):
@@ -152,12 +114,10 @@ def convert_math(body):
 
 
 def main():
-    if len(sys.argv) != 2:
-        sys.exit("usage: to-hugo.py <source> < <md2zhihu output> > <hugo input>")
-    src_path = sys.argv[1]
+    if len(sys.argv) != 1:
+        sys.exit("usage: to-hugo.py < <md2zhihu output> > <hugo input>")
     lines = sys.stdin.read().split("\n")
-    start = rename_keys(lines)
-    start = add_date(lines, start, src_path)
+    start = body_start(lines)
     body = convert_math(lines[start:])
     sys.stdout.write("\n".join(lines[:start] + body))
 

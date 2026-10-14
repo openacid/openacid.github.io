@@ -1,6 +1,7 @@
 ---
 title:      "EzRaft: Build a Distributed KV Store in 100 Lines"
-permalink:  /algo/ezraft/
+date:       2026-08-01
+url:        /algo/ezraft/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "EzRaft builds on OpenRaft and hides the storage, networking, and service layers. Define just four things—Request, Response, apply, and read—and you have a fault-tolerant, three-node distributed KV store."
+description: "EzRaft builds on OpenRaft and hides the storage, networking, and service layers. Define just four things—Request, Response, apply, and read—and you have a fault-tolerant, three-node distributed KV store."
 ---
 
 ![](ezraft-banner.png)

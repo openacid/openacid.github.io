@@ -1,6 +1,7 @@
 ---
 title:      "SlimTrie: 单机百亿文件的极致索引-设计篇"
-permalink:  /tech/algorithm/slimtrie-design/
+date:       2018-07-30
+url:        /tech/algorithm/slimtrie-design/
 authors:
     - wenbo
     - pengsven
@@ -23,7 +24,7 @@ tags:
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "单机100TB存储如何索引百亿小文件？经典的hash map和B-Tree索引的内存开销为O(k*n)，无法全部放入内存。SlimTrie基于Trie裁剪和压缩，将空间复杂度降至O(n)，实现每条索引仅约10字节，在1GB内存中即可建立100TB数据量的索引。"
+description: "单机100TB存储如何索引百亿小文件？经典的hash map和B-Tree索引的内存开销为O(k*n)，无法全部放入内存。SlimTrie基于Trie裁剪和压缩，将空间复杂度降至O(n)，实现每条索引仅约10字节，在1GB内存中即可建立100TB数据量的索引。"
 ---
 
 ![](slim-1-00.jpg)

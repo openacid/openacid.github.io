@@ -1,7 +1,7 @@
 ---
 title:      "Raft Configuration Change with Single Log Entry"
 date:       2025-10-07
-permalink:  /algo/single-log-joint/
+url:        /algo/single-log-joint/
 authors:
     - xp
 categories:
@@ -19,7 +19,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "Is the single-log-entry approach to Raft configuration change simpler than the standard Joint Consensus?"
+description: "Is the single-log-entry approach to Raft configuration change simpler than the standard Joint Consensus?"
 ---
 
 

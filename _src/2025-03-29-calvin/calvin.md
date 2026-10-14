@@ -1,6 +1,7 @@
 ---
 title:      "理解 Calvin - Fast Distributed Transactions for Partitioned Database Systems"
-permalink:  /algo/calvin/
+date:       2025-03-29
+url:        /algo/calvin/
 authors:
     - xp
 categories:
@@ -17,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "提供一个直观的视角，帮助读者更好地理解 Calvin 的架构设计与工作原理"
+description: "提供一个直观的视角，帮助读者更好地理解 Calvin 的架构设计与工作原理"
 ---
 
 ![](./calvin-banner.webp)

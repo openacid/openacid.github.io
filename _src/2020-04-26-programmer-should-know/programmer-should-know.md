@@ -1,6 +1,7 @@
 ---
 title:      "几个无理取闹的coding心得"
-permalink:  /tech/bla/programmer-should-know/
+date:       2020-04-26
+url:        /tech/bla/programmer-should-know/
 authors:
     - xp
 categories:
@@ -14,7 +15,7 @@ refs:
 
 pdf: false
 mathjax: false
-excerpt: "来自一个莫得感情的coding万年户"
+description: "来自一个莫得感情的coding万年户"
 ---
 
 ![](programmer-should-know-banner.png)

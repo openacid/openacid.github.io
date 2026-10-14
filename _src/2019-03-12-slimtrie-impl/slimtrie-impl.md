@@ -1,6 +1,7 @@
 ---
 title:      "SlimTrie: 单机百亿文件的极致索引-实现篇"
-permalink:  /tech/algorithm/slimtrie-impl/
+date:       2019-03-12
+url:        /tech/algorithm/slimtrie-impl/
 authors:
     - wenbo
     - pengsven
@@ -23,7 +24,7 @@ tags:
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "SlimTrie的代码级实现详解：通过Trie裁剪去除单分支节点将空间从O(n*k)降至O(n)，再用compacted array压缩存储，最终每条索引仅需约6字节（加4字节value共10字节）。实测内存开销约为B-Tree的13%，查询速度约为其2.6倍。"
+description: "SlimTrie的代码级实现详解：通过Trie裁剪去除单分支节点将空间从O(n*k)降至O(n)，再用compacted array压缩存储，最终每条索引仅需约6字节（加4字节value共10字节）。实测内存开销约为B-Tree的13%，查询速度约为其2.6倍。"
 ---
 
 ![](slim-2-00.webp)

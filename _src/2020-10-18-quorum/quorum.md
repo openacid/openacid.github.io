@@ -1,6 +1,7 @@
 ---
 title:      "后分布式时代: 多数派读写的'少数派'实现"
-permalink:  /algo/quorum/
+date:       2020-10-18
+url:        /algo/quorum/
 authors:
     - xp
 categories:
@@ -36,7 +37,7 @@ mathjax: true
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数."
+description: "通过减少多数派读写中参与者的数量, 可以实现分布式系统某些特定场景的优化, 以及介绍这些优化对系统可用性产生的影响, 根据什么标准来选择和调整这些参数."
 ---
 
 ![](quorum-banner-small.jpg)

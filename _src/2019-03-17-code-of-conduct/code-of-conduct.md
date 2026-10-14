@@ -1,6 +1,7 @@
 ---
 title:      "OpenACID's Code of Conduct"
-permalink:  /culture/code-of-conduct/
+date:       2019-03-17
+url:        /culture/code-of-conduct/
 authors:
     - xp
 categories:
@@ -11,7 +12,7 @@ tags:
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "交流原则强调尊重和包容, 反馈机制倡导建设性沟通"
+description: "交流原则强调尊重和包容, 反馈机制倡导建设性沟通"
 ---
 
 ## 社交规则

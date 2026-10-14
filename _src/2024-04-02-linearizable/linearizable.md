@@ -1,6 +1,7 @@
 ---
 title:      "分布式系统中的Linearizable事务:时间、通信与一致性"
-permalink:  /algo/linearizable/
+date:       2024-04-02
+url:        /algo/linearizable/
 authors:
     - xp
 categories:
@@ -16,7 +17,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "分布式系统中,Linearizable事务的实现需要解决事务间先后顺序的判断问题,本文深入探讨了这一难题,分析了其中的时间一致性挑战,并提出了几种解决方案和设计思路。"
+description: "分布式系统中,Linearizable事务的实现需要解决事务间先后顺序的判断问题,本文深入探讨了这一难题,分析了其中的时间一致性挑战,并提出了几种解决方案和设计思路。"
 ---
 
 ![](./linearizable-banner-47x20.jpg)

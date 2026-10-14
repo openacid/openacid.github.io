@@ -1,6 +1,7 @@
 ---
 title:      "Histogram Done Right: 2KB Memory, 0.2% Error"
-permalink:  /algo/histogram/
+date:       2026-04-02
+url:        /algo/histogram/
 authors:
     - xp
 categories:
@@ -19,7 +20,7 @@ mathjax: false
 toc: true
 toc_label: Table of Contents
 toc_sticky: true
-excerpt: "A lightweight histogram that tracks latency distributions in 2KB of memory with sub-0.2% error. Uses a float-like encoding for O(1) bucket indexing and trapezoid interpolation for accurate percentile estimation — no floating-point math needed."
+description: "A lightweight histogram that tracks latency distributions in 2KB of memory with sub-0.2% error. Uses a float-like encoding for O(1) bucket indexing and trapezoid interpolation for accurate percentile estimation — no floating-point math needed."
 ---
 
 ![](histagram-banner.png)

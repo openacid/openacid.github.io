@@ -22,7 +22,7 @@ hugo                 # 把整个网站生成到 public/
 ## 构建流程
 
 ```text
-_src/<YYYY-MM-DD-目录>/<名字>.md     原稿；front matter 有 permalink: 的才发布
+_src/<YYYY-MM-DD-目录>/<名字>.md     原稿；front matter 有 url: 的才发布
   │  build-content.sh：md2zhihu 转换，再由 to-hugo.py 适配
   ▼
 .build/<名字>/<名字>.md              每篇文章一个目录，放 Hugo 的文章输入
@@ -36,11 +36,7 @@ public/                           完整的静态网站
 
 md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复制图片和附件，并把图表代码块画成图片。
 
-`to-hugo.py` 做三件事：
-
-- 把 front matter 的 `permalink` 改名为 `url`，`excerpt` 改名为 `description`。
-- 在 front matter 中写入 `date:`，值是原稿目录名的日期前缀。原稿自己写了 `date:` 时不改。
-- 改写 `$$...$$` 公式。kramdown 把前后都是空行的 `$$...$$` 当作块公式，其余当作行内公式。Hugo 的 Markdown 解析器 Goldmark 不能这样区分，还会把引用块中跨行公式的 `>` 读进公式。所以 `to-hugo.py` 把每个公式合并成一行，并把块公式改写成 `\[...\]`。
+`to-hugo.py` 改写 `$$...$$` 公式。kramdown 把前后都是空行的 `$$...$$` 当作块公式，其余当作行内公式。Hugo 的 Markdown 解析器 Goldmark 不能这样区分，还会把引用块中跨行公式的 `>` 读进公式。所以 `to-hugo.py` 把每个公式合并成一行，并把块公式改写成 `\[...\]`。原稿中的公式仍写成 `$$...$$`：md2zhihu 只把 `$` 或 `$$` 之间的内容当作公式，生成知乎版和微信版时才能把公式画成图片。
 
 ## 文件
 
@@ -60,19 +56,18 @@ md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复�
 
 | 字段 | 作用 |
 | --- | --- |
-| `permalink` | 文章网址；没有这个字段的原稿不发布 |
+| `url` | 文章网址；没有这个字段的原稿不发布 |
+| `date` | 发布日期，例如 `2019-10-30`；没有这个字段时构建失败 |
 | `title` | 标题 |
-| `excerpt` | 摘要，用在首页列表、`<meta name="description">` 和 feed 中 |
+| `description` | 摘要，用在首页列表、`<meta name="description">` 和 feed 中 |
 | `authors` | `data/authors.yaml` 中的作者 id；id 不存在时构建失败 |
 | `categories`、`tags` | 分类和标签，生成 `/categories/…` 和 `/tags/…` 页面 |
 | `toc`、`toc_label` | 是否显示目录，以及目录的标题 |
 | `mathjax` | 为 `true` 时加载 MathJax |
 
-发布日期取自原稿目录名的 `YYYY-MM-DD-` 前缀。同一目录中日期不同的文章，用 front matter 的 `date:` 写明自己的日期，例如 `2025-10-02-raft-io-order/` 中的 `raft-io-order-fix.md`。
-
 两条限制：
 
-- 不要修改已发布文章的 `permalink`。giscus 按网址路径找 GitHub Discussions 中的讨论，路径一变，旧评论就对不上了。
+- 不要修改已发布文章的 `url`。giscus 按网址路径找 GitHub Discussions 中的讨论，路径一变，旧评论就对不上了。
 - 列表项的第一行不能只有一个公式，例如 `- $$x$$`。kramdown 可能把它当作块公式，`to-hugo.py` 无法照做，遇到时报错退出。
 
 ## 没有迁移的内容
