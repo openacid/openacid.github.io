@@ -19,6 +19,10 @@ hugo                 # 把整个网站生成到 public/
 
 修改 `_src/` 中的原稿后，要重新运行 `./build-content.sh`。
 
+`hugo server --buildDrafts` 和 `hugo server` 一样启动本地预览，另外还显示草稿，即 front matter 中有 `draft: true` 的文章。`hugo` 不生成草稿的页面，`.github/workflows/pages.yml` 也用 `hugo` 生成网站，所以发布的网站上没有草稿。
+
+和其他文章一样，草稿要放在 `_src/<YYYY-MM-DD-目录>/` 中，并写 `url:` 和 `date:`，预览中才有它。草稿推送到 `main` 后，页面不发布，但它的图片和附件仍会发布到 `/post-res/<名字>/`。
+
 ## 构建流程
 
 ```text
