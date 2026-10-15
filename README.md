@@ -52,7 +52,7 @@ md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复�
 | `assets/css/main.css` | 样式 |
 | `data/authors.yaml` | 作者资料：名字、简介、头像、链接 |
 | `static/assets/images/` | logo、favicon、作者头像、二维码 |
-| `static/import-back/`、`static/py/`、`static/post-res/`、`static/assets/images/banner/` 等 | 旧站的 70 个文件，没有页面引用它们；放在这里，它们的旧网址才能继续访问 |
+| `static/py/`、`static/post-res/`、`static/assets/images/banner/` 等 | 旧站的 56 个文件，没有页面引用它们；放在这里，它们的旧网址才能继续访问 |
 | `content/_index.md` | 首页；同时让旧网址 `/page2/` 跳转到首页 |
 | `build-platform-specific.sh` | 生成文章的知乎版和微信版，并上传到 R2 |
 
@@ -76,7 +76,7 @@ md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复�
 
 ## 没有迁移的内容
 
-- GitHub Pages 把没有 front matter 的 Markdown 文件渲染成的 10 个网页：`/py/`、`/import-back/` 和 8 个 `/import-back/<目录>/<名字>/`。这些 Markdown 文件本身在 `static/` 中，例如 `/import-back/paxos/paxos.md` 仍可访问。
+- GitHub Pages 把没有 front matter 的 `static/py/README.md` 渲染成的 `/py/` 网页。Markdown 文件本身仍可通过 `/py/README.md` 访问。
 - 站内搜索。
 - 文章的阅读时长，例如 "40 minute read"。
 - Google Analytics `UA-69976993-2`：Universal Analytics 已于 2023-07-01 停止收集数据。
