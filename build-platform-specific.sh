@@ -120,34 +120,12 @@ build()
     echo ""
 }
 
-# build "wechat" _src/2023-12-17-openraft-read/openraft-read.md
-# build "wechat" _src/2025-03-29-calvin/calvin.md
-# build "zhihu" _src/2025-03-29-calvin/calvin.md
-# build "wechat" _src/2025-04-13-paxos-same-ballot/paxos-same-ballot.md
-# build "zhihu" _src/2025-04-13-paxos-same-ballot/paxos-same-ballot.md
-
-# build "wechat" _src/2025-04-19-single-log-joint/single-log-joint.md
-# build "zhihu" _src/2025-04-19-single-log-joint/single-log-joint.md
-
-# build "wechat" _src/single-log-joint-png/2025-04-19-single-log-joint.md
-# build "zhihu" _src/single-log-joint-png/2025-04-19-single-log-joint.md
-
-# build "wechat" _src/2025-08-27-crc/crc.md
-# build "wechat" _src/2025-10-02-raft-io-order/raft-io-order-cn.md
-
-# build "zhihu" _src/2025-10-02-raft-io-order/raft-io-order-complete-cn.md
-
-# build "wechat" _src/2026-01-04-xp-vibe-coding/xp-vibe-coding.md
-
-# build "wechat" _src/2026-04-02-histogram/histogram-cn.md
-
-# build "wechat" _src/2026-05-11-raf-without-term/raf-without-term-cn.md
-# build "zhihu" _src/2026-05-11-raf-without-term/raf-without-term-cn.md
-
 # build "wechat" _src/2026-08-01-ezraft/ezraft-cn.md
 # build "zhihu" _src/2026-08-01-ezraft/ezraft-cn.md
 
 # build "wechat" _src/2026-08-11-ez-ts-oracle/ez-ts-oracle-cn.md
-build "zhihu" _src/2026-08-11-ez-ts-oracle/ez-ts-oracle-cn.md
+# build "zhihu" _src/2026-08-11-ez-ts-oracle/ez-ts-oracle-cn.md
+
+build "wechat" _src/2026-10-15-raft-rw-quorum/raft-rw-quorum-cn.md
 
 

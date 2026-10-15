@@ -35,7 +35,7 @@ We'll start with a few nodes running Paxos, see what happens when two leaders tr
 
 ### Every `read quorum` must intersect every `write quorum`
 
-In the usual Paxos setup, both phases need a majority. Any two majorities share at least one node, so all the quorums overlap. That's the arrangement in Lamport's [Paxos Made Simple](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf).
+In the usual Paxos setup, both phases need a majority. Any two majorities share at least one node, so all the quorums overlap. That's the arrangement in Lamport's [Paxos Made Simple][ref-paxos-simple].
 
 Flexible Paxos lets us be more selective about that overlap. We use a `read quorum` in phase 1 to establish a leader, and a `write quorum` in phase 2 to commit a command. The rule we need is this: **every `read quorum` must share a node with every `write quorum`**. Two `read quorums` can be disjoint. So can two `write quorums`.
 
@@ -78,7 +78,7 @@ Next, node-4 tries to write `b` through `{2, 4}`. Node-2 has promised `ballot_1`
 
 Both leaders made it through phase 1. Once they tried to write, the ballot ordering gave the nodes a way to settle the competition. In this execution, only the leader with the higher ballot can finish phase 2.
 
-That's why the `read quorums` can be disjoint. The overlap between an election quorum and every `write quorum` still gives the promises somewhere to take effect. The rest of Paxos, including recovery of previously accepted values, stays in place. [Flexible Paxos, §2, §4.1, §5](https://arxiv.org/pdf/1608.06696)
+That's why the `read quorums` can be disjoint. The overlap between an election quorum and every `write quorum` still gives the promises somewhere to take effect. The rest of Paxos, including recovery of previously accepted values, stays in place. [Flexible Paxos, §2, §4.1, §5][ref-flexible-paxos]
 
 ## Raft also needs a guarantee about competing leaders
 
@@ -104,7 +104,7 @@ Then node-4 writes `b` at the same index and sends it to node-2. Node-2 makes th
 
 **We've now executed two different commands at the same index.** That's a consensus failure.
 
-The surprising part is that neither follower rejected the other leader's write. In standard Raft, a follower can accept AppendEntries from the elected leader even if it voted for someone else. The sender doesn't have to match `voted_for`; the request still has to pass the term and log matching checks. [Raft paper, Figures 2 and 3](https://raft.github.io/raft.pdf)
+The surprising part is that neither follower rejected the other leader's write. In standard Raft, a follower can accept AppendEntries from the elected leader even if it voted for someone else. The sender doesn't have to match `voted_for`; the request still has to pass the term and log matching checks. [Raft paper, Figures 2 and 3][ref-raft]
 
 That behavior is useful when there's one elected leader. Our new election rules have allowed two.
 
@@ -112,7 +112,7 @@ That behavior is useful when there's one elected leader. Our new election rules 
 
 Think about how a node tells one leader from another. For this discussion, let's write an election identity as `(term, voted_for)` and call it a `LeaderId`. The `voted_for` part names the candidate in that election.
 
-In Paxos, ballots give us a total order. Standard Raft's rules work more like a partial order. A higher term is newer. The same term and candidate ID describe the same election. But two different candidates in the same term don't have an ordering. OpenRaft's [partial comparison rules](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27) express that directly.
+In Paxos, ballots give us a total order. Standard Raft's rules work more like a partial order. A higher term is newer. The same term and candidate ID describe the same election. But two different candidates in the same term don't have an ordering. OpenRaft's [partial comparison rules][code-openraft-leader-id-cmp] express that directly.
 
 Raft gets away with this because **each term elects at most one leader**. With majority election quorums, two candidates would have to share at least one voter. That voter only votes once, so both candidates can't win.
 
@@ -158,7 +158,7 @@ There's another way to make those election quorums overlap. We can add a small g
 
 Every `read quorum` must include a majority of these election nodes. Any two of those majorities share a voter. That voter can't vote twice in a term, so two candidates can't both win.
 
-We still need the nodes that actually store the log. A `read quorum` must meet every `write quorum` at one of those data nodes. Before granting a vote, a data node checks that the candidate's log is at least as up to date as its own. That's how the election protects committed entries. **The dedicated voters keep the leader unique; the data nodes keep the log safe.** [Raft paper, §5.4.1, §5.4.3](https://raft.github.io/raft.pdf)
+We still need the nodes that actually store the log. A `read quorum` must meet every `write quorum` at one of those data nodes. Before granting a vote, a data node checks that the candidate's log is at least as up to date as its own. That's how the election protects committed entries. **The dedicated voters keep the leader unique; the data nodes keep the log safe.** [Raft paper, §5.4.1, §5.4.3][ref-raft]
 
 For example, keep four data nodes in the `2×2` grid and add three election nodes. To elect a leader, take one whole data row and any two election nodes. To commit a write, take one whole data column.
 
@@ -204,7 +204,7 @@ With majority quorums, the nine-node cluster would need five nodes. The same six
 
 This second approach lets us use disjoint election quorums, but it changes more of the protocol. **The log ID grows from `(term, index)` to `(term, voted_for, index)`.** Votes, replication requests, and commitment checks all need to use that full identity.
 
-If you'd like to see what those changes look like in code, OpenRaft has examples of [voting and persisting full leader identities](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155), [checking prefixes with full log IDs](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139), and [checking the current leader identity before committing](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/replication_handler/mod.rs#L230-L244).
+If you'd like to see what those changes look like in code, OpenRaft has examples of [voting and persisting full leader identities][code-openraft-vote], [checking prefixes with full log IDs][code-openraft-prefix], and [checking the current leader identity before committing][code-openraft-commit].
 
 ## Client reads can confirm leadership through a `write quorum`
 
@@ -212,13 +212,13 @@ Now suppose a client sends a read instead of a write. For that read to be linear
 
 ReadIndex gives the leader two jobs. It needs to confirm that it's still allowed to act as leader, then wait until its state machine has applied enough of the log to answer the read.
 
-There's a startup condition to keep here. **Before serving ReadIndex requests, a leader must have committed an entry from its current leadership.** In standard Raft, that means its current term. In the second approach, it means its current full leader identity. Changing the quorums doesn't remove that requirement. You can see the standard check in [etcd/raft's ReadIndex readiness code](https://github.com/etcd-io/raft/blob/v3.6.0/raft.go#L1278-L1285).
+There's a startup condition to keep here. **Before serving ReadIndex requests, a leader must have committed an entry from its current leadership.** In standard Raft, that means its current term. In the second approach, it means its current full leader identity. Changing the quorums doesn't remove that requirement. You can see the standard check in [etcd/raft's ReadIndex readiness code][code-etcd-read-index-ready].
 
 After that, **either approach can confirm leadership through a `write quorum`**. Here's how a read proceeds:
 
 1. The request arrives, and the leader records its current commit index as `read_index`.
 2. The leader sends a fresh round of heartbeats and waits for a `write quorum` to acknowledge its current identity. It includes a round identifier so replies from an earlier round won't count for this read.
-3. The leader waits for its local state machine to apply every entry through `read_index`. Only then does the application read the state and return the result. [etcd/raft ReadIndex interface and application requirements](https://github.com/etcd-io/raft/blob/v3.6.0/node.go#L199-L205)
+3. The leader waits for its local state machine to apply every entry through `read_index`. Only then does the application read the state and return the result. [etcd/raft ReadIndex interface and application requirements][code-etcd-read-index]
 
 The heartbeats use the same identity rules as the rest of the protocol. The first approach compares terms. The second compares the full `(term, voted_for)` identity.
 
@@ -250,7 +250,7 @@ Let's follow the leader through the change:
 
 At first, some nodes may still be using `c0` while others have moved to `c01`. Later, some may be using `c01` while others have moved to `c1`.
 
-The wait between those two stages matters. **By committing `c01` before introducing `c1`, we keep the old and new configurations from making independent decisions.** The election freshness check and commitment rules also make later leaders retain the committed configuration entry. A change of leader therefore preserves that ordering. [Raft paper, §6, Figure 11](https://raft.github.io/raft.pdf)
+The wait between those two stages matters. **By committing `c01` before introducing `c1`, we keep the old and new configurations from making independent decisions.** The election freshness check and commitment rules also make later leaders retain the committed configuration entry. A change of leader therefore preserves that ordering. [Raft paper, §6, Figure 11][ref-raft]
 
 So we check intersections across each adjacent pair: `c0` with `c01`, then `c01` with `c1`. **Every `read quorum` on either side must meet every `write quorum` on the other side.** With the first approach, `read quorums` must also meet across the pair, so we still elect only one leader per term. With the second approach, ordered leader identities handle the competition.
 
@@ -276,3 +276,13 @@ Go back to that five-node leader waiting for its third copy of a write. We can l
 In either case, every `read quorum` still has to meet every `write quorum`. The same overlap helps us confirm leadership for reads and move safely between memberships.
 
 We can make the leader wait for fewer acknowledgments. We just need to be clear about what we're asking the rest of the cluster to do in return, especially when a leader fails or the membership changes.
+
+[ref-paxos-simple]: https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
+[ref-flexible-paxos]: https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"
+[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
+[code-openraft-leader-id-cmp]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27 "OpenRaft: partial comparison of leader IDs"
+[code-openraft-vote]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155 "OpenRaft: vote with and persist the full leader identity"
+[code-openraft-prefix]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139 "OpenRaft: check log prefixes with full log IDs"
+[code-openraft-commit]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/replication_handler/mod.rs#L230-L244 "OpenRaft: check the current leader identity before committing"
+[code-etcd-read-index-ready]: https://github.com/etcd-io/raft/blob/v3.6.0/raft.go#L1278-L1285 "etcd/raft: serve ReadIndex only after committing in the current term"
+[code-etcd-read-index]: https://github.com/etcd-io/raft/blob/v3.6.0/node.go#L199-L205 "etcd/raft: ReadIndex interface and application requirements"

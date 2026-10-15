@@ -33,7 +33,7 @@ Raft 确实可以把 read quorum 和 write quorum 分开设置, 但协议仍需�
 
 ### 任意 read quorum 都必须与任意 write quorum 相交
 
-经典 Paxos 的常见配置在选举和复制阶段都使用多数派 quorum, 因而任意两个 quorum 都有交集. Lamport 的[《Paxos Made Simple》](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf)就采用这种配置.
+经典 Paxos 的常见配置在选举和复制阶段都使用多数派 quorum, 因而任意两个 quorum 都有交集. Lamport 的[《Paxos Made Simple》][ref-paxos-simple]就采用这种配置.
 
 Flexible Paxos 进一步放宽了交集要求, 把两个阶段的 quorum 分开设置. 第一阶段使用 read quorum 完成选举, 第二阶段使用 write quorum 提交命令. **任意 read quorum 都必须与任意 write quorum 相交, 但 read quorum 之间、write quorum 之间不必相交**.
 
@@ -77,7 +77,7 @@ Paxos 用全局唯一且全序的 ballot 标识每次选举, 也就是任意两�
 
 所以, **两个 leader 都先完成第一阶段后, 第二阶段时, 只有较大 ballot 的 leader 能够成功**. 
 
-所以, read quorum 之间可以不相交, 让两个 leader 都完成第一阶段; read quorum 与 write quorum 的交集则把冲突留到第二阶段处理. 在沿用经典 Paxos 其他规则的前提下, Flexible Paxos 因而可以放宽同一阶段的 quorum 交集要求.[Flexible Paxos, §2、§4.1、§5](https://arxiv.org/pdf/1608.06696)
+所以, read quorum 之间可以不相交, 让两个 leader 都完成第一阶段; read quorum 与 write quorum 的交集则把冲突留到第二阶段处理. 在沿用经典 Paxos 其他规则的前提下, Flexible Paxos 因而可以放宽同一阶段的 quorum 交集要求.[Flexible Paxos, §2、§4.1、§5][ref-flexible-paxos]
 
 ## 但 Raft 不能直接套用 Flexible Paxos 的 quorum 配置
 
@@ -102,7 +102,7 @@ Flexible Paxos 可以减少选举和复制需要等待的节点数, 因此我们
 
 结果是, **node-1 和 node-4 在同一个 index `i` 执行了不同命令, 破坏了共识**. 
 
-**原因在于, 原版 Raft 不要求接收节点的 `voted_for` 与请求中的 leader 相同**.[Raft 论文, Figure 2–3](https://raft.github.io/raft.pdf)
+**原因在于, 原版 Raft 不要求接收节点的 `voted_for` 与请求中的 leader 相同**.[Raft 论文, Figure 2–3][ref-raft]
 
 ### 原因: Raft 的 leader id是偏序关系, 所以必须在选举阶段保证 leader 唯一
 
@@ -110,7 +110,7 @@ Flexible Paxos 可以减少选举和复制需要等待的节点数, 因此我们
 
 **LeaderId 在 Paxos 里(对应Paxos的 BallotNum)是全序的, 即任意两个可以比较大小, 但在 Raft 里是偏序的**, 最终才需要每个 term 只能有一个 Leader 选出的限制:
 
-Raft 中 LeaderId 偏序关系表现为: 当两个 leader 的 term 不同时, 节点按 term 比较大小; 当 term 和 `voted_for` 都相同时, 两个 leader 相等. 但如果 term 相同、`voted_for` 不同, 两个 leader 就无法比较大小(体现在, 一个节点如果在 term `t` vote给了a节点, 就不能再在 term `t` 把vote给其他节点). 偏序允许出现无法比较的 2 个 LeaderId, 可以参考 OpenRaft 的[偏序比较规则](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27) . 
+Raft 中 LeaderId 偏序关系表现为: 当两个 leader 的 term 不同时, 节点按 term 比较大小; 当 term 和 `voted_for` 都相同时, 两个 leader 相等. 但如果 term 相同、`voted_for` 不同, 两个 leader 就无法比较大小(体现在, 一个节点如果在 term `t` vote给了a节点, 就不能再在 term `t` 把vote给其他节点). 偏序允许出现无法比较的 2 个 LeaderId, 可以参考 OpenRaft 的[偏序比较规则][code-openraft-leader-id-cmp] . 
 
 正是因为这种偏序关系, 即 term 相同时 LeaderId `(term, voted_for)` 可能无法比较大小, 所以为了保证liveness, 在处理 AppendEntries 请求时, 只要AppendEntries中的term和本地的term一样, 就必须允许请求中的`voted_for` 覆盖本地的. 而要保证这个覆盖操作永远正确, 就要求一个 term 必须只能选出一个 Leader. 反之如果有2个leader, 由于LeaderId是偏序的无法确定谁覆盖谁.
 
@@ -151,7 +151,7 @@ Raft 中 LeaderId 偏序关系表现为: 当两个 leader 的 term 不同时, �
 
 我们可以规定, 每个 read quorum 都必须取得选举节点中的多数票. 由于任意两个多数派都共享至少一个选举节点, 而每个选举节点在同一个 term 内只投一票, 不同的 read quorum 就无法在同一个 term 选出两个 leader.
 
-不过, 选举节点只负责保证 leader 唯一. read quorum 还必须包含保存日志的节点, 并在保存日志的节点上与每个 write quorum 相交. 保存日志的节点继续按 Raft 的日志新旧规则投票, 才能保证当选 leader 保留已提交日志.[Raft 论文, §5.4.1、§5.4.3](https://raft.github.io/raft.pdf)
+不过, 选举节点只负责保证 leader 唯一. read quorum 还必须包含保存日志的节点, 并在保存日志的节点上与每个 write quorum 相交. 保存日志的节点继续按 Raft 的日志新旧规则投票, 才能保证当选 leader 保留已提交日志.[Raft 论文, §5.4.1、§5.4.3][ref-raft]
 
 例如, 我们可以把 4 个保存日志的节点排成 `2×2` 网格, 再增加 3 个选举节点. 每个 read quorum 包含网格中的一整行和任意 2 个选举节点, 每个 write quorum 则包含网格中的一整列. 任意两个 read quorum 至少共享一个选举节点, 任意 read quorum 与任意 write quorum 也共享一个保存日志的节点. 因而, 这个 7 节点集群选举只需 4 个节点确认, 提交只需 2 个节点确认.
 
@@ -186,7 +186,7 @@ Raft 中 LeaderId 偏序关系表现为: 当两个 leader 的 term 不同时, �
 
 从实现上看, 方法二需要把 **log ID 从 `(term, index)` 扩展为 `(term, voted_for, index)`**, 投票记录和复制请求也要携带完整 leader 身份. 因而, 协议的多个环节都需要配合身份规则的变化.
 
-OpenRaft 的实现可以作为这部分改造的参考. OpenRaft 已有[完整 leader 身份的投票与持久化](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155)、[完整 log ID 的前缀检查](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139)和[当前 leader 身份的提交检查](https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/replication_handler/mod.rs#L230-L244). 
+OpenRaft 的实现可以作为这部分改造的参考. OpenRaft 已有[完整 leader 身份的投票与持久化][code-openraft-vote]、[完整 log ID 的前缀检查][code-openraft-prefix]和[当前 leader 身份的提交检查][code-openraft-commit]. 
 
 ## Client Read 可以通过 write quorum 确认 Leadership
 
@@ -198,7 +198,7 @@ Raft 的客户端读 Linearizable Read 要求返回结果反映读请求开始�
 
 1. leader 收到读请求时, 把当前提交位置记录为本次读请求的 `read_index`.
 2. leader 选择一个 write quorum 作为本次读请求的心跳确认集合. leader 为本次读请求发起一轮新的心跳, 等待选中的 write quorum 全部确认当前 leader 身份. 心跳携带本次确认轮次的标识, leader 只统计与本次确认轮次对应的回复.
-3. leader 等待本地状态机应用完 index 不超过 `read_index` 的已提交日志, 再读取状态机并返回结果.[etcd/raft 的 ReadIndex 接口与应用要求](https://github.com/etcd-io/raft/blob/v3.6.0/node.go#L199-L205)
+3. leader 等待本地状态机应用完 index 不超过 `read_index` 的已提交日志, 再读取状态机并返回结果.[etcd/raft 的 ReadIndex 接口与应用要求][code-etcd-read-index]
 
 心跳沿用选举和复制的 LeaderId 比较规则: 方法一保证每个 term 至多一个 leader, 接收节点按 term 拒绝旧 leader 的心跳. 方法二允许同 term 的不同 leader, 因而心跳必须携带并比较完整的 `(term, voted_for)` 身份, 接收节点也要拒绝较小LeaderId的心跳.
 
@@ -222,7 +222,7 @@ Raft 中 leader 按以下顺序推进成员变更:
 2. 等 leader 按 `c01` 的 write quorum 提交 `c01` 配置日志后, leader 才能追加并复制 `c1` 配置日志. 各节点将 `c1` 配置日志追加到本地日志后, 就开始使用 `c1`.
 3. 最后, leader 按 `c1` 的 write quorum 提交 `c1` 配置日志, 完成成员变更.
 
-成员变更期间, 不同节点可以暂时分别使用 `c0` 和 `c01`, 也可以分别使用 `c01` 和 `c1`. leader 必须先提交 `c01` 配置日志, 才能追加 `c1` 配置日志. 同时, 投票时的日志新旧比较和提交规则保证后续 leader 保留已提交的配置日志. 因此, `c0` 和 `c1` 不能同时独立作出决定.[Raft 论文, §6、Figure 11](https://raft.github.io/raft.pdf)
+成员变更期间, 不同节点可以暂时分别使用 `c0` 和 `c01`, 也可以分别使用 `c01` 和 `c1`. leader 必须先提交 `c01` 配置日志, 才能追加 `c1` 配置日志. 同时, 投票时的日志新旧比较和提交规则保证后续 leader 保留已提交的配置日志. 因此, `c0` 和 `c1` 不能同时独立作出决定.[Raft 论文, §6、Figure 11][ref-raft]
 
 所以, 检查成员变更的 quorum 交集时, 我们只需考虑 `c0` 与 `c01`、`c01` 与 `c1` 两组相邻配置. 每组中, 每一方的每个 read quorum 都必须与另一方的每个 write quorum 相交. 如果采用方法一, 还需要保证两个相邻配置之间的任意 read quorum 相交, 配合每个 term 只投一票来保证 leader 唯一. 方法二已经使用完整 leader 身份区分竞争的 leader, 因而只要求 read quorum 与 write quorum 相交.
 
@@ -236,3 +236,12 @@ Raft 中 leader 按以下顺序推进成员变更:
 ## 总结
 
 Raft 的 read-write quorum 设计, 需要让 quorum 交集与 LeaderId 规则共同保护已提交日志. 方法一通过 read quorum 两两相交, 保留每个 term 至多一个 leader 的约束; 方法二通过全序的 LeaderId 和配套的投票、日志匹配、复制及提交规则, 允许 read quorum 之间不相交. 在固定配置内, 两种方法都要求任意 read quorum 与任意 write quorum 相交. ReadIndex 和成员变更也必须满足所选方法的身份规则与交集要求. 最终的 quorum 配置需要兼顾提交等待开销、故障后的可用性和协议改造成本.
+
+[ref-paxos-simple]: https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
+[ref-flexible-paxos]: https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"
+[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
+[code-openraft-leader-id-cmp]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27 "OpenRaft: LeaderId 的偏序比较规则"
+[code-openraft-vote]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155 "OpenRaft: 完整 leader 身份的投票与持久化"
+[code-openraft-prefix]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139 "OpenRaft: 完整 log ID 的前缀检查"
+[code-openraft-commit]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/replication_handler/mod.rs#L230-L244 "OpenRaft: 当前 leader 身份的提交检查"
+[code-etcd-read-index]: https://github.com/etcd-io/raft/blob/v3.6.0/node.go#L199-L205 "etcd/raft: ReadIndex 接口与应用要求"
