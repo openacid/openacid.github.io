@@ -18,7 +18,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "一个轻量 histogram 实现：仅 2KB 内存，latency 场景下 percentile 估算误差低于 0.2%。采用类浮点数编码实现 O(1) 记录，利用梯形插值大幅提升 percentile 精度——全程无浮点运算。"
+description: "一个轻量 histogram 实现：仅 2KB 内存，latency 场景下 percentile 估算误差低于 0.2%。采用类浮点数编码实现 O(1) 记录，利用梯形插值大幅提升 percentile 精度——全程无浮点运算。"
 ---
 
 ![](histagram-banner.png)

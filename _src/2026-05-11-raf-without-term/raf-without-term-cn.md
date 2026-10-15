@@ -15,7 +15,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "raf 是一个实验性的 Raft 变体：不再独立持久化 currentTerm，而是让 candidate 在 election 时占用一个 log index，并把这个 index 作为 leader term。"
+description: "raf 是一个实验性的 Raft 变体：不再独立持久化 currentTerm，而是让 candidate 在 election 时占用一个 log index，并把这个 index 作为 leader term。"
 ---
 
 ![](raf-banner-small.png)

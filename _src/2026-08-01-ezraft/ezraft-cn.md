@@ -16,7 +16,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "EzRaft 建立在 OpenRaft 之上, 把存储/网络/服务接口都隐藏起来, 用户只需要定义 Request, Response, apply 和 read 四样东西, 就能得到一个三节点容错的分布式 KV 存储."
+description: "EzRaft 建立在 OpenRaft 之上, 把存储/网络/服务接口都隐藏起来, 用户只需要定义 Request, Response, apply 和 read 四样东西, 就能得到一个三节点容错的分布式 KV 存储."
 ---
 
 ![](ezraft-banner.png)

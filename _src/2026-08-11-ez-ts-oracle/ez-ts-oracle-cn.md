@@ -16,7 +16,7 @@ mathjax: false
 toc: true
 toc_label: 本文目录
 toc_sticky: true
-excerpt: "timestamp-oracle 是一个基于 EzRaft 的分布式授时服务, 后台 task 定期通过写 Raft log 申请预留一段 timestamp range, HTTP API `next_timestamp` 直接在内存完成 timestamp 分配. Raft 保证 Leader failover 后 timestamp 不会重复或回退."
+description: "timestamp-oracle 是一个基于 EzRaft 的分布式授时服务, 后台 task 定期通过写 Raft log 申请预留一段 timestamp range, HTTP API `next_timestamp` 直接在内存完成 timestamp 分配. Raft 保证 Leader failover 后 timestamp 不会重复或回退."
 ---
 
 ![](ez-time-server-banner.png)
