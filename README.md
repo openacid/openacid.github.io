@@ -52,7 +52,7 @@ md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复�
 | `assets/css/main.css` | 样式 |
 | `data/authors.yaml` | 作者资料：名字、简介、头像、链接 |
 | `static/assets/images/` | logo、favicon、作者头像、二维码 |
-| `static/py/`、`static/post-res/`、`static/assets/images/banner/` 等 | 旧站的 56 个文件，没有页面引用它们；放在这里，它们的旧网址才能继续访问 |
+| `static/py/`、`static/assets/images/banner/` 等 | 旧站的 36 个文件，没有页面引用它们；放在这里，它们的旧网址才能继续访问 |
 | `content/_index.md` | 首页；同时让旧网址 `/page2/` 跳转到首页 |
 | `build-platform-specific.sh` | 生成文章的知乎版和微信版，并上传到 R2 |
 
