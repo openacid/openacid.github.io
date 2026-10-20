@@ -11,6 +11,9 @@ set -o errexit
 # https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev/2023-12-17-openraft-read.html
 url_base="https://pub-e254240c5c35410cb21a0cf4fb58f73e.r2.dev"
 
+# Platforms that md2zhihu accepts, see: md2zhihu --help
+md2zhihu_platforms="zhihu wechat weibo github minimal_mistake simple transparent"
+
 
 
 # Call xp-md2html to convert md to html, using github-markdown.css
@@ -67,6 +70,19 @@ build()
 {
     local platform="$1"
     local fn="$2"
+
+    local supported=false
+    local p
+    for p in $md2zhihu_platforms; do
+        if [ "$p" = "$platform" ]; then
+            supported=true
+        fi
+    done
+
+    if [ "$supported" = false ]; then
+        echo "Invalid platform: '$platform', expect one of: $md2zhihu_platforms" >&2
+        exit 1
+    fi
 
     local name_suffix=${fn##*/}
     local name=${name_suffix%.md}
