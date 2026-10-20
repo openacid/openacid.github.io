@@ -126,6 +126,7 @@ build()
 # build "wechat" _src/2026-08-11-ez-ts-oracle/ez-ts-oracle-cn.md
 # build "zhihu" _src/2026-08-11-ez-ts-oracle/ez-ts-oracle-cn.md
 
-build "wechat" _src/2026-10-15-raft-rw-quorum/raft-rw-quorum-cn.md
+# build "wechat" _src/2026-10-15-raft-rw-quorum/raft-rw-quorum-cn.md
+build $1 $2
 
 
