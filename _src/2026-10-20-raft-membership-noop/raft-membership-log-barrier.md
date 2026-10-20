@@ -17,8 +17,6 @@ toc_sticky: true
 description: "Standard joint consensus provides its own log barrier through config entries. Single-step changes and joint consensus extended with rollback require a committed current-term entry before a new config. Two failure scenarios show why the difference comes down to quorum overlap."
 ---
 
-# Raft Membership Changes: When a Leader Must Commit a Current-Term Entry First
-
 ![Raft membership changes and log barriers](raft-membership-noop-banner-small.png)
 
 Raft's corrected single-step membership-change protocol requires a leader to commit an entry from its current term before proposing a new config. Standard joint consensus needs no separate noop barrier: its config entries already establish mutual exclusion. If we extend joint consensus to allow rollback, however, both rollback and completion require the extra barrier.

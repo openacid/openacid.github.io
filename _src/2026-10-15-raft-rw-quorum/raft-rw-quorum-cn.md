@@ -17,8 +17,6 @@ toc_sticky: true
 description: "Raft 可以分开配置read-quorum(选举)和write-quorum(日志提交), 但必须保证每个 term 至多一个 leader, 或用全序的 LeaderId 区分同 term 的不同 leader. 本文从 Flexible Paxos 出发, 说明两种方法的 quorum 条件, 以及 ReadIndex 和成员变更需要满足的约束."
 ---
 
-# 从 Flexible Paxos 到 Raft：read-write quorum
-
 ![](images/raft-rw-quorum-banner-small.png)
 
 标准 Raft 在选举和日志提交时都使用多数派. 如果希望减少日志复制需要等待的节点数, 一个自然的办法是让选举和提交分别使用不同的 quorum.

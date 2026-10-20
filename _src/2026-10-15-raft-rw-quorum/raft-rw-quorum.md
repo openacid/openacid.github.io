@@ -17,8 +17,6 @@ toc_sticky: true
 description: "A Raft leader usually waits for a majority before committing a write. We can reduce that wait, but the election rules and leader identities must still protect the log. Through a few small clusters, we explore two ways to do this, then follow the consequences for reads, failures, and membership changes."
 ---
 
-# Flexible Raft: `Read and Write Quorums`
-
 ![](images/raft-rw-quorum-banner-small.png)
 
 Picture a five-node Raft cluster handling a write. The leader has saved the entry locally and sent it to the followers. One follower replies. Then a second. Now the leader has three copies, enough to commit.

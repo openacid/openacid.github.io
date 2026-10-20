@@ -18,8 +18,6 @@ toc_sticky: true
 description: "标准 joint 用 config 日志本身建立 barrier，两步都无需额外要求 leader 的 noop 已提交。单步变更与允许 joint 回退的扩展则需要 leader 先提交当前 term 日志，以排除较小 term 遗留的冲突变更。"
 ---
 
-# Raft 成员变更：何时需要先提交 leader 的当前 term 日志
-
 ![Raft 成员变更与日志 barrier](raft-membership-noop-banner-small.png)
 
 Raft 的单步成员变更从 `C0` 直接切换到 `C1`，要求 leader 先提交一条当前 term 的日志，再追加 `C1`。标准 joint 则通过 `C01 = [C0,C1]` 过渡到 `C1`，由 config 日志本身建立 barrier，两步都无需额外要求 leader 的 noop 已提交。如果在标准 joint 之外，额外允许 `C01` 回退到 `C0`，那么完成到 `C1` 与回退到 `C0` 都需要先提交 leader 的当前 term 日志。
