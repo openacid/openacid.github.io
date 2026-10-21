@@ -703,7 +703,7 @@ LevelDB 的这个 mask 操作，表面上看就是几行简单的代码，但背
 **CRC 算法原理**：
 - [Wikipedia: Cyclic redundancy check](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) - CRC 算法的数学基础
 - [Wikipedia: Finite field arithmetic](https://en.wikipedia.org/wiki/Finite_field_arithmetic) - GF(2) 有限域运算
-- [Wikipedia: Irreducible polynomial](https://en.wikipedia.org/wiki/Irreducible_polynomial) - 不可约多项式的数学定义
+- [Wikipedia: Irreducible polynomial][wiki-irreducible-polynomial] - 不可约多项式的数学定义
 
 **多项式运算**：
 - [Wikipedia: Polynomial long division](https://en.wikipedia.org/wiki/Polynomial_long_division) - 多项式长除法
@@ -734,7 +734,7 @@ LevelDB 的这个 mask 操作，表面上看就是几行简单的代码，但背
 - [ZFS checksum algorithms](https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Checksums.html) - ZFS 文件系统的校验算法
 
 **错误检测技术**：
-- [Reed-Solomon codes](https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction) - 纠错码理论
+- [Reed-Solomon codes][wiki-reed-solomon] - 纠错码理论
 - [Hamming codes](https://en.wikipedia.org/wiki/Hamming_code) - 汉明码原理
 
 ## 实用工具

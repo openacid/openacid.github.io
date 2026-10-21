@@ -30,7 +30,7 @@ description: "本文介绍了Zipf定律，该定律描述了互联网内容访�
 ![xxx](1kfile.png)
 
 这句是一个经验结论, 从它可以得出我们的频度分布公式:
-也就是[zipf][] 模型.
+也就是[zipf][wiki-zipf] 模型.
 
 $$
 f(k) = c/k^s
@@ -178,4 +178,3 @@ Discover, Design, Distribute
 [find-zipf.py]:find-zipf.py
 [file-access-count.txt]:file-access-count.txt
 [多项式回归]: https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92
-[zipf]: https://en.wikipedia.org/wiki/Zipf%27s_law

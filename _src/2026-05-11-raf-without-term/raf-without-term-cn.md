@@ -420,4 +420,3 @@ election 时，candidate 用 `terms.len()` 选择 term；成为 leader 后，缺
 
 [raf]: https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
 [raft]: https://raft.github.io/ "Raft"
-[raft-paper]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"

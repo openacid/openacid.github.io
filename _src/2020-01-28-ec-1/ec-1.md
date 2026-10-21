@@ -26,18 +26,10 @@ refs:
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
     - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
-    - "Finite-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Finite-Field"
-    - "Galois-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Galois-Field"
-    - "Reed-Solomon":     https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction  "Reed-Solomon error correction"
-    - "Erasure-Code":     https://en.wikipedia.org/wiki/Erasure_code                           "Erasure-Code"
-    - "Prime-Polynomial": https://en.wikipedia.org/wiki/Irreducible_polynomial                 "Prime-Polynomial"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
     - "Generator-Matrix": https://en.wikipedia.org/wiki/Generator_matrix                       "Generator-Matrix"
-    - "第一篇:原理":      https://blog.openacid.com/storage/ec-1                               "第一篇:Erasure-Code-擦除码-1-原理篇"
-    - "第二篇:实现":      https://blog.openacid.com/storage/ec-2                               "第二篇:Erasure-Code-擦除码-2-实现篇"
-    - "第三篇:极限":      https://blog.openacid.com/storage/ec-3                               "第三篇:Erasure-Code-擦除码-3-极限篇"
 
 mathjax: true
 toc: true
@@ -50,7 +42,7 @@ description: "擦除码(EC)通过增加校验块来保证分布式存储的可�
 
 # 前言
 
-做分布式存储的同学, 一定都知道一个了不地的冗余算法叫作擦除码([Erasure-Code]), 
+做分布式存储的同学, 一定都知道一个了不地的冗余算法叫作擦除码([Erasure-Code][wiki-erasure-code]),
 它让存储以多副本**几分之一**的成本来达到同样高的可靠性.
 
 虽然web上有很多介绍EC的文字,
@@ -61,9 +53,9 @@ description: "擦除码(EC)通过增加校验块来保证分布式存储的可�
 于是准备了这3篇介绍EC的文字, 我敢肯定, 你没看过这样**通(di)俗(diao)易(she)懂(hua)** 的EC教程.
 看完这3篇文字! 保你可以徒手写出一个EC存储系统, 本文是第一部分:
 
-- [第一篇:原理]
-- [第二篇:实现]
-- [第三篇:极限]
+- [第一篇:原理][post-ec-1]
+- [第二篇:实现][post-ec-2]
+- [第三篇:极限][post-ec-3]
 
 # 问题
 
@@ -91,7 +83,7 @@ description: "擦除码(EC)通过增加校验块来保证分布式存储的可�
 3副本的方式虽然简单容易实现, 但要额外浪费2倍的存储空间,
 因此存储领域中一直都希望用一种较少的冗余的存储方式, 来实现同样较高的可靠性.
 
-不论是单机上的[RAID]技术, 还是今天要提到的EC([Erasure-Code], 擦除码, 纠删码)
+不论是单机上的[RAID]技术, 还是今天要提到的EC([Erasure-Code][wiki-erasure-code], 擦除码, 纠删码)
 都是用来解决这个问题的. 接下来, 我们通过几个例子, 来逐步展示 EC 的工作原理.
 
 > RAID 本质上跟EC没有区别, 它是单机系统时代被广泛使用的成熟实现.
@@ -553,6 +545,6 @@ $$
 以及我们将通过什么样的手段来解决这些问题, 将EC真正应用到生产环境中.
 
 > EC擦除码系列:
-> - [第一篇:原理]
-> - [第二篇:实现]
-> - [第三篇:极限]
+> - [第一篇:原理][post-ec-1]
+> - [第二篇:实现][post-ec-2]
+> - [第三篇:极限][post-ec-3]

@@ -33,7 +33,7 @@ description: "本文分析了内容分发网络 (CDN) 的成本构成，以及 Z
 我们通过
 `90%的流量由10%的内容产生`
 这句经验描述，
-得出了访问频率的[zipf][]模型:
+得出了访问频率的[zipf][wiki-zipf]模型:
 
 $$
 f(k) = c/k^s
@@ -310,5 +310,4 @@ $$
 [find-zipf.py]:find-zipf.py
 [file-access-count.txt]:file-access-count.txt
 [多项式回归]: https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92
-[zipf]: https://en.wikipedia.org/wiki/Zipf%27s_law
 [zipf-blog]: /tech/zipf

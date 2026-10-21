@@ -275,9 +275,6 @@ In either case, every `read quorum` still has to meet every `write quorum`. The 
 
 We can make the leader wait for fewer acknowledgments. We just need to be clear about what we're asking the rest of the cluster to do in return, especially when a leader fails or the membership changes.
 
-[ref-paxos-simple]: https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
-[ref-flexible-paxos]: https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"
-[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
 [code-openraft-leader-id-cmp]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27 "OpenRaft: partial comparison of leader IDs"
 [code-openraft-vote]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155 "OpenRaft: vote with and persist the full leader identity"
 [code-openraft-prefix]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139 "OpenRaft: check log prefixes with full log IDs"

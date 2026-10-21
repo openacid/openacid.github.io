@@ -123,7 +123,7 @@ Single-step changes use a log barrier. The correction discussed in [the earlier 
 
 > A new leader must commit an entry from its current term before appending a membership-change entry.
 
-In this example, `d` must commit a term 2 entry under `C0` before proposing `Cv`. A quorum of `C0` will then hold an entry newer than the term 1 `Cu`. Since every quorum of `Cu` intersects that quorum, `a` cannot win with a log that still ends at `Cu`. This is the condition in [Ongaro's correction for single-server membership changes][ref-single-safety].
+In this example, `d` must commit a term 2 entry under `C0` before proposing `Cv`. A quorum of `C0` will then hold an entry newer than the term 1 `Cu`. Since every quorum of `Cu` intersects that quorum, `a` cannot win with a log that still ends at `Cu`. This is the condition in [Ongaro's correction for single-server membership changes][ref-raft-single-server-bug].
 
 ## 5. Neither step of standard joint consensus needs a separate noop barrier
 
@@ -219,5 +219,3 @@ A noop is the usual way to establish the extra barrier, but an application entry
 
 [post-raft-bug]: /distributed/raft-bug/ "The Pitfalls of Raft Membership Change"
 [post-rw-quorum]: /distributed/raft-rw-quorum/ "Flexible Raft: Read and Write Quorums"
-[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
-[ref-single-safety]: https://gist.github.com/ongardie/a11f32b70581e20d6bcd "Diego Ongaro: Safety of Raft single-server membership changes"

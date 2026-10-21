@@ -26,18 +26,10 @@ refs:
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
     - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
-    - "Finite-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Finite-Field"
-    - "Galois-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Galois-Field"
-    - "Reed-Solomon":     https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction  "Reed-Solomon error correction"
-    - "Erasure-Code":     https://en.wikipedia.org/wiki/Erasure_code                           "Erasure-Code"
-    - "Prime-Polynomial": https://en.wikipedia.org/wiki/Irreducible_polynomial                 "Prime-Polynomial"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
     - "Generator-Matrix": https://en.wikipedia.org/wiki/Generator_matrix                       "Generator-Matrix"
-    - "第一篇:原理":      https://blog.openacid.com/storage/ec-1                               "第一篇:Erasure-Code-擦除码-1-原理篇"
-    - "第二篇:实现":      https://blog.openacid.com/storage/ec-2                               "第二篇:Erasure-Code-擦除码-2-实现篇"
-    - "第三篇:极限":      https://blog.openacid.com/storage/ec-3                               "第三篇:Erasure-Code-擦除码-3-极限篇"
     - "费马小定理的群论的证明":    https://en.wikipedia.org/wiki/Proofs_of_Fermat%27s_little_theorem#Proofs_using_group_theory "费马小定理的群论的证明"
 
 pdf: false
@@ -53,7 +45,7 @@ description: "本文介绍了如何在计算机有限的数字精度内实现高
 
 # 书接上回
 
-上一篇 [第一篇:原理][] 中, 我们介绍了EC的基本原理,
+上一篇 [第一篇:原理][post-ec-1] 中, 我们介绍了EC的基本原理,
 实际上EC的存储跟恢复过程可以理解为:
 一条k-1次曲线可以通过k个系数或曲线上的点来确定.
 
@@ -65,9 +57,9 @@ description: "本文介绍了如何在计算机有限的数字精度内实现高
 
 本文我们来解决这个问题, 看如何将EC的理论应用到计算机中, 保证计算不会溢出.
 
-- [第一篇:原理][] 上一篇 🤔
-- [第二篇:实现][] 我们在这 😁
-- [第三篇:极限]   🤔
+- [第一篇:原理][post-ec-1] 上一篇 🤔
+- [第二篇:实现][post-ec-2] 我们在这 😁
+- [第三篇:极限][post-ec-3]   🤔
 
 # 思路
 
@@ -125,7 +117,7 @@ $$
 ```
 
 
-# GF(7): 伽罗华域[Galois-Field] GF(7)
+# GF(7): 伽罗华域[Galois-Field][wiki-finite-field] GF(7)
 
 上面我们提到的几个数学公式, 高次曲线, 多元一次方程组等,
 他们之所以能正确的工作, 是因为他们依赖于一套底层的基础运算规则,
@@ -343,7 +335,7 @@ $$
 ## GF(7) 的EC实现
 
 在这个模7的新世界里, 它满足我们旧世界里的四则运算法则,
-我们已经可以使用前面([第一篇:原理][])提到的 EC 的算法来编码或解码了:
+我们已经可以使用前面([第一篇:原理][post-ec-1])提到的 EC 的算法来编码或解码了:
 
 假设模7新世界里我们的数据块 d₁ = 3, d₂ = 2, 对应上面的直线方程:
 y = 2 ⊗ x ⊕ 3
@@ -386,15 +378,15 @@ $$
 不会大于7!
 距离我们的目标又接近了1步.
 
-模7下的四则运算构成了1个 伽罗华域 [Galois-Field]: GF(7).
-简单来说, [Galois-Field] 是一个集合, 集合里的元素满足某种四则运算.
+模7下的四则运算构成了1个 伽罗华域 [Galois-Field][wiki-finite-field]: GF(7).
+简单来说, [Galois-Field][wiki-finite-field] 是一个集合, 集合里的元素满足某种四则运算.
 摘自wikipedia上的解释:
 
 > A finite field is a set on which the operations of multiplication, addition, subtraction and division are defined
 
 
 > 7是1个可选的数来通过取模的方式构造一个Galois-Field,
-> 也可以选择模11或其他质数来构造1个 [Galois-Field],
+> 也可以选择模11或其他质数来构造1个 [Galois-Field][wiki-finite-field],
 > 但是不能选择模一个合数来建立新的四则运算规则.
 > 假设使用模6, 模6世界里面的2是6的一个因子, 它没有乘法逆元, 也即是说2 乘以
 > 1~5任何一个数在模6的世界里都不是1.
@@ -420,15 +412,15 @@ $$
 它比上面模7新世界稍微复杂一点, 得到这个域分为2步:
 
 -   我们首先选择1个基础的,
-    只包含2个元素的 [Galois-Field] GF(2): {0, 1}.
+    只包含2个元素的 [Galois-Field][wiki-finite-field] GF(2): {0, 1}.
 
--   再在这个 GF(2) 的基础上建立1个有256个元素的 [Galois-Field] GF(2⁸).
+-   再在这个 GF(2) 的基础上建立1个有256个元素的 [Galois-Field][wiki-finite-field] GF(2⁸).
 
 
 
-# GF(2): 模2的新世界: [Galois-Field] GF(2)
+# GF(2): 模2的新世界: [Galois-Field][wiki-finite-field] GF(2)
 
-首先选择了最小的[Galois-Field] GF(2), 类似于前面模7的例子, GF(2) 里的四则运算的定义为结果模2.
+首先选择了最小的[Galois-Field][wiki-finite-field] GF(2), 类似于前面模7的例子, GF(2) 里的四则运算的定义为结果模2.
 它里面只有2个元素{0,1}:
 
 在这个GF(2)里, 运算的规则也非常简单:
@@ -486,7 +478,7 @@ $$
 解得 u₁ = 1, u₂ = 1.
 
 
-下一步, 我们希望构建1个1 byte大小(2⁸ 个元素)的 [Galois-Field] GF(2⁸),
+下一步, 我们希望构建1个1 byte大小(2⁸ 个元素)的 [Galois-Field][wiki-finite-field] GF(2⁸),
 在这个 GF(2⁸) 里的 EC 中,
 每个 dⱼ  和  yᵢ 的取值范围可以是0~255.
 
@@ -625,14 +617,14 @@ GF(2)为系数的多项式的集合还不是一个伽罗华域,
 > 但这种分数形式的表示方法在实际使用中会造成很大不便.
 
 
-现在我们需要找到1个质的多项式([Prime-Polynomial]),
+现在我们需要找到1个质的多项式([Prime-Polynomial][wiki-irreducible-polynomial]),
 来替代GF(7)中**7**的角色,
 最终得到1个有256个元素的多项式的伽罗华域 GF(2⁸).
 
-GF(2⁸) 类似于模7的方式, 将多项式模一个质的多项式([Prime-Polynomial])来得到:
+GF(2⁸) 类似于模7的方式, 将多项式模一个质的多项式([Prime-Polynomial][wiki-irreducible-polynomial])来得到:
 GF(2)[X]/(P₈(X))
 
-质的多项式([Prime-Polynomial]) 简单说就是不可分解的多项式,
+质的多项式([Prime-Polynomial][wiki-irreducible-polynomial]) 简单说就是不可分解的多项式,
 例如 x² + 1 在**实数域**下就是 **质多项式**, 它无法分解成2个多项式乘积.
 
 ## GF(2) 下的质多项式
@@ -805,7 +797,7 @@ $$
     \end{aligned}
     $$
 
-    > [Galois-Field] 的计算目前实现都是基于查表的,
+    > [Galois-Field][wiki-finite-field] 的计算目前实现都是基于查表的,
     > 所以选择大的域虽然可以一次计算多个字节,
     > 但内存中随机访问一个大表也可能会造成cache miss太多而影响性能.
 
@@ -960,7 +952,7 @@ $$
 
 ## Vandermonde 矩阵的可逆性
 
-在 [第一篇:原理] 中通提到:
+在 [第一篇:原理][post-ec-1] 中通提到:
 
 > [Vandermonde] 矩阵的任意 `m * m` 的子矩阵, 是一个Generalized Vandermonde Matrix,
 >  它在 xᵢ 都为正数时可以保证永远有唯一解.
@@ -995,6 +987,6 @@ EC的实现到这里就结束了,
 于是下一篇我们将介绍如何把EC实现为一个高效的实现.
 
 > EC擦除码系列:
-> - [第一篇:原理]
-> - [第二篇:实现]
-> - [第三篇:极限]
+> - [第一篇:原理][post-ec-1]
+> - [第二篇:实现][post-ec-2]
+> - [第三篇:极限][post-ec-3]

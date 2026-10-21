@@ -13,7 +13,7 @@
 **CRC 算法原理**：
 - Wikipedia: Cyclic redundancy check -- https://en.wikipedia.org/wiki/Cyclic_redundancy_check
 - Wikipedia: Finite field arithmetic -- https://en.wikipedia.org/wiki/Finite_field_arithmetic
-- Wikipedia: Irreducible polynomial -- https://en.wikipedia.org/wiki/Irreducible_polynomial
+- [Wikipedia: Irreducible polynomial][wiki-irreducible-polynomial]
 
 **多项式运算**：
 - Wikipedia: Polynomial long division -- https://en.wikipedia.org/wiki/Polynomial_long_division
@@ -44,7 +44,7 @@
 - ZFS checksum algorithms -- https://openzfs.github.io/openzfs-docs/Basic%20Concepts/Checksums.html
 
 **错误检测技术**：
-- Reed-Solomon codes -- https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction
+- [Reed-Solomon codes][wiki-reed-solomon]
 - Hamming codes -- https://en.wikipedia.org/wiki/Hamming_code
 
 ## 实用工具

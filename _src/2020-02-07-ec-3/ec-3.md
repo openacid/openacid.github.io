@@ -29,18 +29,10 @@ refs:
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
     - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
-    - "Finite-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Finite-Field"
-    - "Galois-Field":     https://en.wikipedia.org/wiki/Finite_field                           "Galois-Field"
-    - "Reed-Solomon":     https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction  "Reed-Solomon error correction"
-    - "Erasure-Code":     https://en.wikipedia.org/wiki/Erasure_code                           "Erasure-Code"
-    - "Prime-Polynomial": https://en.wikipedia.org/wiki/Irreducible_polynomial                 "Prime-Polynomial"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
     - "Generator-Matrix": https://en.wikipedia.org/wiki/Generator_matrix                       "Generator-Matrix"
-    - "第一篇:原理":      https://blog.openacid.com/storage/ec-1                               "第一篇:Erasure-Code-擦除码-1-原理篇"
-    - "第二篇:实现":      https://blog.openacid.com/storage/ec-2                               "第二篇:Erasure-Code-擦除码-2-实现篇"
-    - "第三篇:极限":      https://blog.openacid.com/storage/ec-3                               "第三篇:Erasure-Code-擦除码-3-极限篇"
     - "费马小定理的群论的证明":    https://en.wikipedia.org/wiki/Proofs_of_Fermat%27s_little_theorem#Proofs_using_group_theory "费马小定理的群论的证明"
 
     - "布鲁克·泰勒":   https://en.wikipedia.org/wiki/Taylor_series#Binomial_series "泰勒级数"
@@ -69,7 +61,7 @@ description: "没有人比我更懂EC(特辣脯口气): 从指令集和算法两
 
 # 书接上回
 
-上一篇 [第二篇:实现] 中, 我们介绍完了基于GF(2⁸)伽罗瓦域的标准实现以及做了正确性分析,
+上一篇 [第二篇:实现][post-ec-2] 中, 我们介绍完了基于GF(2⁸)伽罗瓦域的标准实现以及做了正确性分析,
 我们也提到:
 
 > 在EC的计算中, 编解码是一个比较耗时的过程,
@@ -79,9 +71,9 @@ description: "没有人比我更懂EC(特辣脯口气): 从指令集和算法两
 本文我们来介绍, 在实际生产环境使用时还需做哪些优化,
 来将EC打造成一个高效的实现.
 
-- [第一篇:原理] 再上一篇 🤔
-- [第二篇:实现] 上一篇 🤔
-- [第三篇:极限] 我们在这 😁
+- [第一篇:原理][post-ec-1] 再上一篇 🤔
+- [第二篇:实现][post-ec-2] 上一篇 🤔
+- [第三篇:极限][post-ec-3] 我们在这 😁
 
 
 优化从两方面入手, 一方面是如何加快运算, 一方面是如何减少运算.
@@ -593,6 +585,6 @@ $$
 EC系列完. 感谢大家听我叨逼叨.
 
 > EC擦除码系列:
-> - [第一篇:原理]
-> - [第二篇:实现]
-> - [第三篇:极限]
+> - [第一篇:原理][post-ec-1]
+> - [第二篇:实现][post-ec-2]
+> - [第三篇:极限][post-ec-3]

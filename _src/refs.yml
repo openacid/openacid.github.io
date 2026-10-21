@@ -15,7 +15,19 @@ universal:
 
   - "ref-classic-paxos": http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple "classic paxos"
 
+  - "ref-raft": https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
+  - "ref-paxos-simple": https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
+  - "ref-flexible-paxos": 'https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"'
+  - "ref-raft-single-server-bug": https://gist.github.com/ongardie/a11f32b70581e20d6bcd "Safety of Raft single-server membership changes"
+  - "docs-openraft-io-ordering": 'https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md "OpenRaft docs: io-ordering"'
+
   # wiki
+  - "wiki-erasure-code": https://en.wikipedia.org/wiki/Erasure_code "Erasure code"
+  - "wiki-reed-solomon": https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction "Reed-Solomon error correction"
+  - "wiki-finite-field": https://en.wikipedia.org/wiki/Finite_field "Finite field"
+  - "wiki-irreducible-polynomial": https://en.wikipedia.org/wiki/Irreducible_polynomial "Irreducible polynomial"
+  - "wiki-zipf": https://en.wikipedia.org/wiki/Zipf%27s_law "Zipf's law"
+
   - "wiki-2pc":  https://en.wikipedia.org/wiki/Two-phase_commit_protocol "Two phase commit"
   - "wiki-dict-order":  https://en.wikipedia.org/wiki/Lexicographic_order "Dictionary order"
   - "wiki-partial-order": https://en.wikipedia.org/wiki/Partially_ordered_set "Partial Order"
@@ -46,10 +58,19 @@ universal:
   - "repo-leveldb": https://github.com/google/leveldb "leveldb"
   - "repo-consensus-bug-paxos": https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
 
+  - "repo-hashicorp-raft": https://github.com/hashicorp/raft "HashiCorp Raft"
+  - "repo-etcd-raft": https://github.com/etcd-io/raft "etcd/raft"
+  - "repo-sofa-jraft": https://github.com/sofastack/sofa-jraft "SOFAJRaft"
+  - "repo-tikv": https://github.com/tikv/tikv "TiKV"
+
   # data structure impl
   - "impl-google-btree": https://github.com/google/btree "btree"
 
   # my articles
+  - "post-ec-1": https://blog.openacid.com/storage/ec-1 "第一篇:Erasure-Code-擦除码-1-原理篇"
+  - "post-ec-2": https://blog.openacid.com/storage/ec-2 "第二篇:Erasure-Code-擦除码-2-实现篇"
+  - "post-ec-3": https://blog.openacid.com/storage/ec-3 "第三篇:Erasure-Code-擦除码-3-极限篇"
+
   - "post-zipf": https://blog.openacid.com/tech/zipf/  "互联网中对象访问频率的91分布"
   - "post-paxos":  https://blog.openacid.com/algo/paxos/ "可靠分布式系统-paxos的直观解释"
   - "post-paxoskv": https://blog.openacid.com/algo/paxoskv/ "200行代码实现基于paxos的kv存储"

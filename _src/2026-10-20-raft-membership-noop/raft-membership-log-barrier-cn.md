@@ -122,7 +122,7 @@ term 3 的 noop 用来满足 Raft 的提交规则：`Cu` 属于 term 1，`a` 在
 
 > 新 leader 必须先提交一条自己当前 term 的日志，才允许追加成员变更日志。
 
-也就是说，term 2 的 `d` 必须先在 `C0` 下提交一条 term 2 日志，再提出 `Cv`。`C0` 的一个 quorum 因此保存比 term 1 的 `Cu` 更新的日志，能够拒绝只持有 `Cu` 的 `a`。这是 [Ongaro 对单步成员变更给出的修正条件][ref-single-safety]。
+也就是说，term 2 的 `d` 必须先在 `C0` 下提交一条 term 2 日志，再提出 `Cv`。`C0` 的一个 quorum 因此保存比 term 1 的 `Cu` 更新的日志，能够拒绝只持有 `Cu` 的 `a`。这是 [Ongaro 对单步成员变更给出的修正条件][ref-raft-single-server-bug]。
 
 ## 5. 标准 joint 的两步变更都无需额外的 noop 提交 barrier
 
@@ -218,5 +218,3 @@ if cluster_committed >= Some(noop_log_id) {
 
 [post-raft-bug]: /distributed/raft-bug-cn/ "Raft 成员变更上踩的坑"
 [post-rw-quorum]: /distributed/raft-rw-quorum/ "从 Flexible Paxos 到 Raft：read-write quorum"
-[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
-[ref-single-safety]: https://gist.github.com/ongardie/a11f32b70581e20d6bcd "Diego Ongaro：Safety of Raft single-server membership changes"

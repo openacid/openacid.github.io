@@ -27,9 +27,6 @@ refs:
     - "Byzantine Paxos":                     https://en.wikipedia.org/wiki/Paxos_(computer_science)#Byzantine_Paxos       "Byzantine Paxos"
     - "Classic Paxos":                       http://lamport.azurewebsites.net/pubs/pubs.html#paxos-simple                 "Classic Paxos"
     - "Fast Paxos":                          http://lamport.azurewebsites.net/pubs/pubs.html#fast-paxos                   "Fast Paxos"
-    - "EC第一篇:原理":                       https://blog.openacid.com/storage/ec-1                                       "第一篇:Erasure-Code-擦除码-1-原理篇"
-    - "EC第二篇:实现":                       https://blog.openacid.com/storage/ec-2                                       "第二篇:Erasure-Code-擦除码-2-实现篇"
-    - "EC第三篇:极限":                       https://blog.openacid.com/storage/ec-3                                       "第三篇:Erasure-Code-擦除码-3-极限篇"
 
 mathjax: false
 toc: true
@@ -143,7 +140,7 @@ paxos的工作, 就是把一堆运行的机器协同起来, 让多个机器成�
 
 <a id="slide-04"></a>
 **slide-04**<br/>
-几乎所有的分布式存储(甚至单机系统, 参考[EC第一篇:原理], [EC第二篇:实现], [EC第三篇:极限]) 都必须用某种冗余的方式在廉价硬件的基础上搭建高可靠的存储.
+几乎所有的分布式存储(甚至单机系统, 参考[EC第一篇:原理][post-ec-1], [EC第二篇:实现][post-ec-2], [EC第三篇:极限][post-ec-3]) 都必须用某种冗余的方式在廉价硬件的基础上搭建高可靠的存储.
 而冗余的基础就是多副本策略, 一份数据存多份.
 多副本保证了可靠性, 而副本之间的一致, 就需要paxos这类分布式一致性算法来保证.
 

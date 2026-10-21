@@ -343,7 +343,7 @@ Joint state 还是 Uniform config 阶段:
 
 ## 参考资料
 
-- Diego Ongaro & John Ousterhout. In Search of an Understandable Consensus Algorithm (Raft 原论文): https://raft.github.io/raft.pdf
+- [Diego Ongaro & John Ousterhout. In Search of an Understandable Consensus Algorithm (Raft 原论文)][ref-raft]
 - OpenRaft(rust): https://github.com/databendlabs/openraft
-- etcd/raft 项目源码: https://github.com/etcd-io/raft
-- Hashicorp Raft 实现: https://github.com/hashicorp/raft
+- [etcd/raft 项目源码][repo-etcd-raft]
+- [Hashicorp Raft 实现][repo-hashicorp-raft]

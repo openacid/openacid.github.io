@@ -28,7 +28,7 @@ description: "Raft's single-server membership change carries two problems: its m
 A while back, over coffee, a friend described a problem their team had hit with [Raft][] in production.
 It looks like a small detail. It cost them a whole cluster.
 
-Their implementation uses [single-server change][]:
+Their implementation uses [single-server change][ref-raft-single-server-bug]:
 to change the replica set, you add or remove one node at a time.
 Moving from `abc` to `bcd` takes two steps.
 First add `d`, which gives `abcd`. Then remove `a`, which gives `bcd`.
@@ -390,5 +390,4 @@ it removes the bug, and it is less code than a correct single-server change.
 
 
 [Raft]: https://raft.github.io/ "Raft"
-[single-server change]: https://gist.github.com/ongardie/a11f32b70581e20d6bcd "Single-server membership change"
 [A Minority Implementation of Majority Read/Write]: https://blog.openacid.com/algo/quorum/ "A Minority Implementation of Majority Read/Write"

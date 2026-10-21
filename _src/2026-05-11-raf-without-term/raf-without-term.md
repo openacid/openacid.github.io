@@ -413,4 +413,3 @@ Repository: [raf][] (`v0.1.1`).
 
 [raf]: https://github.com/drmingdrmer/raf/tree/v0.1.1 "raf"
 [raft]: https://raft.github.io/ "Raft"
-[raft-paper]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"

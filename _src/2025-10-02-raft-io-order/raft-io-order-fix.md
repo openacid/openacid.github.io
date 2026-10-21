@@ -318,13 +318,7 @@ Most production systems choose option 1—it's simpler to reason about and avoid
 ## Related Resources
 
 - [The Hidden Danger in Raft: Why IO Ordering Matters][post-raft-io-order]
-- [OpenRaft docs: io-ordering][]
-- [tikv/tikv][]
-- [hashicorp/raft][]
-- [sofastack/sofa-jraft][]
-
-
-[OpenRaft docs: io-ordering]: https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md
-[tikv/tikv]: https://github.com/tikv/tikv
-[hashicorp/raft]: https://github.com/hashicorp/raft
-[sofastack/sofa-jraft]: https://github.com/sofastack/sofa-jraft
+- [OpenRaft docs: io-ordering][docs-openraft-io-ordering]
+- [tikv/tikv][repo-tikv]
+- [hashicorp/raft][repo-hashicorp-raft]
+- [sofastack/sofa-jraft][repo-sofa-jraft]

@@ -253,7 +253,7 @@ Stick with Joint Consensus. It's cleaner, simpler, and solves the problem direct
 
 ## References
 
-- Diego Ongaro & John Ousterhout. In Search of an Understandable Consensus Algorithm (Raft paper): https://raft.github.io/raft.pdf
+- [Diego Ongaro & John Ousterhout. In Search of an Understandable Consensus Algorithm (Raft paper)][ref-raft]
 - OpenRaft(rust): https://github.com/databendlabs/openraft
-- etcd/raft source code: https://github.com/etcd-io/raft
-- Hashicorp Raft implementation: https://github.com/hashicorp/raft
+- [etcd/raft source code][repo-etcd-raft]
+- [Hashicorp Raft implementation][repo-hashicorp-raft]

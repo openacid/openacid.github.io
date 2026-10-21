@@ -235,9 +235,6 @@ Raft 中 leader 按以下顺序推进成员变更:
 
 Raft 的 read-write quorum 设计, 需要让 quorum 交集与 LeaderId 规则共同保护已提交日志. 方法一通过 read quorum 两两相交, 保留每个 term 至多一个 leader 的约束; 方法二通过全序的 LeaderId 和配套的投票、日志匹配、复制及提交规则, 允许 read quorum 之间不相交. 在固定配置内, 两种方法都要求任意 read quorum 与任意 write quorum 相交. ReadIndex 和成员变更也必须满足所选方法的身份规则与交集要求. 最终的 quorum 配置需要兼顾提交等待开销、故障后的可用性和协议改造成本.
 
-[ref-paxos-simple]: https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
-[ref-flexible-paxos]: https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"
-[ref-raft]: https://raft.github.io/raft.pdf "In Search of an Understandable Consensus Algorithm"
 [code-openraft-leader-id-cmp]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/vote/leader_id/leader_id_cmp.rs#L9-L27 "OpenRaft: LeaderId 的偏序比较规则"
 [code-openraft-vote]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/vote_handler/mod.rs#L101-L155 "OpenRaft: 完整 leader 身份的投票与持久化"
 [code-openraft-prefix]: https://github.com/databendlabs/openraft/blob/728e66bba05c4305dd37016535d1c247a35d2059/openraft/src/engine/handler/following_handler/mod.rs#L120-L139 "OpenRaft: 完整 log ID 的前缀检查"

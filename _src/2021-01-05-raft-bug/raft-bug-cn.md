@@ -15,7 +15,6 @@ tags:
 refs:
     - "多数派读写的少数派实现": https://blog.openacid.com/algo/quorum/           "多数派读写的少数派实现"
     - "Raft":                   https://Raft.github.io/                          "Raft"
-    - "单步变更":               https://gist.github.com/ongardie/a11f32b70581e20d6bcd "单步变更"
 
 platform_refs:
     wechat:
@@ -38,7 +37,7 @@ description: "Raft 在单步成员变更的设计上存在缺陷, 一定要抛�
 
 上次跟朋友在咖啡厅撩天的时候谈笑风生地探讨了一个 [Raft][] 在生产环境中遇到的问题:
 
-他们的 Raft 实现, 使用的是 [单步变更][] 算法(每次添加或删除一个节点),
+他们的 Raft 实现, 使用的是 [单步变更][ref-raft-single-server-bug] 算法(每次添加或删除一个节点),
 例如副本由 `abc` 变成 `bcd` 过程中,
 先加入 `d`, 变成 `abcd` , 再去掉 `a` 变成最终配置 `bcd`.
 
