@@ -19,6 +19,7 @@ universal:
   - "ref-paxos-simple": https://lamport.azurewebsites.net/pubs/paxos-simple.pdf "Paxos Made Simple"
   - "ref-flexible-paxos": 'https://arxiv.org/pdf/1608.06696 "Flexible Paxos: Quorum intersection revisited"'
   - "ref-raft-single-server-bug": https://gist.github.com/ongardie/a11f32b70581e20d6bcd "Safety of Raft single-server membership changes"
+  - "ref-mongo-logless-reconfig": https://arxiv.org/abs/2102.11960 "Design and Analysis of a Logless Dynamic Reconfiguration Protocol"
   - "docs-openraft-io-ordering": 'https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md "OpenRaft docs: io-ordering"'
 
   # wiki
@@ -58,6 +59,7 @@ universal:
   - "repo-ezraft-kvstore": https://github.com/drmingdrmer/ezraft/blob/main/examples/kvstore.rs "ezraft kvstore example"
   - "crates-ezraft": https://crates.io/crates/ezraft "ezraft on crates.io"
   - "docs-ezraft": https://docs.rs/ezraft "ezraft docs"
+  - "repo-quorum-set": https://github.com/drmingdrmer/quorum-set "quorum-set"
   - "repo-leveldb": https://github.com/google/leveldb "leveldb"
   - "repo-consensus-bug-paxos": https://github.com/drmingdrmer/consensus-bugs#trap-the-bug-in-paxos-made-simple "(Not a) bug in Paxos"
 
@@ -79,6 +81,7 @@ universal:
   - "post-paxoskv": https://blog.openacid.com/algo/paxoskv/ "200行代码实现基于paxos的kv存储"
   - "post-quorum": https://blog.openacid.com/algo/quorum/ "多数派读写的少数派实现"
   - "post-raft-bug": https://blog.openacid.com/distributed/raft-bug/ "Raft 成员变更上踩的坑"
+  - "post-raft-bug-cn": https://blog.openacid.com/distributed/raft-bug-cn/ "Raft 成员变更上踩的坑"
   - "post-mmp3": https://blog.openacid.com/algo/mmp3/ "Multi-Master-Paxos 3"
   - "post-apaxos": https://blog.openacid.com/algo/abstract-paxos/ "Abstract-Paxos 统一 Paxos 和 Raft"
   - "post-raft-io-order": https://blog.openacid.com/algo/raft-io-order/ "The Hidden Danger in Raft Why IO Ordering Matters"
@@ -87,6 +90,7 @@ universal:
   # 中文版发布后再补 "post-raft-rejoin-bug-cn", 目前只有英文版
   - "post-linearizable": https://blog.openacid.com/algo/linearizable/ "分布式系统中的 Linearizable 事务"
   - "post-openraft-read": https://blog.openacid.com/algo/openraft-read/ "Openraft 对 ReadIndex 的优化"
+  - "post-raft-membership-log-barrier": 'https://blog.openacid.com/distributed/raft-membership-log-barrier/ "Raft Membership Changes: When a Leader Must Commit a Current-Term Entry First"'
 
   - "discuss-paxos": https://github.com/openacid/openacid.github.io/discussions/31 "paxos的读者答疑"
 
