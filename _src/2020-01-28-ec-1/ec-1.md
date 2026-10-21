@@ -20,12 +20,10 @@ tags:
     - GF256
 
 refs:
-    - "Vandermonde":      https://en.wikipedia.org/wiki/Vandermonde_matrix                     "Vandermonde matrix"
     - "Cauchy":           https://en.wikipedia.org/wiki/Cauchy_matrix                          "Cauchy matrix"
     - "failure-rate":     https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/ "HDD Failure Rate"
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
-    - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
@@ -229,9 +227,9 @@ $$
 
 解出上面这个方程组, 就找回了丢失的 `u₁, u₂` .
 
-> 以上这种**加系数**计算校验块的方式, 就是[RAID-6]的基本工作方式:
+> 以上这种**加系数**计算校验块的方式, 就是[RAID-6][wiki-raid-6]的基本工作方式:
 >
-> [RAID-6]为k个数据块(例如k=10)之外再多存储2个校验数据,
+> [RAID-6][wiki-raid-6]为k个数据块(例如k=10)之外再多存储2个校验数据,
 > 当整个系统丢失2块数据时, 都可以找回.
 
 > 为什么计算 `y₂` 的系数是1, 2, 4, 8...? 系数的选择有很多种方法, 1, 2, 4, 8是其中一个.
@@ -266,12 +264,12 @@ $$
 到此为止, 就是EC算法的核心思想了.
 接下来, 我们再深入1点, 从另外1个角度来解释下为什么要选择这样1组系数.
 
-> 现实中使用的[RAID-5]和[RAID-6]都是 EC 算法的子集.
+> 现实中使用的[RAID-5]和[RAID-6][wiki-raid-6]都是 EC 算法的子集.
 > EC 是更具通用性的算法. 但因为实现的成本(主要是恢复数据时的计算开销), [RAID-5] 和
-> [RAID-6]在单机的可靠性实现中还是占主流地位.
+> [RAID-6][wiki-raid-6]在单机的可靠性实现中还是占主流地位.
 >
 > 但随着存储量的不断增大, 百PB的存储已经不算是很极端场景了.
-> [RAID-6] 在单机环境下不算高的数据丢失风险在大数据量的场景中显示的越来越明显.
+> [RAID-6][wiki-raid-6] 在单机环境下不算高的数据丢失风险在大数据量的场景中显示的越来越明显.
 > 于是在云存储(大规模存储)领域, 能支持更多的冗余校验块的EC成为了主流.
 
 
@@ -427,9 +425,9 @@ $$
 这里 `y₁, y₂ ...` 就是校验块的数据,
 因此, 上面[栗子3](#栗子3-实现km的冗余策略)中选择的系数, 就是从这里来的.
 
-**而这个矩阵, 就是著名的 [Vandermonde] 矩阵**.
+**而这个矩阵, 就是著名的 [Vandermonde][wiki-vandermonde] 矩阵**.
 
-> [Vandermonde] 矩阵只是 EC 其中1种系数的选择方式.
+> [Vandermonde][wiki-vandermonde] 矩阵只是 EC 其中1种系数的选择方式.
 > 其他常用的系数矩阵还有 [Cauchy] 矩阵等.
 
 
@@ -437,12 +435,12 @@ $$
 #  EC的解码: 求解n元一次方程组
 
 EC生成校验块的过程称之为EC的**编码**,
-也就是用[Vandermonde]矩阵去乘所有的数据块.
+也就是用[Vandermonde][wiki-vandermonde]矩阵去乘所有的数据块.
 
 而当数据丢失需要找回的时候,
 使用的是EC的**解码**过程.
 
-既然EC的编码过程是**编码矩阵**([Vandermonde])和数据块列相乘:
+既然EC的编码过程是**编码矩阵**([Vandermonde][wiki-vandermonde])和数据块列相乘:
 
 $$
 \begin{bmatrix}
@@ -503,10 +501,10 @@ $$
 这个矩阵表示的方程组里有2个未知数 `u₂, u₃` ,
 解方程即可得到 `u₂, u₃` 这2块丢失的数据.
 
-##  [Vandermonde] 矩阵保证方程组有解
+##  [Vandermonde][wiki-vandermonde] 矩阵保证方程组有解
 
 对于k+m的EC来说, 任意丢失m个数据块都可以将其找回.
-因为我们选择的[Vandermonde] 矩阵保证了任意`m`行`m`列组成的子矩阵都是线性无关的,
+因为我们选择的[Vandermonde][wiki-vandermonde] 矩阵保证了任意`m`行`m`列组成的子矩阵都是线性无关的,
 构成的方程肯定有确定解. 例如:
 
 $$
@@ -519,15 +517,15 @@ V=\begin{bmatrix}
 \end{bmatrix}
 $$
 
-- [Vandermonde] 的 行列式的值为:
+- [Vandermonde][wiki-vandermonde] 的 行列式的值为:
 
     $$
     \det(V)=\prod_{1 \leq i \lt j \leq n}(x_j - x_i)
     $$
 
-    只要 xᵢ 都不同, 则 [Vandermonde] 矩阵的行列式就不为0, 矩阵可逆, 表示方程有唯一解.
+    只要 xᵢ 都不同, 则 [Vandermonde][wiki-vandermonde] 矩阵的行列式就不为0, 矩阵可逆, 表示方程有唯一解.
 
-- [Vandermonde] 矩阵的任意 `m x m` 的子矩阵, 是一个Generalized Vandermonde Matrix,
+- [Vandermonde][wiki-vandermonde] 矩阵的任意 `m x m` 的子矩阵, 是一个Generalized Vandermonde Matrix,
   它在 xᵢ 都为正数时可以保证永远有唯一解.
 
   因此在**实数**领域, 我们总能保证上面这个冗余策略很好的工作.
@@ -538,7 +536,7 @@ $$
 
 但这套理论还不能直接应用到线上产品中.
 因为计算机中还要考虑数字大小限制, 例如k个32位整数作为数据,
-通过[Vandermonde]矩阵生成校验块, 那校验块的数值几乎确定会溢出.
+通过[Vandermonde][wiki-vandermonde]矩阵生成校验块, 那校验块的数值几乎确定会溢出.
 
 下一篇 Erasure-Code-擦除码-2-实现篇 中,
 我们会展示出算数和计算机算法之间的差异,

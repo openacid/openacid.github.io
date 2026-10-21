@@ -23,12 +23,10 @@ tags:
     - Hitchhiker
 
 refs:
-    - "Vandermonde":      https://en.wikipedia.org/wiki/Vandermonde_matrix                     "Vandermonde matrix"
     - "Cauchy":           https://en.wikipedia.org/wiki/Cauchy_matrix                          "Cauchy matrix"
     - "failure-rate":     https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/ "HDD Failure Rate"
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
-    - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
@@ -486,7 +484,7 @@ $$
 | 1   | 2   | 1 x 10⁻¹² (1个数据块+2个校验块 可靠性 和 3副本等价) |
 | 2   | 2   | 3 x 10⁻¹²                                           |
 | 3   | 2   | 9 x 10⁻¹²                                           |
-| 10  | 2   | 2 x 10⁻¹⁰ (10+2 和 12盘服务器的 [RAID-6] 等价)      |
+| 10  | 2   | 2 x 10⁻¹⁰ (10+2 和 12盘服务器的 [RAID-6][wiki-raid-6] 等价)      |
 | 32  | 2   | 5 x 10⁻⁹                                            |
 | 64  | 2   | 4 x 10⁻⁸                                            |
 

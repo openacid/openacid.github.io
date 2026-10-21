@@ -20,12 +20,10 @@ tags:
     - GF256
 
 refs:
-    - "Vandermonde":      https://en.wikipedia.org/wiki/Vandermonde_matrix                     "Vandermonde matrix"
     - "Cauchy":           https://en.wikipedia.org/wiki/Cauchy_matrix                          "Cauchy matrix"
     - "failure-rate":     https://www.backblaze.com/blog/hard-drive-reliability-stats-q1-2016/ "HDD Failure Rate"
     - "RAID":             https://zh.wikipedia.org/wiki/RAID                                   "RAID"
     - "RAID-5":           https://zh.wikipedia.org/wiki/RAID#RAID_5                            "RAID-5"
-    - "RAID-6":           https://zh.wikipedia.org/wiki/RAID#RAID_6                            "RAID-6"
     - "Field-Extension":  https://en.wikipedia.org/wiki/Field_extension                        "Field-Extension"
     - "Complex-Number":   https://en.wikipedia.org/wiki/Irreducible_polynomial#Field_extension "Complex-Number"
     - "Hamming-7-4":      https://en.wikipedia.org/wiki/Hamming(7,4)                           "Hamming(7, 4)"
@@ -53,7 +51,7 @@ description: "本文介绍了如何在计算机有限的数字精度内实现高
 
 > 但这套理论还不能直接应用到线上产品中.
 > 因为计算机中还要考虑数字大小限制, 例如k个32位整数作为数据,
-> 通过[Vandermonde]矩阵生成校验块, 那校验块的数值几乎确定会溢出.
+> 通过[Vandermonde][wiki-vandermonde]矩阵生成校验块, 那校验块的数值几乎确定会溢出.
 
 本文我们来解决这个问题, 看如何将EC的理论应用到计算机中, 保证计算不会溢出.
 
@@ -810,7 +808,7 @@ $$
 
 通常使用1个矩阵来表示输入和输出的关系
 (而不是像上文中只使用校验块的生成矩阵),
-这里选择1, 2, 3..生成的 [Vandermonde] 矩阵:
+这里选择1, 2, 3..生成的 [Vandermonde][wiki-vandermonde] 矩阵:
 
 $$
 \begin{bmatrix}
@@ -954,7 +952,7 @@ $$
 
 在 [第一篇:原理][post-ec-1] 中通提到:
 
-> [Vandermonde] 矩阵的任意 `m * m` 的子矩阵, 是一个Generalized Vandermonde Matrix,
+> [Vandermonde][wiki-vandermonde] 矩阵的任意 `m * m` 的子矩阵, 是一个Generalized Vandermonde Matrix,
 >  它在 xᵢ 都为正数时可以保证永远有唯一解.
 
 但在GF(2⁸) 中不成立.

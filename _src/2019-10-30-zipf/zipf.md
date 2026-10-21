@@ -118,7 +118,7 @@ a的值只跟最初选择的p相关.
 
 这也很简单, 拿到一段访问日志后,
 首先统计独立url计数,
-然后 通过[多项式回归][]拟合一条直线
+然后 通过[多项式回归][wiki-polynomial-regression]拟合一条直线
 
 例如我们使用预先准备好的url计数文件
 [file-access-count.txt][]
@@ -177,4 +177,3 @@ Discover, Design, Distribute
 
 [find-zipf.py]:find-zipf.py
 [file-access-count.txt]:file-access-count.txt
-[多项式回归]: https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92

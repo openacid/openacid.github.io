@@ -22,6 +22,9 @@ universal:
   - "docs-openraft-io-ordering": 'https://github.com/databendlabs/openraft/blob/main/openraft/src/docs/protocol/io_ordering.md "OpenRaft docs: io-ordering"'
 
   # wiki
+  - "wiki-vandermonde": https://en.wikipedia.org/wiki/Vandermonde_matrix "Vandermonde matrix"
+  - "wiki-raid-6": https://zh.wikipedia.org/wiki/RAID#RAID_6 "RAID-6"
+  - "wiki-polynomial-regression": https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%9B%9E%E5%BD%92 "多项式回归"
   - "wiki-erasure-code": https://en.wikipedia.org/wiki/Erasure_code "Erasure code"
   - "wiki-reed-solomon": https://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction "Reed-Solomon error correction"
   - "wiki-finite-field": https://en.wikipedia.org/wiki/Finite_field "Finite field"
