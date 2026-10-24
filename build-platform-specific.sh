@@ -16,8 +16,8 @@ md2zhihu_platforms="zhihu wechat weibo github minimal_mistake simple transparent
 
 
 
-# Call xp-md2html to convert md to html, using github-markdown.css
-# xp-md2html is a personal repo
+# Call xpmd to convert md to html, using github-markdown.css
+# xpmd is from xp-md2html, a personal repo
 acid_md2html()
 {
     local src_path="$1"
@@ -53,7 +53,7 @@ acid_md2html()
 <article class="markdown-body">
 END
 
-        cat "$src_path" | xp-md2html
+        xpmd render-markdown --bare -i "$src_path"
 
         cat <<-END
 <img src="qrcode-hori.jpg" />
