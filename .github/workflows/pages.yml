@@ -1,15 +1,19 @@
 # Build the site and publish it to GitHub Pages.
 # The repo setting Pages > Source must be "GitHub Actions".
+# A push to ci only builds the site, to test a commit before main receives it.
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
       - main
+      - ci
   workflow_dispatch:
 
+# A group keeps only its newest queued run, so with one group for both branches,
+# a queued build of ci would cancel a queued deploy of main.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -44,6 +48,7 @@ jobs:
           path: public
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:

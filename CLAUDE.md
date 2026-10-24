@@ -75,5 +75,6 @@ and `feed.xml`. Shared reference titles also affect tooltips and the
 generated `Reference:` lists, so those changes can be expected.
 
 `.github/workflows/pages.yml` builds with Hugo 0.164.0 and deploys `public/`
-to GitHub Pages on pushes to `main`. Local build history is for debugging;
+to GitHub Pages on pushes to `main`. A push to `ci` runs only the build, to
+test a commit before `main` receives it. Local build history is for debugging;
 deployment uses the source repository's workflow.
