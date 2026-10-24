@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "group",
+      "type": "file",
+      "file": "math/group-theory/group.md",
+      "x": 0,
+      "y": 160,
+      "width": 320,
+      "height": 340,
+      "color": "4"
+    },
+    {
+      "id": "subgroup",
+      "type": "file",
+      "file": "math/group-theory/subgroup.md",
+      "x": 440,
+      "y": 0,
+      "width": 320,
+      "height": 300,
+      "color": "4"
+    },
+    {
+      "id": "cyclic-group",
+      "type": "file",
+      "file": "math/group-theory/cyclic-group.md",
+      "x": 880,
+      "y": 420,
+      "width": 320,
+      "height": 300,
+      "color": "5"
+    },
+    {
+      "id": "coset",
+      "type": "file",
+      "file": "math/group-theory/coset.md",
+      "x": 880,
+      "y": 0,
+      "width": 320,
+      "height": 300,
+      "color": "5"
+    },
+    {
+      "id": "lagranges-theorem",
+      "type": "file",
+      "file": "math/group-theory/lagranges-theorem.md",
+      "x": 1320,
+      "y": 0,
+      "width": 320,
+      "height": 340,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "group-subgroup",
+      "fromNode": "group",
+      "fromSide": "right",
+      "toNode": "subgroup",
+      "toSide": "left"
+    },
+    {
+      "id": "group-cyclic-group",
+      "fromNode": "group",
+      "fromSide": "right",
+      "toNode": "cyclic-group",
+      "toSide": "left"
+    },
+    {
+      "id": "subgroup-cyclic-group",
+      "fromNode": "subgroup",
+      "fromSide": "right",
+      "toNode": "cyclic-group",
+      "toSide": "left"
+    },
+    {
+      "id": "subgroup-coset",
+      "fromNode": "subgroup",
+      "fromSide": "right",
+      "toNode": "coset",
+      "toSide": "left"
+    },
+    {
+      "id": "coset-lagranges-theorem",
+      "fromNode": "coset",
+      "fromSide": "right",
+      "toNode": "lagranges-theorem",
+      "toSide": "left"
+    }
+  ]
+}

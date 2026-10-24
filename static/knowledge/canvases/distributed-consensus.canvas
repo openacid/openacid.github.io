@@ -1,0 +1,67 @@
+{
+  "nodes": [
+    {
+      "id": "majority",
+      "type": "file",
+      "file": "distributed-consensus/majority.md",
+      "x": 0,
+      "y": 180,
+      "width": 360,
+      "height": 300,
+      "color": "4"
+    },
+    {
+      "id": "quorum-intersection",
+      "type": "file",
+      "file": "distributed-consensus/quorum-intersection.md",
+      "x": 480,
+      "y": 180,
+      "width": 360,
+      "height": 300,
+      "color": "4"
+    },
+    {
+      "id": "acceptor-promises",
+      "type": "file",
+      "file": "distributed-consensus/acceptor-promises.md",
+      "x": 480,
+      "y": -240,
+      "width": 360,
+      "height": 300,
+      "color": "5"
+    },
+    {
+      "id": "paxos",
+      "type": "file",
+      "file": "distributed-consensus/paxos.md",
+      "x": 960,
+      "y": 0,
+      "width": 360,
+      "height": 420,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "majority-quorum-intersection",
+      "fromNode": "majority",
+      "fromSide": "right",
+      "toNode": "quorum-intersection",
+      "toSide": "left"
+    },
+    {
+      "id": "quorum-intersection-paxos",
+      "fromNode": "quorum-intersection",
+      "fromSide": "right",
+      "toNode": "paxos",
+      "toSide": "left"
+    },
+    {
+      "id": "acceptor-promises-paxos",
+      "fromNode": "acceptor-promises",
+      "fromSide": "right",
+      "toNode": "paxos",
+      "toSide": "left"
+    }
+  ]
+}

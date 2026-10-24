@@ -50,6 +50,9 @@ outputs:
 
 menus:
   main:
+    - name: Knowledge
+      url: /knowledge/
+      weight: -10
     - name: About Us
       url: https://github.com/orgs/openacid/people
 
@@ -57,6 +60,9 @@ params:
   name: OpenACID - Distributed Systems Research
   description: Distributed systems research notes.
   logo: /assets/images/logo/icon-lemon-margin.png
+  knowledge:
+    renderer: https://cdn.jsdelivr.net/gh/drmingdrmer/obsidian-canvas-render@3802736acd28423c2cc86275156ce10f704e8cc0/canvas-render.js
+    vault: /knowledge/vault/
   giscus:
     repo: openacid/openacid.github.io
     repo_id: MDEwOlJlcG9zaXRvcnkxNjc1MTA3ODk=

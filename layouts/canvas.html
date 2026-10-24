@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <header class="canvas-heading">
+    <a href="{{ relURL "knowledge/" }}">All topics</a>
+    <h1>{{ .Title }}</h1>
+    <p id="canvas-help">Arrows point from prerequisites to the ideas that use them.</p>
+  </header>
+  <p class="canvas-message" id="canvas-status" role="status">Loading knowledge map…</p>
+  <div id="knowledge-board" role="region" aria-label="{{ .Title }} knowledge map"
+       aria-describedby="canvas-help" aria-busy="true"
+       data-canvas="{{ .Params.canvas }}"
+       data-vault="{{ .Params.vault | default site.Params.knowledge.vault }}"
+       data-renderer="{{ site.Params.knowledge.renderer }}"></div>
+  <noscript><p class="canvas-message">Enable JavaScript to explore this knowledge map.</p></noscript>
+  {{ with resources.Get "js/knowledge.js" }}
+    {{ $script := . | minify | fingerprint "sha256" }}
+    <script type="module" src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+  {{ end }}
+{{ end }}

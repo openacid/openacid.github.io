@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <section class="hero">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+  </section>
+  <nav class="post-list" aria-label="Knowledge topics">
+    {{ range .Params.topics }}
+      {{ with site.GetPage . }}
+        <article>
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <p>{{ .Description }}</p>
+        </article>
+      {{ else }}
+        {{ errorf "Knowledge topic %q has no content page" . }}
+      {{ end }}
+    {{ end }}
+  </nav>
+{{ end }}

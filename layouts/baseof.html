@@ -12,12 +12,12 @@
   <title>{{ $title }}{{ if not .IsHome }} - {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ $description }}">
   <link rel="canonical" href="{{ .Permalink }}">
-  <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+  <meta property="og:type" content="{{ if and .IsPage (eq .Section "posts") }}article{{ else }}website{{ end }}">
   <meta property="og:site_name" content="{{ site.Title }}">
   <meta property="og:title" content="{{ $title }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta property="og:description" content="{{ $description }}">
-  {{ if .IsPage }}
+  {{ if and .IsPage (eq .Section "posts") }}
     <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
     {{ with index .Params.authors 0 }}
       <meta name="author" content="{{ (index hugo.Data.authors .).name }}">
@@ -40,7 +40,7 @@
     {{ partialCached "math.html" . }}
   {{ end }}
 </head>
-<body>
+<body{{ if .Params.canvas }} class="canvas-page"{{ end }}>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="site-title" href="{{ site.Home.RelPermalink }}">

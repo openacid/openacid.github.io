@@ -343,6 +343,64 @@ a:focus-visible {
   color: var(--muted);
 }
 
+.canvas-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.canvas-page .site-header {
+  flex-shrink: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.canvas-page .site-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.canvas-page .site-footer {
+  display: none;
+}
+
+.canvas-heading {
+  align-items: baseline;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  padding: 0.65rem 1.5rem;
+}
+
+.canvas-heading h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.canvas-heading p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.canvas-message {
+  margin: 0;
+  padding: 1rem 1.5rem;
+}
+
+#knowledge-board {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
+
 @media (max-width: 800px) {
   body {
     font-size: 17px;
