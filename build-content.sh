@@ -10,7 +10,7 @@ set -e
 cd "$(dirname "$0")"
 
 # Another md2zhihu version may write other output, so the version is fixed.
-image=ghcr.io/drmingdrmer/md2zhihu:v0.19
+image=ghcr.io/drmingdrmer/md2zhihu:v0.20
 
 if [ "$1" != "--in-image" ]; then
     exec docker run --rm -v "$PWD:/work" --user "$(id -u):$(id -g)" "$image" ./build-content.sh --in-image
@@ -26,15 +26,13 @@ for path in $(grep -l '^url:' _src/*/*.md); do
 
     # The post and its images share a dir, so md2zhihu links an image by its file name.
     # The rewrite gives each image the URL it had on the Jekyll site.
+    # The platform hugo writes each formula on one line, between the math delimiters that hugo.yaml sets.
     md2zhihu \
-        --platform         minimal_mistake \
+        --platform         hugo \
         --refs             _src/refs.yml \
         --jekyll           \
         --asset-output-dir .build \
         --md-output        "$out" \
         --rewrite          "^" "/post-res/$name/" \
         "$path"
-
-    python3 to-hugo.py < "$out" > "$out.tmp"
-    mv "$out.tmp" "$out"
 done

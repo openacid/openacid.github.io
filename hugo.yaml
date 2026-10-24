@@ -73,7 +73,7 @@ markup:
     extensions:
       # kramdown leaves a bare URL as text.
       linkify: false
-      # to-hugo.py writes each block math between \[ and \]; the other $$...$$ are inline.
+      # md2zhihu -p hugo writes each block math between \[ and \]; the other $$...$$ are inline.
       passthrough:
         enable: true
         delimiters:

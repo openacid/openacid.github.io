@@ -8,7 +8,7 @@
 
 依赖：
 
-- [Docker](https://docs.docker.com/get-docker/)：`build-content.sh` 在镜像 `ghcr.io/drmingdrmer/md2zhihu:v0.19` 中运行 [md2zhihu](https://github.com/drmingdrmer/md2zhihu)。镜像里有 md2zhihu 用到的 graphviz、mermaid-cli 和 Chromium，所以本机不用安装它们。
+- [Docker](https://docs.docker.com/get-docker/)：`build-content.sh` 在镜像 `ghcr.io/drmingdrmer/md2zhihu:v0.20` 中运行 [md2zhihu](https://github.com/drmingdrmer/md2zhihu)。镜像里有 md2zhihu 用到的 graphviz、mermaid-cli 和 Chromium，所以本机不用安装它们。
 - [Hugo](https://gohugo.io/installation/)，测试用的是 v0.164.0。
 
 ```bash
@@ -27,7 +27,7 @@ hugo                 # 把整个网站生成到 public/
 
 ```text
 _src/<YYYY-MM-DD-目录>/<名字>.md     原稿；front matter 有 url: 的才发布
-  │  build-content.sh：md2zhihu 转换，再由 to-hugo.py 适配
+  │  build-content.sh：md2zhihu 用 hugo 平台转换
   ▼
 .build/<名字>/<名字>.md              每篇文章一个目录，放 Hugo 的文章输入
 .build/<名字>/<图片和附件>            网址是 /post-res/<名字>/<文件>，与 Jekyll 站点相同
@@ -40,7 +40,7 @@ public/                           完整的静态网站
 
 md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复制图片和附件，并把图表代码块画成图片。
 
-`to-hugo.py` 改写 `$$...$$` 公式。kramdown 把前后都是空行的 `$$...$$` 当作块公式，其余当作行内公式。Hugo 的 Markdown 解析器 Goldmark 不能这样区分，还会把引用块中跨行公式的 `>` 读进公式。所以 `to-hugo.py` 把每个公式合并成一行，并把块公式改写成 `\[...\]`。原稿中的公式仍写成 `$$...$$`：md2zhihu 只把 `$` 或 `$$` 之间的内容当作公式，生成知乎版和微信版时才能把公式画成图片。
+md2zhihu 的 `hugo` 平台改写 `$$...$$` 公式。kramdown 把前后都是空行的 `$$...$$` 当作块公式，其余当作行内公式。Hugo 的 Markdown 解析器 Goldmark 不能这样区分，还会把引用块中跨行公式的 `>` 读进公式。所以 `hugo` 平台把每个公式合并成一行，并把块公式改写成 `\[...\]`。原稿中的公式仍写成 `$$...$$`：md2zhihu 只把 `$` 或 `$$` 之间的内容当作公式，生成知乎版和微信版时才能把公式画成图片。
 
 ## 文件
 
@@ -69,10 +69,9 @@ md2zhihu 展开 `_src/refs.yml` 和原稿 `refs` 字段中的链接定义，复�
 | `toc`、`toc_label` | 是否显示目录，以及目录的标题 |
 | `mathjax` | 为 `true` 时加载 MathJax |
 
-两条限制：
+一条限制：
 
 - 不要修改已发布文章的 `url`。giscus 按网址路径找 GitHub Discussions 中的讨论，路径一变，旧评论就对不上了。
-- 列表项的第一行不能只有一个公式，例如 `- $$x$$`。kramdown 可能把它当作块公式，`to-hugo.py` 无法照做，遇到时报错退出。
 
 ## 没有迁移的内容
 

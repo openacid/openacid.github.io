@@ -38,10 +38,10 @@ hugo build
 ```
 
 `build-content.sh` converts Markdown with the pinned Docker image
-`ghcr.io/drmingdrmer/md2zhihu:v0.19`. It selects `_src/*/*.md` files whose
+`ghcr.io/drmingdrmer/md2zhihu:v0.20`. It selects `_src/*/*.md` files whose
 front matter contains `url:`, expands shared references, copies assets,
-and renders supported diagram blocks. It then runs `to-hugo.py` to adapt
-math delimiters and multiline formulas for Hugo.
+and renders supported diagram blocks. Its `--platform hugo` writes each
+formula on one line, between the math delimiters that `hugo.yaml` sets.
 
 Hugo mounts generated Markdown from `.build/` as `content/posts/` and its
 assets as `/post-res/<article-name>/`. It writes the final site to `public/`.
@@ -65,9 +65,8 @@ Keep published `url` values and heading IDs stable: existing links and
 Giscus discussions depend on them. Articles need `date` and `url` fields;
 `draft: true` hides a page from production, but its assets are still copied.
 
-Preserve the original `$` and `$$` math syntax in `_src/`; `to-hugo.py`
-handles Hugo's delimiters. A list item's first line containing only a
-`$$...$$` formula is unsupported and fails conversion.
+Preserve the original `$` and `$$` math syntax in `_src/`; md2zhihu's
+`hugo` platform converts it to Hugo's delimiters.
 
 After link or rendering changes, compare generated HTML, not just source
 Markdown. Check link destinations and labels, heading IDs, image paths,
