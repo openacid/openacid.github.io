@@ -13,7 +13,7 @@ cd "$(dirname "$0")"
 image=ghcr.io/drmingdrmer/md2zhihu:v0.20
 
 if [ "$1" != "--in-image" ]; then
-    exec docker run --rm -v "$PWD:/work" --user "$(id -u):$(id -g)" "$image" ./build-content.sh --in-image
+    exec docker run --rm -v "$PWD:/work" --user "$(id -u):$(id -g)" "$image" ./convert-posts.sh --in-image
 fi
 
 rm -rf .build

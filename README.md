@@ -8,16 +8,16 @@
 
 依赖：
 
-- [Docker](https://docs.docker.com/get-docker/)：`build-content.sh` 在镜像 `ghcr.io/drmingdrmer/md2zhihu:v0.20` 中运行 [md2zhihu](https://github.com/drmingdrmer/md2zhihu)。镜像里有 md2zhihu 用到的 graphviz、mermaid-cli 和 Chromium，所以本机不用安装它们。
+- [Docker](https://docs.docker.com/get-docker/)：`convert-posts.sh` 在镜像 `ghcr.io/drmingdrmer/md2zhihu:v0.20` 中运行 [md2zhihu](https://github.com/drmingdrmer/md2zhihu)。镜像里有 md2zhihu 用到的 graphviz、mermaid-cli 和 Chromium，所以本机不用安装它们。
 - [Hugo](https://gohugo.io/installation/)，测试用的是 v0.164.0。
 
 ```bash
-./build-content.sh   # 把 _src/ 中发布的文章转换到 .build/
+./convert-posts.sh   # 把 _src/ 中发布的文章转换到 .build/
 hugo server          # 本地预览：http://localhost:1313/
 hugo                 # 把整个网站生成到 public/
 ```
 
-修改 `_src/` 中的原稿后，要重新运行 `./build-content.sh`。
+修改 `_src/` 中的原稿后，要重新运行 `./convert-posts.sh`。
 
 `hugo server --buildDrafts` 和 `hugo server` 一样启动本地预览，另外还显示草稿，即 front matter 中有 `draft: true` 的文章。`hugo` 不生成草稿的页面，`.github/workflows/pages.yml` 也用 `hugo` 生成网站，所以发布的网站上没有草稿。
 
@@ -27,7 +27,7 @@ hugo                 # 把整个网站生成到 public/
 
 ```text
 _src/<YYYY-MM-DD-目录>/<名字>.md     原稿；front matter 有 url: 的才发布
-  │  build-content.sh：md2zhihu 用 hugo 平台转换
+  │  convert-posts.sh：md2zhihu 用 hugo 平台转换
   ▼
 .build/<名字>/<名字>.md              每篇文章一个目录，放 Hugo 的文章输入
 .build/<名字>/<图片和附件>            网址是 /post-res/<名字>/<文件>，与 Jekyll 站点相同
@@ -54,7 +54,7 @@ md2zhihu 的 `hugo` 平台改写 `$$...$$` 公式。kramdown 把前后都是空�
 | `static/assets/images/` | logo、favicon、作者头像、二维码 |
 | `static/py/`、`static/assets/images/banner/` 等 | 旧站的 36 个文件，没有页面引用它们；放在这里，它们的旧网址才能继续访问 |
 | `content/_index.md` | 首页；同时让旧网址 `/page2/` 跳转到首页 |
-| `build-platform-specific.sh` | 生成文章的知乎版和微信版，并上传到 R2 |
+| `export-post.sh` | 生成文章的知乎版和微信版，并上传到 R2 |
 
 ## 原稿的 front matter
 

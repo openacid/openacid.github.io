@@ -12,7 +12,7 @@ taxonomies:
   category: categories
   tag: tags
 
-# build-content.sh writes each post and its images into .build/<name>/.
+# convert-posts.sh writes each post and its images into .build/<name>/.
 # The images are served at /post-res/<name>/, as on the Jekyll site.
 module:
   mounts:

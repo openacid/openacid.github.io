@@ -38,7 +38,7 @@ jobs:
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
       - name: Convert the posts in _src/
-        run: ./build-content.sh
+        run: ./convert-posts.sh
 
       - name: Build the site
         run: hugo

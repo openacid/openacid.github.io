@@ -22,7 +22,7 @@ templates. The old Jekyll site is preserved in tag `v1-jekyll`.
 - `hugo.yaml`: routes, mounts, taxonomies, Atom feed, Markdown rendering,
   menus, and Giscus settings.
 - `.build/`: generated Hugo input, one directory per article. Edit `_src/`
-  rather than these files; `build-content.sh` deletes and rebuilds it.
+  rather than these files; `convert-posts.sh` deletes and rebuilds it.
 - `public/`: generated website. It is ignored by the source repository and
   locally contains a separate Git repository for build comparisons.
   Preserve `public/.git` and keep its history separate from source commits.
@@ -33,11 +33,11 @@ templates. The old Jekyll site is preserved in tag `v1-jekyll`.
 Run from the repository root:
 
 ```sh
-./build-content.sh
+./convert-posts.sh
 hugo build
 ```
 
-`build-content.sh` converts Markdown with the pinned Docker image
+`convert-posts.sh` converts Markdown with the pinned Docker image
 `ghcr.io/drmingdrmer/md2zhihu:v0.20`. It selects `_src/*/*.md` files whose
 front matter contains `url:`, expands shared references, copies assets,
 and renders supported diagram blocks. Its `--platform hugo` writes each
@@ -49,14 +49,14 @@ Use `hugo server` for previews, or `hugo server --buildDrafts` to include
 drafts. Rebuild `.build/` after changing article sources or references.
 Run `make -C _src` when changing Typst figures; it requires Typst >= 0.14.
 
-`build-public.sh` runs both build stages, then stages and commits all changes
+`snapshot-site.sh` runs both build stages, then stages and commits all changes
 in the separate `public/` repository with `Build from <source HEAD>`.
 Run it only when a generated-output commit is requested. For a comparison
 without committing, run the two build commands above and inspect
 `git -C public diff`. Historical comparisons use
 `git -C public log --oneline` and `git -C public diff <before> <after>`.
 
-`build-platform-specific.sh <platform> <source.md>` creates platform exports
+`export-post.sh <platform> <source.md>` creates platform exports
 in `md2-local/` and uploads them to R2. Run it only when an upload is intended.
 
 ## Editing and verification

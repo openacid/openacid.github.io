@@ -2,7 +2,7 @@
 
 head_hash="$(git rev-parse HEAD)"
 
-./build-content.sh
+./convert-posts.sh
 
 hugo build
 
