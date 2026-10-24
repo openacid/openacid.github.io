@@ -953,7 +953,7 @@ snapshot 复制跟 State 分段复制没有本质区别, 将 State 中的 log �
 $$
 \forall q \in c_i,
 \forall p \in c_j,
-q \cap p \ne \empty
+q \cap p \ne \emptyset
 $$
 
 在后面的讨论中我们将满足以上约束的2个 config 的关系表示为: **cᵢ ~ cᵢ₊₁**.
