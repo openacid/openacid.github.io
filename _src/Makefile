@@ -5,13 +5,14 @@
 ARTICLES := $(patsubst %/images-typst,%,$(wildcard */images-typst))
 TYP := $(wildcard */images-typst/[0-9]*.typ)
 PNG := $(subst /images-typst/,/images/,$(TYP:.typ=.png))
+LIB := $(wildcard lib/typst/*.typ)
 
 all: $(PNG)
 
 define article-images
-$(1)/images/%.png: $(1)/images-typst/%.typ $(1)/images-typst/style.typ Makefile
+$(1)/images/%.png: $(1)/images-typst/%.typ $(1)/images-typst/style.typ $(LIB) Makefile
 	mkdir -p "$$(@D)"
-	typst compile --ppi 144 "$$<" "$$@"
+	typst compile --root . --ppi 144 "$$<" "$$@"
 endef
 
 $(foreach article,$(ARTICLES),$(eval $(call article-images,$(article))))

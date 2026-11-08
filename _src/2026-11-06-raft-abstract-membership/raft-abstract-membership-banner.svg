@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">Custom Membership in OpenRaft</title>
+  <desc id="description">Five abstract membership shapes surround a shared pair of intersecting quorum rings: equal-sized nodes for threshold membership, different-sized nodes for weighted membership, a tree of sites for hierarchical membership, a grid, and freely overlapping sets for explicit membership. Blue marks read quorums and green marks write quorums.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop stop-color="#081422"/>
+      <stop offset="1" stop-color="#122a3a"/>
+    </linearGradient>
+    <radialGradient id="blue-haze">
+      <stop stop-color="#3068cf" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#3068cf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="green-haze">
+      <stop stop-color="#238a55" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#238a55" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x2="1" y2="0">
+      <stop stop-color="#6699ff"/>
+      <stop offset="1" stop-color="#64d7aa"/>
+    </linearGradient>
+    <pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#d1e3f6" fill-opacity=".07"/>
+    </pattern>
+    <style>
+      text { font-family: 'Helvetica Neue', Arial, sans-serif; }
+      .read-set { fill: #6699ff; fill-opacity: .07; stroke: #6699ff; stroke-width: 2.5; }
+      .write-set { fill: #64d7aa; fill-opacity: .07; stroke: #64d7aa; stroke-width: 2.5; }
+      .edge { fill: none; stroke: #69869e; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .branch { fill: #122a3a; stroke: #7e9ab0; stroke-width: 2; }
+      .caption { fill: #9bb1c6; font-size: 15px; letter-spacing: 2.6px; }
+    </style>
+    <g id="node">
+      <circle r="17" fill="#152d40" stroke="#66849b" stroke-width="2"/>
+      <circle r="4" fill="#849fb5"/>
+    </g>
+    <g id="read-node">
+      <circle r="17" fill="#182f51" stroke="#82acff" stroke-width="2"/>
+      <circle r="5" fill="#a8c6ff"/>
+    </g>
+    <g id="write-node">
+      <circle r="17" fill="#153d37" stroke="#64d7aa" stroke-width="2"/>
+      <circle r="5" fill="#98e6c5"/>
+    </g>
+    <g id="shared-node">
+      <circle r="22" fill="#f0f7ff" fill-opacity=".05"/>
+      <circle r="17" fill="#e8f3fc"/>
+      <circle r="6" fill="#203b51"/>
+    </g>
+    <g id="leaf">
+      <circle r="7" fill="#203c50" stroke="#6a879f" stroke-width="1.5"/>
+    </g>
+    <g id="read-leaf">
+      <circle r="7" fill="#a8c6ff"/>
+    </g>
+    <g id="write-leaf">
+      <circle r="7" fill="#98e6c5"/>
+    </g>
+    <g id="shared-leaf">
+      <circle r="7" fill="#e8f3fc"/>
+    </g>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#background)"/>
+  <ellipse cx="1060" cy="290" rx="650" ry="540" fill="url(#blue-haze)"/>
+  <ellipse cx="1290" cy="660" rx="650" ry="480" fill="url(#green-haze)"/>
+  <rect width="1600" height="900" fill="url(#dots)"/>
+
+  <!-- Broad contours join the composition without specifying a network route. -->
+  <path d="M648 900C502 688 617 367 899 171C1177-22 1500 71 1600 322" fill="none" stroke="#6699ff" stroke-opacity=".06" stroke-width="70"/>
+  <path d="M665 900C519 688 634 367 916 171C1194-22 1517 71 1617 322" fill="none" stroke="#6699ff" stroke-opacity=".13" stroke-width="1"/>
+  <path d="M730 900C634 693 799 505 1107 414C1376 335 1511 397 1600 509" fill="none" stroke="#64d7aa" stroke-opacity=".045" stroke-width="86"/>
+
+  <!-- A short, language-neutral title keeps the banner shared by both posts. -->
+  <g fill="#f0f6ff">
+    <rect x="96" y="110" width="42" height="4" rx="2" fill="url(#accent)"/>
+    <text x="154" y="123" font-size="32" font-weight="500" letter-spacing=".3">OpenRaft</text>
+    <text x="90" y="350" font-size="88" font-weight="600" letter-spacing="-3">Custom</text>
+    <text x="90" y="452" font-size="88" font-weight="600" letter-spacing="-3">Membership</text>
+  </g>
+  <text x="96" y="526" fill="#9bb1c6" font-size="25">
+    <tspan x="96">Read and write quorums,</tspan>
+    <tspan x="96" dy="37">defined by your application.</tspan>
+  </text>
+  <g font-size="18" fill="#a7bdd0">
+    <circle cx="107" cy="772" r="10" fill="#6699ff" fill-opacity=".08" stroke="#82acff" stroke-width="2"/>
+    <text x="132" y="778">read quorum</text>
+    <circle cx="329" cy="772" r="10" fill="#64d7aa" fill-opacity=".08" stroke="#64d7aa" stroke-width="2"/>
+    <text x="354" y="778">write quorum</text>
+  </g>
+
+  <!-- Dotted curves relate the five alternatives to the shared quorum concept. -->
+  <g fill="none" stroke="#7893ad" stroke-opacity=".3" stroke-width="1.5" stroke-dasharray="3 9" stroke-linecap="round">
+    <path d="M1023 420C963 399 953 354 915 318"/>
+    <path d="M1132 389C1153 348 1199 329 1233 301"/>
+    <path d="M1168 465C1224 461 1224 379 1324 373"/>
+    <path d="M1110 528C1117 562 1135 586 1135 607"/>
+    <path d="M1033 505C974 536 959 590 909 619"/>
+  </g>
+
+  <!-- Threshold: a read quorum of three and a write quorum of two share a node. -->
+  <g transform="translate(865 210)">
+    <path class="read-set" d="M-89-15Q-89-37-64-41L-14-73Q12-84 27-59L35 72Q36 99 8 102L-17 102Q-42 100-48 74L-89 17Z"/>
+    <path class="write-set" d="M48-20Q71-30 88-8Q101 13 84 34L21 94Q0 110-20 89Q-34 70-17 51Z"/>
+    <use href="#read-node" x="-65"/>
+    <use href="#read-node" y="-45"/>
+    <use href="#write-node" x="65" y="5"/>
+    <use href="#shared-node" y="70"/>
+    <text class="caption" x="-85" y="145">THRESHOLD</text>
+  </g>
+
+  <!-- Weighted: one double-weight node and three single-weight nodes. -->
+  <g transform="translate(1250 200)">
+    <path class="read-set" d="M-93-15Q-84-44-53-42L42-73Q66-79 75-55Q85-31 60-19L-35 35Q-72 58-93 23Z"/>
+    <path class="write-set" d="M24-58Q47-79 66-55L119 13Q134 35 111 53L44 107Q22 125 6 100Q-2 89 2 71L18-39Z"/>
+    <circle cx="-55" r="26" fill="#182f51" stroke="#82acff" stroke-width="2"/>
+    <circle cx="-55" r="8" fill="#a8c6ff"/>
+    <use href="#shared-node" x="45" y="-45"/>
+    <use href="#write-node" x="95" y="30"/>
+    <use href="#write-node" x="25" y="85"/>
+    <text class="caption" x="-43" y="151">WEIGHTED</text>
+  </g>
+
+  <!-- Hierarchical: two nodes from each of two sites make a quorum. -->
+  <g transform="translate(1370 510)">
+    <path class="edge" d="M0-112V-87M-85-40V-87H85V-40M0-87V-40"/>
+    <path class="edge" d="M-85-40V-7M-107 20V-7H-63V20M-85-7V20"/>
+    <path class="edge" d="M0-40V-7M-22 20V-7H22V20M0-7V20"/>
+    <path class="edge" d="M85-40V-7M63 20V-7H107V20M85-7V20"/>
+    <path class="branch" d="M0-122L10-112L0-102L-10-112Z"/>
+    <circle class="branch" cx="-85" cy="-40" r="8"/>
+    <circle class="branch" cy="-40" r="8"/>
+    <circle class="branch" cx="85" cy="-40" r="8"/>
+    <g fill="#e8f3fc" fill-opacity=".025" stroke="#476279" stroke-opacity=".6">
+      <rect x="-125" y="-21" width="80" height="75" rx="16"/>
+      <rect x="-40" y="-21" width="80" height="75" rx="16"/>
+      <rect x="45" y="-21" width="80" height="75" rx="16"/>
+    </g>
+    <rect class="read-set" x="-121" y="5" width="50" height="30" rx="15"/>
+    <rect class="write-set" x="-123" y="1" width="54" height="38" rx="19"/>
+    <rect class="write-set" x="-36" y="5" width="50" height="30" rx="15"/>
+    <rect class="read-set" x="49" y="5" width="50" height="30" rx="15"/>
+    <use href="#shared-leaf" x="-107" y="20"/>
+    <use href="#shared-leaf" x="-85" y="20"/>
+    <use href="#leaf" x="-63" y="20"/>
+    <use href="#write-leaf" x="-22" y="20"/>
+    <use href="#write-leaf" y="20"/>
+    <use href="#leaf" x="22" y="20"/>
+    <use href="#read-leaf" x="63" y="20"/>
+    <use href="#read-leaf" x="85" y="20"/>
+    <use href="#leaf" x="107" y="20"/>
+    <text class="caption" x="-111" y="100">HIERARCHICAL</text>
+  </g>
+
+  <!-- Grid: a complete read row intersects a write quorum spanning all rows. -->
+  <g transform="translate(1135 724)">
+    <path class="edge" stroke-opacity=".3" d="M-44-44H44M-44 0H44M-44 44H44M-44-44V44M0-44V44M44-44V44"/>
+    <rect class="read-set" x="-69" y="-68" width="138" height="48" rx="24"/>
+    <rect class="write-set" x="-86" y="-23" width="172" height="46" rx="23" transform="rotate(45)"/>
+    <use href="#shared-node" x="-44" y="-44"/>
+    <use href="#read-node" y="-44"/>
+    <use href="#read-node" x="44" y="-44"/>
+    <use href="#node" x="-44"/>
+    <use href="#write-node"/>
+    <use href="#node" x="44"/>
+    <use href="#node" x="-44" y="44"/>
+    <use href="#node" y="44"/>
+    <use href="#write-node" x="44" y="44"/>
+    <text class="caption" x="-24" y="108">GRID</text>
+  </g>
+
+  <!-- Explicit: quorum boundaries only; no hierarchy or edges are implied. -->
+  <g transform="translate(815 624)">
+    <path class="read-set" d="M-78-8C-72-39-23-35-2-65C18-91 56-66 49-41C42-15 2-13-19 13C-42 42-88 24-78-8Z"/>
+    <path class="write-set" d="M-74-5C-64-40-23-21-7-1C10 20 56 3 82 21C113 43 66 76 38 94C7 115-27 103-28 76C-30 46-89 34-74-5Z"/>
+    <use href="#shared-node" x="-48"/>
+    <use href="#read-node" x="22" y="-50"/>
+    <use href="#write-node" x="65" y="38"/>
+    <use href="#write-node" x="-5" y="75"/>
+    <text class="caption" x="-47" y="147">EXPLICIT</text>
+  </g>
+
+  <!-- Shared read/write intersection, separate from the five node arrangements. -->
+  <g transform="translate(1090 454)">
+    <circle r="81" fill="#0b1c2d" fill-opacity=".5" stroke="#7694af" stroke-opacity=".12"/>
+    <ellipse class="read-set" cx="-20" rx="40" ry="49" transform="rotate(-24)"/>
+    <ellipse class="write-set" cx="20" rx="40" ry="49" transform="rotate(-24)"/>
+    <path d="M-7 0L-1 6L11-8" fill="none" stroke="#e8f3fc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
